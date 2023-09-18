@@ -26,8 +26,7 @@ class IndoorAirQuality {
       }
     }
     time = DateTime.parse((data as Map)['received_at']);
-    List<dynamic> readings = [temp, hum, co2, time];
-    print(time);
+    List<dynamic> readings = [temp, hum, 0, time];
     return readings;
   }
 

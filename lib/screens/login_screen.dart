@@ -31,6 +31,8 @@ class _LoginScreenState extends State<LoginScreen> {
   );
 
   bool _isSourceLoginPaasword = true;
+  bool isSnackBarVisible =
+      false; // Add this variable to track the Snackbar visibility
 
   void openSignupScreen() {
     Navigator.of(context).pushReplacementNamed('signupScreen');
@@ -38,32 +40,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-   // subscription.cancel();
+    subscription.cancel();
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
   }
 
-  /*late StreamSubscription subscription;
+  late StreamSubscription subscription;
   var isDeviceConnected = false;
-  bool isAlertSet = false;*/
+  bool isAlertSet = false;
 
   @override
   void initState() {
-   // getConnectivity();
+    getConnectivity();
     super.initState();
   }
 
- /* getConnectivity() =>
-      subscription = Connectivity().onConnectivityChanged.listen(
-        (ConnectivityResult result) async {
-          isDeviceConnected = await InternetConnectionChecker().hasConnection;
-          if (!isDeviceConnected && isAlertSet == false) {
-            showDialogBox();
-            setState(() => isAlertSet = true);
-          }
-        },
-      );*/
+  getConnectivity() {
+    subscription = Connectivity().onConnectivityChanged.listen(
+      (ConnectivityResult result) async {
+        isDeviceConnected = await InternetConnectionChecker().hasConnection;
+        if (!isDeviceConnected && isAlertSet == false) {
+          showDialogBox();
+          setState(() => isAlertSet = true);
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -206,26 +209,24 @@ class _LoginScreenState extends State<LoginScreen> {
                               // ignore: body_might_complete_normally_catch_error
                               .catchError((err) {
                             showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text("خطأ"),
-                                    content: Text(
-                                        "البريد الالكتروني او كلمة المرور خطأ"),
-                                    actions: [
-                                      TextButton(
-                                        child: Text("حسنًا"),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      )
-                                    ],
-                                  );
-                                });
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("خطأ"),
+                                  content: Text(
+                                      "البريد الالكتروني او كلمة المرور خطأ"),
+                                  actions: [
+                                    TextButton(
+                                      child: Text("حسنًا"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    )
+                                  ],
+                                );
+                              },
+                            );
                           });
-                          /* setState(() {
-                          
-                        });*/
                         }
                       },
                     ),
@@ -284,26 +285,69 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
- /* showDialogBox() => showCupertinoDialog<String>(
-        context: context,
-        builder: (BuildContext content) => CupertinoAlertDialog(
-          title: Text('لا يوجد اتصال بالانترنت'),
-          content: Text("الرجاء التحقق من اتصال الانترنت"),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(context, 'Cancel');
-                setState(() => isAlertSet = false);
-                isDeviceConnected =
-                    await InternetConnectionChecker().hasConnection;
-                if (!isDeviceConnected) {
-                  showDialogBox();
-                  setState(() => isAlertSet = true);
-                }
-              },
-              child: Text('حسنا'),
-            ),
-          ],
+  showDialogBox() {
+    final scaffold = ScaffoldMessenger.of(context);
+
+    if (!isSnackBarVisible) {
+      // Check if the Snackbar is not already visible
+      scaffold.showSnackBar(
+        SnackBar(
+          content:
+              Text("لا يوجد اتصال بالانترنت\nالرجاء التحقق من اتصال الانترنت"),
+          backgroundColor: Colors.black, // Set the background color to black
+          duration:
+              Duration(seconds: 9999), // Set the duration to a large value
+          action: SnackBarAction(
+            label: 'حسنًا',
+            onPressed: () async {
+              //scaffold.hideCurrentSnackBar();
+              setState(() => isAlertSet = false);
+              isDeviceConnected =
+                  await InternetConnectionChecker().hasConnection;
+              if (!isDeviceConnected) {
+                setState(() {
+                  isAlertSet = true;
+                  isSnackBarVisible =
+                      false; // Set the flag to false when Snackbar is hidden
+                });
+              }
+            },
+          ),
         ),
-      );*/
+      );
+
+      setState(() => isSnackBarVisible =
+          true); // Set the flag to true when showing the Snackbar
+    }
+  }
+
+/* showDialogBox() {
+  final scaffold = ScaffoldMessenger.of(context);
+
+  if (!isSnackBarVisible) {
+    // Check if the Snackbar is not already visible
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text("لا يوجد اتصال بالانترنت\nالرجاء التحقق من اتصال الانترنت"),
+        backgroundColor: Colors.black, // Set the background color to red
+        action: SnackBarAction(
+          label: 'حسنًا',
+          onPressed: () async {
+            //scaffold.hideCurrentSnackBar();
+            setState(() => isAlertSet = false);
+            isDeviceConnected = await InternetConnectionChecker().hasConnection;
+            if (!isDeviceConnected) {
+              setState(() {
+                isAlertSet = true;
+                isSnackBarVisible = false; // Set the flag to false when Snackbar is hidden
+              });
+            }
+          },
+        ),
+      ),
+    );
+
+    setState(() => isSnackBarVisible = true); // Set the flag to true when showing the Snackbar
+  }
+}*/
 }

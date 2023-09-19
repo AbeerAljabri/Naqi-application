@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -21,7 +23,13 @@ class _SignupScreenState extends State<SignupScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-
+  final GlobalKey widget1Key = GlobalKey();
+  final GlobalKey widget2Key = GlobalKey();
+  String text = 'لا';
+  String text1 = 'خفيف';
+  String menu1Value = '';
+  String menu2Value = '';
+  var _formKey;
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   //button style
@@ -49,7 +57,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
   bool validateStructure(String value) {
     String pattern =
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~-_]).{8,}$';
+        // r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+        r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#\$&*~_-]).{8,}$';
     RegExp regExp = RegExp(pattern);
     return regExp.hasMatch(value);
   }
@@ -66,11 +75,11 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   void initState() {
-   // getConnectivity();
+    // getConnectivity();
     super.initState();
   }
 
- /* getConnectivity() =>
+  /* getConnectivity() =>
       subscription = Connectivity().onConnectivityChanged.listen(
         (ConnectivityResult result) async {
           isDeviceConnected = await InternetConnectionChecker().hasConnection;
@@ -83,7 +92,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   void dispose() {
-   // subscription.cancel();
+    // subscription.cancel();
     super.dispose();
     _firstNameContoroller.dispose();
     _lasttNameContoroller.dispose();
@@ -268,10 +277,283 @@ class _SignupScreenState extends State<SignupScreen> {
                     },
                   ),
                 ),
+// هنااا
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(22),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.4),
+                        blurRadius: 7,
+                        offset: Offset(0, 5), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      GestureDetector(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors
+                                .white, // Set the background color of the container
+                            borderRadius: BorderRadius.circular(
+                                20), // Set the border radius
+                          ),
+                          height: 60,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Row(
+                                children: [
+                                  // Container( padding: const EdgeInsets.only(right: 12), child: icon),
+                                  Container(
+                                    padding: const EdgeInsets.only(right: 12),
+                                    child: Center(
+                                      child: Text(
+                                        'هل تعاني من ظروف صحية تنفسية؟',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                key: widget1Key,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 6.0),
+                                    child: Text(
+                                      text,
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 12),
+                                    child: Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 16.0,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        onTap: () {
+                          final RenderBox? renderBox1 =
+                              widget1Key.currentContext?.findRenderObject()
+                                  as RenderBox?;
+                          if (renderBox1 != null) {
+                            final Offset widget1Position =
+                                renderBox1.localToGlobal(Offset.zero);
 
-                SizedBox(height: 15),
+                            showMenu(
+                              context: context,
+                              position: RelativeRect.fromLTRB(
+                                widget1Position.dx, // Left
+                                widget1Position.dy +
+                                    renderBox1.size.height, // Top
+                                widget1Position.dx +
+                                    renderBox1.size.width, // Right
+                                widget1Position.dy +
+                                    renderBox1.size.height +
+                                    80.0, // Bottom
+                              ), // Adjust the position as needed
+                              items: [
+                                PopupMenuItem(
+                                  child: Text('نعم'),
+                                  value: 'نعم',
+                                ),
+                                PopupMenuItem(
+                                  child: Text('لا'),
+                                  value: 'لا',
+                                ),
+                              ],
+                            ).then((value) {
+                              if (value != null) {
+                                setState(() {
+                                  text = value;
+                                  menu1Value = value;
 
-                //sigup button
+                                  if (menu1Value == 'لا') text1 = 'خفيف';
+                                });
+                              }
+                            });
+                          }
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0, right: 16),
+                        child: Divider(
+                          color: Colors.grey, // Specify the color of the line
+                          height: 1.0, // Specify the height of the line
+                          thickness: 0.50, // Specify the thickness of the line
+                        ),
+                      ),
+                      Visibility(
+                        visible: menu1Value == 'نعم',
+                        child: GestureDetector(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors
+                                  .white, // Set the background color of the container
+                              borderRadius: BorderRadius.circular(
+                                  20), // Set the border radius
+                            ),
+                            height: 60,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Row(
+                                  children: [
+                                    // Container( padding: const EdgeInsets.only(right: 12), child: icon),
+                                    Container(
+                                      padding: const EdgeInsets.only(right: 12),
+                                      child: Center(
+                                        child: Text(
+                                          'مستوى الحالة الصحية',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  key: widget2Key,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 6.0),
+                                      child: Text(
+                                        text1,
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.only(left: 12),
+                                      child: Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 16.0,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                          onTap: () {
+                            final RenderBox? renderBox2 =
+                                widget2Key.currentContext?.findRenderObject()
+                                    as RenderBox?;
+                            if (renderBox2 != null) {
+                              final Offset widget2Position =
+                                  renderBox2.localToGlobal(Offset.zero);
+
+                              showMenu(
+                                context: context,
+                                position: RelativeRect.fromLTRB(
+                                  widget2Position.dx, // Left
+                                  widget2Position.dy +
+                                      renderBox2.size.height, // Top
+                                  widget2Position.dx +
+                                      renderBox2.size.width, // Right
+                                  widget2Position.dy +
+                                      renderBox2.size.height +
+                                      80.0, // Bottom
+                                ),
+                                items: [
+                                  PopupMenuItem(
+                                    child: Text('خفيف'),
+                                    value: 'خفيف',
+                                  ),
+                                  PopupMenuItem(
+                                    child: Text('متوسط'),
+                                    value: 'متوسط',
+                                  ),
+                                  PopupMenuItem(
+                                    child: Text('شديد'),
+                                    value: 'شديد',
+                                  ),
+                                ],
+                              ).then((value) {
+                                if (value != null) {
+                                  setState(() {
+                                    text1 = value;
+                                    menu2Value = value;
+                                  });
+                                }
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                /*  Form(
+                  key: _formKey,
+                  child: Column(
+                    // Your other form fields
+                    children: [
+                      // Your existing TextFormField and other form fields
+
+                      // Add a FormField for showMenu
+                      FormField<String>(
+                        builder: (FormFieldState<String> state) {
+                          return InputDecorator(
+                            decoration: InputDecoration(
+                              labelText: 'Choose from menu',
+                              errorText:
+                                  state.hasError ? state.errorText : null,
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: menu1Value,
+                                onChanged: (value) {
+                                  setState(() {
+                                    menu1Value = value!;
+                                    var isButtonEnabled = true;
+                                    if (menu1Value == 'لا') text1 = 'خفيف';
+                                  });
+                                },
+                                items: [
+                                  DropdownMenuItem(
+                                    child: Text('نعم'),
+                                    value: 'نعم',
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text('لا'),
+                                    value: 'لا',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'يرجى اختيار قيمة من القائمة';
+                          }
+                          return null; // Return null if validation succeeds
+                        },
+                      ),
+
+                      // Your "Sign Up" button and other widgets
+                    ],
+                  ),
+                ),*/
+                SizedBox(height: 25),
+//sigup button
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -310,8 +592,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                             'firstName': firstName,
                                             'lastName': lastName,
                                             'userEmail': userEmail,
-                                            'healthStatus': false,
-                                            'healthStatusLevel': 'خفيف',
+                                            'healthStatus': text,
+                                            'healthStatusLevel': text1,
                                           }),
                                           // ignore: avoid_print
                                           print("data added"),
@@ -359,9 +641,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         }),
                   ],
                 ),
-
-                SizedBox(height: 25),
-
                 // text sign up
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

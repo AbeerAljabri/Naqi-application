@@ -3,24 +3,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:naqi_app/firebase.dart';
+import 'package:naqi_app/screens/login_screen.dart';
 
-import '../indoorAirQuality.dart';
-//import 'package:naqi_app/indoorAirQuality.dart';
 
 class profilePage extends StatefulWidget {
   profilePage({Key? key}) : super(key: key);
-
+  
   @override
   _profilePageState createState() => _profilePageState();
 }
 
 class _profilePageState extends State<profilePage> {
-  IndoorAirQuality indoorAirQuality = IndoorAirQuality();
   String originalFirstName = FirebaseService.first_name ?? "";
   String originalLastName = FirebaseService.last_name ?? "";
   bool changesMade = false; // Add a boolean variable to track changes
   bool isButtonEnabled = false; // Add a boolean variable to track button state
-
 
   @override
   void initState() {
@@ -42,7 +39,6 @@ class _profilePageState extends State<profilePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -56,7 +52,6 @@ class _profilePageState extends State<profilePage> {
         ),
       ),
       body: SafeArea(
-        
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Center(
@@ -78,7 +73,7 @@ class _profilePageState extends State<profilePage> {
                       SizedBox(
                           height:
                               5), // Adjusted the SizedBox height for better spacing
-        
+
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -99,7 +94,8 @@ class _profilePageState extends State<profilePage> {
                                     newValue; // Update the original value locally
                                 changesMade =
                                     true; // Set changesMade to true when changes are made
-                                isButtonEnabled = true;
+                                isButtonEnabled = newValue
+                                    .isNotEmpty; // تحقق من عدم فراغ القيمة
                               });
                             },
                             decoration: InputDecoration(
@@ -115,9 +111,9 @@ class _profilePageState extends State<profilePage> {
                     ],
                   ),
                 ),
-        
+
                 SizedBox(height: 16),
-        
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -133,7 +129,7 @@ class _profilePageState extends State<profilePage> {
                       SizedBox(
                           height:
                               5), // Adjusted the SizedBox height for better spacing
-        
+
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -154,7 +150,8 @@ class _profilePageState extends State<profilePage> {
                                     newValue; // Update the original value locally
                                 changesMade =
                                     true; // Set changesMade to true when changes are made
-                                isButtonEnabled = true;
+                                isButtonEnabled = newValue
+                                    .isNotEmpty; // تحقق من عدم فراغ القيمة
                               });
                             },
                             decoration: InputDecoration(
@@ -170,7 +167,7 @@ class _profilePageState extends State<profilePage> {
                     ],
                   ),
                 ),
-        
+
                 SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -194,8 +191,8 @@ class _profilePageState extends State<profilePage> {
                           title: Text(
                             FirebaseService.email ?? "",
                             style: TextStyle(
-                              color:
-                                  Colors.grey[600], // Set the color to dark grey
+                              color: Colors
+                                  .grey[600], // Set the color to dark grey
                             ),
                           ),
                         ),
@@ -205,64 +202,61 @@ class _profilePageState extends State<profilePage> {
                 ),
                 SizedBox(height: 30),
                 // Adjusted the SizedBox height for better spacing
-               ElevatedButton(
-  onPressed: isButtonEnabled
-      ? () {
-          if (originalFirstName != null &&
-              originalFirstName.isNotEmpty) {
-            FirebaseService.first_name = originalFirstName;
-            updateInfo('firstName', originalFirstName);
-          }
+                ElevatedButton(
+                  onPressed: isButtonEnabled
+                      ? () {
+                          if (originalFirstName != null &&
+                              originalFirstName.isNotEmpty) {
+                            FirebaseService.first_name = originalFirstName;
+                            updateInfo('firstName', originalFirstName);
+                          }
 
-          if (originalLastName != null &&
-              originalLastName.isNotEmpty) {
-            FirebaseService.last_name = originalLastName;
-            updateInfo('lastName', originalLastName);
-          }
+                          if (originalLastName != null &&
+                              originalLastName.isNotEmpty) {
+                            FirebaseService.last_name = originalLastName;
+                            updateInfo('lastName', originalLastName);
+                          }
 
-          // After updating Firestore, show a success message
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              isButtonEnabled = false;
-              FocusScope.of(context).unfocus(); // Hide the keyboard
-              return AlertDialog(
-                title: Text(
-                    'تم الحفظ بنجاح'),
-                content: Text(
-                    'تم حفظ التغييرات بنجاح.'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      isButtonEnabled = true;
-                    },
-                    style: TextButton.styleFrom(
-                      primary: Colors.blue,
+                          // After updating Firestore, show a success message
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              isButtonEnabled = false;
+                              FocusScope.of(context)
+                                  .unfocus(); // Hide the keyboard
+                              return AlertDialog(
+                                title: Text('تم الحفظ بنجاح'),
+                                content: Text('تم حفظ التغييرات بنجاح.'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      isButtonEnabled = true;
+                                    },
+                                    style: TextButton.styleFrom(
+                                      primary: Colors.blue,
+                                    ),
+                                    child: Text('حسنًا'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      : null,
+                  child: Text(
+                    'حفظ التغييرات',
+                    style: TextStyle(
+                      color: isButtonEnabled ? Colors.white : Colors.grey[700],
                     ),
-                    child: Text('حسنًا'),
                   ),
-                ],
-              );
-            },
-          );
-        }
-      : null,
-  child: Text(
-    'حفظ التغييرات',
-    style: TextStyle(
-      color: isButtonEnabled
-          ? Colors.white
-          : Colors.grey[700],
-    ),
-  ),
-  style: ElevatedButton.styleFrom(
-    primary: Color.fromARGB(255, 43, 138, 159),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8.0),
-    ),
-  ),
-),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color.fromARGB(255, 43, 138, 159),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                ),
                 SizedBox(height: 30),
               ],
             ),

@@ -91,17 +91,33 @@ class _IndoorPageState extends State<IndoorPage>
                           if (!snapshot.hasData) {
                             print("no data");
                             return Container(
-                                height: 40,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 135.0, left: 135),
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.grey,
+                              height: 100,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 135.0, left: 135),
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.grey),
+                                      strokeWidth: 4.0,
+                                      semanticsLabel: 'Loading',
+                                      semanticsValue: 'Loading',
                                     ),
-                                    strokeWidth: 2.0,
                                   ),
-                                ));
+                                  RichText(
+                                    text: TextSpan(
+                                      text: 'بانتظار البيانات',
+                                      style: TextStyle(
+                                        color: Color(0xff45A1B6),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20.0,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
                           } else {
                             var data = jsonDecode(snapshot.data.toString());
                             List<dynamic> readings =

@@ -56,4 +56,11 @@ class Fan {
         .child("Fan")
         .update({"isSwitchOn": isSwitchOn});
   }
+
+  void updateisAutomatic(int isAutomatic) {
+    FirebaseDatabase.instance
+        .reference()
+        .child("Fan")
+        .update({"isAutomatic": isAutomatic});
+  }
 }

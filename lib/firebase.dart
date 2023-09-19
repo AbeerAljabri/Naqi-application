@@ -9,7 +9,8 @@ class FirebaseService {
   static var email;
   static var healthStatus = false;
   static var healthStatusLevel;
-
+  static String switchStatus = '';
+  static String automatic = '';
   //DatabaseReference databaseRef;
   static Future<void> initialize() async {
     await Firebase.initializeApp(
@@ -57,14 +58,24 @@ class FirebaseService {
   }
 
   Future<String> isSwitchOn() async {
-    String isSwitchOn = '';
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref.child('Fan/isSwitchOn').get();
     if (snapshot.exists) {
-      isSwitchOn = snapshot.value.toString();
+      switchStatus = snapshot.value.toString();
     } else {
       print('No data available.');
     }
-    return isSwitchOn;
+    return switchStatus;
+  }
+
+  Future<String> isAutomatic() async {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref.child('Fan/isAutomatic').get();
+    if (snapshot.exists) {
+      automatic = snapshot.value.toString();
+    } else {
+      print('No data available.');
+    }
+    return automatic;
   }
 }

@@ -23,7 +23,6 @@ class _SignupScreenState extends State<SignupScreen> {
   internetConnection connection = internetConnection();
 
   final _firstNameContoroller = TextEditingController();
-  final _lasttNameContoroller = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -72,10 +71,6 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _isSourcePaasword = true;
   bool _isSourceConfirPaasword = true;
 
-/* to connection
-  late StreamSubscription subscription;
-  var isDeviceConnected = false;
-  bool isAlertSet = false; */
 
   @override
   void initState() {
@@ -83,24 +78,12 @@ class _SignupScreenState extends State<SignupScreen> {
     super.initState();
   }
 
-  /* getConnectivity() =>
-      subscription = Connectivity().onConnectivityChanged.listen(
-        (ConnectivityResult result) async {
-          isDeviceConnected = await InternetConnectionChecker().hasConnection;
-          if (!isDeviceConnected && isAlertSet == false) {
-            showDialogBox();
-            setState(() => isAlertSet = true);
-          }
-        },
-      );*/
+
 
   @override
   void dispose() {
-    // subscription.cancel();
     super.dispose();
     _firstNameContoroller.dispose();
-    _lasttNameContoroller.dispose();
-
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -150,40 +133,21 @@ class _SignupScreenState extends State<SignupScreen> {
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12)),
-                        labelText: " الاسم الاول",
+                        labelText: "الاسم",
                         prefixIcon: Icon(Icons.person)),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'الرجاء ادخال الاسم الاول';
+                        return 'الرجاء ادخال الاسم ';
                       }
                       return null;
                     },
                   ),
                 ),
 
-                //last name
-                SizedBox(height: 10),
+                
+              
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: TextFormField(
-                    controller: _lasttNameContoroller,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        labelText: " الاسم الاخير",
-                        prefixIcon: Icon(Icons.person)),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'الرجاء ادخال الاسم الاخير';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-
-                //last name
+                //email
                 SizedBox(height: 10),
 
                 // email textfield
@@ -599,8 +563,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
                         if (_key.currentState!.validate()) {
                           var firstName = _firstNameContoroller.text.trim();
-                          var lastName = _lasttNameContoroller.text.trim();
-
                           var userEmail = _emailController.text.trim();
                           var userPassword = _passwordController.text.trim();
 
@@ -619,7 +581,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                             .doc(value.user!.uid)
                                             .set({
                                           'firstName': firstName,
-                                          'lastName': lastName,
                                           'userEmail': userEmail,
                                           'healthStatus': text,
                                           'healthStatusLevel': text1,

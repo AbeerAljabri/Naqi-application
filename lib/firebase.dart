@@ -38,7 +38,6 @@ class FirebaseService {
       final userInfo = await fetchUserInfo(userId);
 
       first_name = userInfo.data()!['firstName'];
-      last_name = userInfo.data()!['lastName'];
       email = userInfo.data()!['userEmail'];
       healthStatus = userInfo.data()!['healthStatus'];
       healthStatusLevel = userInfo.data()!['healthStatusLevel'];

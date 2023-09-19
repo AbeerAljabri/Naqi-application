@@ -17,7 +17,6 @@ class profilePage extends StatefulWidget {
 
 class _profilePageState extends State<profilePage> {
   String originalFirstName = FirebaseService.first_name ?? "";
-  String originalLastName = FirebaseService.last_name ?? "";
   bool changesMade = false; // Add a boolean variable to track changes
   bool isButtonEnabled = false; // Add a boolean variable to track button state
 
@@ -116,62 +115,7 @@ class _profilePageState extends State<profilePage> {
                   ),
                 ),
 
-                SizedBox(height: 16),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'الاسم الأخير',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      SizedBox(
-                          height:
-                              5), // Adjusted the SizedBox height for better spacing
-
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(
-                              8.0), // Simplified BorderRadius
-                        ),
-                        child: ListTile(
-                          leading: Icon(Icons.person),
-                          title: TextFormField(
-                            initialValue:
-                                originalLastName, // Use the original value
-                            onChanged: (newValue) {
-                              setState(() {
-                                originalLastName =
-                                    newValue; // Update the original value locally
-                                changesMade =
-                                    true; // Set changesMade to true when changes are made
-                                isButtonEnabled = newValue
-                                    .isNotEmpty; // تحقق من عدم فراغ القيمة
-                              });
-                            },
-                            decoration: InputDecoration(
-                              border: InputBorder.none, // Hide the underline
-                            ),
-                            textDirection: TextDirection
-                                .rtl, // Force right-to-left direction
-                            textAlign:
-                                TextAlign.start, // Align to the start (left)
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
+               
                 SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -209,9 +153,8 @@ class _profilePageState extends State<profilePage> {
                 ElevatedButton(
                   onPressed: (isButtonEnabled &&
                           originalFirstName != null &&
-                          originalFirstName.isNotEmpty &&
-                          originalLastName != null &&
-                          originalLastName.isNotEmpty)
+                          originalFirstName.isNotEmpty
+                    )
                       ? () async {
                           // Check for internet connection
                           bool isConnected = await connection.checkInternetConnection();
@@ -242,12 +185,6 @@ class _profilePageState extends State<profilePage> {
                               originalFirstName.isNotEmpty) {
                             FirebaseService.first_name = originalFirstName;
                             updateInfo('firstName', originalFirstName);
-                          }
-
-                          if (originalLastName != null &&
-                              originalLastName.isNotEmpty) {
-                            FirebaseService.last_name = originalLastName;
-                            updateInfo('lastName', originalLastName);
                           }
 
                           // After updating Firestore, show a success message
@@ -284,9 +221,8 @@ class _profilePageState extends State<profilePage> {
                     style: TextStyle(
                       color: (isButtonEnabled &&
                               originalFirstName != null &&
-                              originalFirstName.isNotEmpty &&
-                              originalLastName != null &&
-                              originalLastName.isNotEmpty)
+                              originalFirstName.isNotEmpty
+                             )
                           ? Colors.white
                           : Colors.grey[700],
                     ),

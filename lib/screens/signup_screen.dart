@@ -71,14 +71,11 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _isSourcePaasword = true;
   bool _isSourceConfirPaasword = true;
 
-
   @override
   void initState() {
     // getConnectivity();
     super.initState();
   }
-
-
 
   @override
   void dispose() {
@@ -143,9 +140,6 @@ class _SignupScreenState extends State<SignupScreen> {
                     },
                   ),
                 ),
-
-                
-              
 
                 //email
                 SizedBox(height: 10),
@@ -582,7 +576,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                             .set({
                                           'firstName': firstName,
                                           'userEmail': userEmail,
-                                          'healthStatus': text,
+                                          'healthStatus':
+                                              text == 'نعم' ? true : false,
                                           'healthStatusLevel': text1,
                                         }),
                                         // ignore: avoid_print

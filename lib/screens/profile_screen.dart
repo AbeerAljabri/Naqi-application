@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,10 +6,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:naqi_app/firebase.dart';
 import 'package:naqi_app/screens/login_screen.dart';
 
+import '../internetConnection.dart';
 
 class profilePage extends StatefulWidget {
   profilePage({Key? key}) : super(key: key);
-  
+
   @override
   _profilePageState createState() => _profilePageState();
 }
@@ -19,9 +21,11 @@ class _profilePageState extends State<profilePage> {
   bool changesMade = false; // Add a boolean variable to track changes
   bool isButtonEnabled = false; // Add a boolean variable to track button state
 
+ internetConnection connection = internetConnection();
   @override
   void initState() {
     super.initState();
+    isButtonEnabled = false;
   }
 
   void updateInfo(var feild, var feildValue) async {
@@ -203,8 +207,37 @@ class _profilePageState extends State<profilePage> {
                 SizedBox(height: 30),
                 // Adjusted the SizedBox height for better spacing
                 ElevatedButton(
-                  onPressed: isButtonEnabled
-                      ? () {
+                  onPressed: (isButtonEnabled &&
+                          originalFirstName != null &&
+                          originalFirstName.isNotEmpty &&
+                          originalLastName != null &&
+                          originalLastName.isNotEmpty)
+                      ? () async {
+                          // Check for internet connection
+                          bool isConnected = await connection.checkInternetConnection();
+
+                          if (!isConnected) {
+                            // Show a Snackbar for no internet connection
+                            final scaffold = ScaffoldMessenger.of(context);
+                            scaffold.showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    "لا يوجد اتصال بالانترنت، الرجاء التحقق من الاتصال بالانترنت"),
+                                duration: Duration(
+                                    seconds: 5), // Set the duration as needed
+                                action: SnackBarAction(
+                                  label: 'حسنًا',
+                                  onPressed: () {
+                                    // Handle the action when the "OK" button is pressed
+                                    scaffold.hideCurrentSnackBar();
+                                  },
+                                ),
+                              ),
+                            );
+                            return;
+                          }
+
+                          // Perform the save operation
                           if (originalFirstName != null &&
                               originalFirstName.isNotEmpty) {
                             FirebaseService.first_name = originalFirstName;
@@ -221,7 +254,6 @@ class _profilePageState extends State<profilePage> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              isButtonEnabled = false;
                               FocusScope.of(context)
                                   .unfocus(); // Hide the keyboard
                               return AlertDialog(
@@ -231,7 +263,10 @@ class _profilePageState extends State<profilePage> {
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
-                                      isButtonEnabled = true;
+                                      setState(() {
+                                        isButtonEnabled =
+                                            false; // Disable the button after successful save
+                                      });
                                     },
                                     style: TextButton.styleFrom(
                                       primary: Colors.blue,
@@ -247,7 +282,13 @@ class _profilePageState extends State<profilePage> {
                   child: Text(
                     'حفظ التغييرات',
                     style: TextStyle(
-                      color: isButtonEnabled ? Colors.white : Colors.grey[700],
+                      color: (isButtonEnabled &&
+                              originalFirstName != null &&
+                              originalFirstName.isNotEmpty &&
+                              originalLastName != null &&
+                              originalLastName.isNotEmpty)
+                          ? Colors.white
+                          : Colors.grey[700],
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
@@ -257,6 +298,7 @@ class _profilePageState extends State<profilePage> {
                     ),
                   ),
                 ),
+
                 SizedBox(height: 30),
               ],
             ),

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:naqi_app/screens/forgot_pw_reset.dart';
+
+import '../internetConnection.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,6 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
+  internetConnection connection = internetConnection();
+
   //button style
   final ButtonStyle buttonPrimary = ElevatedButton.styleFrom(
     minimumSize: Size(345, 55),
@@ -31,8 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
   );
 
   bool _isSourceLoginPaasword = true;
-  bool isSnackBarVisible =
-      false; // Add this variable to track the Snackbar visibility
 
   void openSignupScreen() {
     Navigator.of(context).pushReplacementNamed('signupScreen');
@@ -40,32 +41,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    subscription.cancel();
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
   }
 
-  late StreamSubscription subscription;
-  var isDeviceConnected = false;
-  bool isAlertSet = false;
 
   @override
   void initState() {
-    getConnectivity();
     super.initState();
-  }
-
-  getConnectivity() {
-    subscription = Connectivity().onConnectivityChanged.listen(
-      (ConnectivityResult result) async {
-        isDeviceConnected = await InternetConnectionChecker().hasConnection;
-        if (!isDeviceConnected && isAlertSet == false) {
-          showDialogBox();
-          setState(() => isAlertSet = true);
-        }
-      },
-    );
   }
 
   @override
@@ -189,47 +173,70 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                      child: Text(
-                        'تسجيل الدخول',
-                        style: GoogleFonts.robotoCondensed(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                      style: buttonPrimary,
-                      onPressed: () async {
-                        if (_key.currentState!.validate()) {
-                          await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                            email: _emailController.text.trim(),
-                            password: _passwordController.text.trim(),
-                          )
-                              // ignore: body_might_complete_normally_catch_error
-                              .catchError((err) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text("خطأ"),
-                                  content: Text(
-                                      "البريد الالكتروني او كلمة المرور خطأ"),
-                                  actions: [
-                                    TextButton(
-                                      child: Text("حسنًا"),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    )
-                                  ],
-                                );
-                              },
-                            );
-                          });
-                        }
-                      },
-                    ),
+                   ElevatedButton(
+  child: Text(
+    'تسجيل الدخول',
+    style: GoogleFonts.robotoCondensed(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: 18,
+    ),
+  ),
+  style: buttonPrimary,
+  onPressed: () async {
+    // Check for internet connection
+    bool isConnected = await connection.checkInternetConnection();
+
+    if (!isConnected) {
+      // Show a Snackbar for no internet connection
+      final scaffold = ScaffoldMessenger.of(context);
+      scaffold.showSnackBar(
+        SnackBar(
+          content: Text(
+              "لا يوجد اتصال بالانترنت، الرجاء التحقق من الاتصال بالانترنت"),
+          duration: Duration(seconds: 5), // Set the duration as needed
+          action: SnackBarAction(
+            label: 'حسنًا',
+            onPressed: () {
+              // Handle the action when the "OK" button is pressed
+              scaffold.hideCurrentSnackBar();
+            },
+          ),
+        ),
+      );
+      return;
+    }
+
+    // Continue with the login operation
+    if (_key.currentState!.validate()) {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      )
+          .catchError((err) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("خطأ"),
+              content: Text("البريد الالكتروني او كلمة المرور خطأ"),
+              actions: [
+                TextButton(
+                  child: Text("حسنًا"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          },
+        );
+      });
+    }
+  },
+),
+
                   ],
                 ),
 
@@ -284,70 +291,4 @@ class _LoginScreenState extends State<LoginScreen> {
       color: Colors.grey,
     );
   }
-
-  showDialogBox() {
-    final scaffold = ScaffoldMessenger.of(context);
-
-    if (!isSnackBarVisible) {
-      // Check if the Snackbar is not already visible
-      scaffold.showSnackBar(
-        SnackBar(
-          content:
-              Text("لا يوجد اتصال بالانترنت\nالرجاء التحقق من اتصال الانترنت"),
-          backgroundColor: Colors.black, // Set the background color to black
-          duration:
-              Duration(seconds: 9999), // Set the duration to a large value
-          action: SnackBarAction(
-            label: 'حسنًا',
-            onPressed: () async {
-              //scaffold.hideCurrentSnackBar();
-              setState(() => isAlertSet = false);
-              isDeviceConnected =
-                  await InternetConnectionChecker().hasConnection;
-              if (!isDeviceConnected) {
-                setState(() {
-                  isAlertSet = true;
-                  isSnackBarVisible =
-                      false; // Set the flag to false when Snackbar is hidden
-                });
-              }
-            },
-          ),
-        ),
-      );
-
-      setState(() => isSnackBarVisible =
-          true); // Set the flag to true when showing the Snackbar
-    }
-  }
-
-/* showDialogBox() {
-  final scaffold = ScaffoldMessenger.of(context);
-
-  if (!isSnackBarVisible) {
-    // Check if the Snackbar is not already visible
-    scaffold.showSnackBar(
-      SnackBar(
-        content: Text("لا يوجد اتصال بالانترنت\nالرجاء التحقق من اتصال الانترنت"),
-        backgroundColor: Colors.black, // Set the background color to red
-        action: SnackBarAction(
-          label: 'حسنًا',
-          onPressed: () async {
-            //scaffold.hideCurrentSnackBar();
-            setState(() => isAlertSet = false);
-            isDeviceConnected = await InternetConnectionChecker().hasConnection;
-            if (!isDeviceConnected) {
-              setState(() {
-                isAlertSet = true;
-                isSnackBarVisible = false; // Set the flag to false when Snackbar is hidden
-              });
-            }
-          },
-        ),
-      ),
-    );
-
-    setState(() => isSnackBarVisible = true); // Set the flag to true when showing the Snackbar
-  }
-}*/
 }

@@ -32,6 +32,23 @@ class _IndoorPageState extends State<IndoorPage>
     fanStatus.then((value) {
       status = value;
     });
+
+    Future<String> automatic = firebase.isAutomatic();
+    automatic.then((value) {
+      isAutomatic = value;
+    });
+
+    Future<String> fanSwitch = firebase.isSwitchOn();
+    fanSwitch.then((value) {
+      setState(() {
+        switchOn = value;
+        isSwitchOn = switchOn == '1' ? true : false;
+      });
+
+      print('swich $switchOn');
+
+      print('is $isSwitchOn');
+    });
   }
 
   @override
@@ -39,11 +56,16 @@ class _IndoorPageState extends State<IndoorPage>
   Sensor sensor = Sensor();
   Fan fan = Fan();
   IndoorAirQuality sensorReadings = IndoorAirQuality();
-  static bool isSwitchOn = false;
-  String status = '';
   FirebaseService firebase = FirebaseService();
+  String switchOn = '';
+
+  bool isSwitchOn = false;
+
+  String isAutomatic = '';
+  String status = '';
 
   Widget build(BuildContext context) {
+    //print(isSwitchOn);
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -123,6 +145,20 @@ class _IndoorPageState extends State<IndoorPage>
       status = value;
     });
 
+    /* Future<String> automatic = firebase.isAutomatic();
+    automatic.then((value) {
+      isAutomatic = value;
+    });
+
+    Future<String> fanSwitch = firebase.isSwitchOn();
+    fanSwitch.then((value) {
+      setState(() {
+        switchOn = value;
+        isSwitchOn = switchOn == '1' ? true : false;
+      });
+    });*/
+    isSwitchOn = FirebaseService.switchStatus == '1' ? true : false;
+    isAutomatic = FirebaseService.automatic;
     return Padding(
       padding: const EdgeInsets.only(top: 20, right: 2),
       child: Container(
@@ -183,7 +219,7 @@ class _IndoorPageState extends State<IndoorPage>
                     ),
                     Row(
                       children: [
-                        if (status == '0')
+                        if ((isSwitchOn == false) && (isAutomatic == '0'))
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
@@ -193,7 +229,7 @@ class _IndoorPageState extends State<IndoorPage>
                               ),
                             ),
                           ),
-                        if (status == '1')
+                        if ((isSwitchOn == true) || (isAutomatic == '1'))
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
@@ -212,22 +248,35 @@ class _IndoorPageState extends State<IndoorPage>
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: Switch(
-                activeColor: const Color.fromARGB(255, 255, 255, 255),
-                activeTrackColor: const Color(0xff45A1B6),
-                inactiveThumbColor: Colors.blueGrey.shade600,
-                inactiveTrackColor: Colors.grey.shade400,
+                activeColor: isAutomatic == '0'
+                    ? const Color.fromARGB(255, 255, 255, 255)
+                    : Colors.blueGrey.shade50,
+                activeTrackColor: isAutomatic == '0'
+                    ? const Color(0xff45A1B6)
+                    : Colors.grey.shade200,
+                inactiveThumbColor: isAutomatic == '0'
+                    ? Colors.blueGrey.shade600
+                    : Colors.blueGrey.shade50,
+                inactiveTrackColor: isAutomatic == '0'
+                    ? Colors.grey.shade400
+                    : Colors.grey.shade200,
                 splashRadius: 50.0,
                 value: isSwitchOn,
-                onChanged: (value) => setState(() {
-                  if (value) {
-                    fan.turnOn();
-                    fan.updateSwitch(1);
-                  } else {
-                    fan.turnOff();
-                    fan.updateSwitch(0);
-                  }
-                  isSwitchOn = value;
-                }),
+                onChanged: isAutomatic == '0'
+                    ? (value) {
+                        setState(() {
+                          if (value) {
+                            fan.turnOn();
+                            fan.updateSwitch(1);
+                          } else {
+                            fan.turnOff();
+                            fan.updateSwitch(0);
+                          }
+                          isSwitchOn = value;
+                          FirebaseService.switchStatus = isSwitchOn ? '1' : '0';
+                        });
+                      }
+                    : null, // Set onChanged to null when the condition is not met
               ),
             ),
           ],

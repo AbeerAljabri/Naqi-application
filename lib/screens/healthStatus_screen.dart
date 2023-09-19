@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:naqi_app/firebase.dart';
 
+import '../internetConnection.dart';
+
 class healthStatusPage extends StatefulWidget {
   healthStatusPage({Key? key}) : super(key: key);
 
@@ -12,6 +14,8 @@ class healthStatusPage extends StatefulWidget {
 }
 
 class _healthStatusPageState extends State<healthStatusPage> {
+  internetConnection connection = internetConnection();
+
   final GlobalKey widget1Key = GlobalKey();
   final GlobalKey widget2Key = GlobalKey();
   String text =
@@ -290,7 +294,33 @@ class _healthStatusPageState extends State<healthStatusPage> {
                   padding: const EdgeInsets.all(12.0),
                   child: ElevatedButton(
                     onPressed: isButtonEnabled
-                        ? () {
+                        ? () async {
+                            // Check for internet connection
+                            bool isConnected =
+                                await connection.checkInternetConnection();
+
+                            if (!isConnected) {
+                              // Show a Snackbar for no internet connection
+                              final scaffold = ScaffoldMessenger.of(context);
+                              scaffold.showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      "لا يوجد اتصال بالانترنت، الرجاء التحقق من الاتصال بالانترنت"),
+                                  duration: Duration(
+                                      seconds: 5), // Set the duration as needed
+                                  action: SnackBarAction(
+                                    label: 'حسنًا',
+                                    onPressed: () {
+                                      // Handle the action when the "OK" button is pressed
+                                      scaffold.hideCurrentSnackBar();
+                                    },
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            // Continue with the save operation
                             FirebaseService.healthStatus =
                                 menu1Value == 'نعم' ? true : false;
                             updateInfo(
@@ -317,7 +347,9 @@ class _healthStatusPageState extends State<healthStatusPage> {
                                     TextButton(
                                       onPressed: () {
                                         Navigator.of(context).pop();
-                                        isButtonEnabled = true;
+                                        setState(() {
+                                          isButtonEnabled = false;
+                                        });
                                       },
                                       style: TextButton.styleFrom(
                                         primary: Colors.blue,

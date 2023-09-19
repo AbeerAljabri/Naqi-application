@@ -10,6 +10,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../internetConnection.dart';
+
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -18,6 +20,8 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  internetConnection connection = internetConnection();
+
   final _firstNameContoroller = TextEditingController();
   final _lasttNameContoroller = TextEditingController();
   final _emailController = TextEditingController();
@@ -558,87 +562,113 @@ class _SignupScreenState extends State<SignupScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                        child: Text(
-                          'تسجيل ',
-                          style: GoogleFonts.robotoCondensed(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
+                      child: Text(
+                        'تسجيل ',
+                        style: GoogleFonts.robotoCondensed(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
                         ),
-                        style: buttonPrimary,
-                        onPressed: () async {
-                          if (_key.currentState!.validate()) {
-                            var firstName = _firstNameContoroller.text.trim();
-                            var lastName = _lasttNameContoroller.text.trim();
+                      ),
+                      style: buttonPrimary,
+                      onPressed: () async {
+                        // Check for internet connection
+                        bool isConnected =
+                            await connection.checkInternetConnection();
 
-                            var userEmail = _emailController.text.trim();
-                            var userPassword = _passwordController.text.trim();
+                        if (!isConnected) {
+                          // Show a Snackbar for no internet connection
+                          final scaffold = ScaffoldMessenger.of(context);
+                          scaffold.showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  "لا يوجد اتصال بالانترنت، الرجاء التحقق من الاتصال بالانترنت"),
+                              duration: Duration(
+                                  seconds: 5), // Set the duration as needed
+                              action: SnackBarAction(
+                                label: 'حسنًا',
+                                onPressed: () {
+                                  // Handle the action when the "OK" button is pressed
+                                  scaffold.hideCurrentSnackBar();
+                                },
+                              ),
+                            ),
+                          );
+                          return;
+                        }
 
-                            if (passwordConfirmed()) {
-                              try {
-                                await FirebaseAuth.instance
-                                    .createUserWithEmailAndPassword(
-                                      email: userEmail,
-                                      password: userPassword,
-                                    )
-                                    .then((value) => {
-                                          // ignore: avoid_print
-                                          print("user created"),
-                                          FirebaseFirestore.instance
-                                              .collection("users")
-                                              .doc(value.user!.uid)
-                                              .set({
-                                            'firstName': firstName,
-                                            'lastName': lastName,
-                                            'userEmail': userEmail,
-                                            'healthStatus': text,
-                                            'healthStatusLevel': text1,
-                                          }),
-                                          // ignore: avoid_print
-                                          print("data added"),
-                                        })
-                                    .then((value) {
-                                  AwesomeDialog(
-                                      // width: width(context, 1),
-                                      context: context,
-                                      dialogType: DialogType.success,
-                                      title: "",
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 20),
-                                      autoHide: Duration(seconds: 2),
-                                      body: const Text(
-                                        "تم التسجيل بنجاح",
-                                        style: TextStyle(fontSize: 20),
-                                      )).show().then((value) {
-                                    Navigator.of(context).pushNamed('/');
-                                  });
+                        if (_key.currentState!.validate()) {
+                          var firstName = _firstNameContoroller.text.trim();
+                          var lastName = _lasttNameContoroller.text.trim();
+
+                          var userEmail = _emailController.text.trim();
+                          var userPassword = _passwordController.text.trim();
+
+                          if (passwordConfirmed()) {
+                            try {
+                              await FirebaseAuth.instance
+                                  .createUserWithEmailAndPassword(
+                                    email: userEmail,
+                                    password: userPassword,
+                                  )
+                                  .then((value) => {
+                                        // ignore: avoid_print
+                                        print("user created"),
+                                        FirebaseFirestore.instance
+                                            .collection("users")
+                                            .doc(value.user!.uid)
+                                            .set({
+                                          'firstName': firstName,
+                                          'lastName': lastName,
+                                          'userEmail': userEmail,
+                                          'healthStatus': text,
+                                          'healthStatusLevel': text1,
+                                        }),
+                                        // ignore: avoid_print
+                                        print("data added"),
+                                      })
+                                  .then((value) {
+                                AwesomeDialog(
+                                    // width: width(context, 1),
+                                    context: context,
+                                    dialogType: DialogType.success,
+                                    title: "",
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 20),
+                                    autoHide: Duration(seconds: 2),
+                                    body: const Text(
+                                      "تم التسجيل بنجاح",
+                                      style: TextStyle(fontSize: 20),
+                                    )).show().then((value) {
+                                  Navigator.of(context).pushNamed('/');
                                 });
-                                // Navigator.of(context).pushNamed('/');
-                              } on FirebaseAuthException catch (e) {
-                                if (e.code == 'email-already-in-use') {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text("خطأ"),
-                                          content: Text(
-                                              "البريد الكتروني المدخل مسجل مسبقًا، الرجاء كتابة عنوان بريد الكتروني اخر"),
-                                          actions: [
-                                            TextButton(
-                                              child: Text("حسنًا"),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            )
-                                          ],
-                                        );
-                                      });
-                                }
+                              });
+                              // Navigator.of(context).pushNamed('/');
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code == 'email-already-in-use') {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text("خطأ"),
+                                        content: Text(
+                                            "البريد الكتروني المدخل مسجل مسبقًا، الرجاء كتابة عنوان بريد الكتروني اخر"),
+                                        actions: [
+                                          TextButton(
+                                            child: Text("حسنًا"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          )
+                                        ],
+                                      );
+                                    });
                               }
                             }
                           }
-                        }),
+                        }
+                      },
+                    ),
                   ],
                 ),
                 // text sign up

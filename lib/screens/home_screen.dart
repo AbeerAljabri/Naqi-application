@@ -4,7 +4,10 @@ import 'package:naqi_app/screens/indoor_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:naqi_app/screens/settings_screen.dart';
+import 'package:naqi_app/screens/indoorID.dart';
+import 'package:naqi_app/screens/OutdoorID.dart';
 import 'package:naqi_app/firebase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeSceen extends StatefulWidget {
   const HomeSceen({super.key});
@@ -18,6 +21,8 @@ class _HomeSceenState extends State<HomeSceen>
   FirebaseService firebaseService = FirebaseService();
   SettingsPage settingsPage = SettingsPage();
   IndoorPage indoorPage = IndoorPage();
+  IndoorIDPage indoorIdPage = IndoorIDPage();
+  OutdoorIDPage outdoorIDPage = OutdoorIDPage();
 
   @override
   void initState() {
@@ -35,9 +40,94 @@ class _HomeSceenState extends State<HomeSceen>
     //هنا صفحة حسابي
     settingsPage,
     //هنا صفحة داخلي
-    indoorPage,
+    FutureBuilder<bool>(
+      future: checkIndoorSensorID(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Container(
+              height: 100,
+              child: Center(
+                  child: Container(
+                height: 100,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 135.0, left: 135),
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+                        strokeWidth: 4.0,
+                        semanticsLabel: 'Loading',
+                        semanticsValue: 'Loading',
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: 'بانتظار البيانات',
+                        style: TextStyle(
+                          color: Color(0xff45A1B6),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )));
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}'); // Handle error if any
+        } else {
+          final hasIndoorSensorID = snapshot.data ?? false;
+
+          return hasIndoorSensorID ? indoorPage : indoorIdPage;
+        }
+      },
+    ),
     //هنا صفحة خارجي
-    Center(child: Text('خارجي', style: TextStyle(fontSize: 37))),
+    FutureBuilder<bool>(
+      future: checkOutdoorSensorID(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Container(
+              height: 100,
+              child: Center(
+                  child: Container(
+                height: 100,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 135.0, left: 135),
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+                        strokeWidth: 4.0,
+                        semanticsLabel: 'Loading',
+                        semanticsValue: 'Loading',
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: 'بانتظار البيانات',
+                        style: TextStyle(
+                          color: Color(0xff45A1B6),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )));
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}'); // Handle error if any
+        } else {
+          final hasOutdoorSensorID = snapshot.data ?? false;
+
+          return hasOutdoorSensorID
+              ? Center(child: Text('خارجي', style: TextStyle(fontSize: 37)))
+              : outdoorIDPage;
+        }
+      },
+    ),
+    //Center(child: Text('خارجي', style: TextStyle(fontSize: 37))),
     //هنا صفحة التقارير
     Center(child: Text('التقارير', style: TextStyle(fontSize: 37))),
   ];
@@ -135,4 +225,43 @@ class _HomeSceenState extends State<HomeSceen>
 
   @override
   bool get wantKeepAlive => true;
+  Future<bool> checkIndoorSensorID() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final userDoc =
+            FirebaseFirestore.instance.collection('users').doc(user.uid);
+        final userData = await userDoc.get();
+
+        if (userData.exists) {
+          final userMap = userData.data() as Map<String, dynamic>;
+          return userMap.containsKey('IndoorSensorID');
+        }
+      }
+    } catch (e) {
+      print('Error checking IndoorSensorID: $e');
+    }
+
+    return false;
+  }
+
+  Future<bool> checkOutdoorSensorID() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final userDoc =
+            FirebaseFirestore.instance.collection('users').doc(user.uid);
+        final userData = await userDoc.get();
+
+        if (userData.exists) {
+          final userMap = userData.data() as Map<String, dynamic>;
+          return userMap.containsKey('OutdoorSensorID');
+        }
+      }
+    } catch (e) {
+      print('Error checking IndoorSensorID: $e');
+    }
+
+    return false;
+  }
 }

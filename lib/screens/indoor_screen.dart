@@ -44,10 +44,38 @@ class _IndoorPageState extends State<IndoorPage>
         switchOn = value;
         isSwitchOn = switchOn == '1' ? true : false;
       });
+    });
 
-      print('swich $switchOn');
+    Future<String> indoorSensorID = firebase.getIndoorSensorID();
+    indoorSensorID.then((value) {
+      setState(() {
+        indoorSensorID1 = value;
+        FirebaseService.indoorSensorID = indoorSensorID1;
+      });
+      Future<String> indoorSensorURL =
+          firebase.getIndoorSensorURL(indoorSensorID1);
+      indoorSensorURL.then((value) {
+        setState(() {
+          indoorSensorUrl = value;
+          FirebaseService.indoorSensorURL = indoorSensorUrl;
+        });
+      });
+    });
 
-      print('is $isSwitchOn');
+    Future<String> outdoorSensorID = firebase.getOudoorSensorID();
+    outdoorSensorID.then((value) {
+      setState(() {
+        outdoorSensorID1 = value;
+        FirebaseService.outdoorSensorID = outdoorSensorID1;
+      });
+      Future<String> outdoorSensorURL =
+          firebase.getOudoorSensorURL(outdoorSensorID1);
+      outdoorSensorURL.then((value) {
+        setState(() {
+          outdoorSensorUrl = value;
+          FirebaseService.outdoorSensorURL = outdoorSensorUrl;
+        });
+      });
     });
   }
 
@@ -63,6 +91,10 @@ class _IndoorPageState extends State<IndoorPage>
 
   String isAutomatic = '';
   String status = '';
+  String indoorSensorID1 = '';
+  String indoorSensorUrl = '';
+  String outdoorSensorID1 = '';
+  String outdoorSensorUrl = '';
 
   Widget build(BuildContext context) {
     //print(isSwitchOn);
@@ -94,25 +126,27 @@ class _IndoorPageState extends State<IndoorPage>
                               height: 100,
                               child: Column(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 135.0, left: 135),
-                                    child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.grey),
-                                      strokeWidth: 4.0,
-                                      semanticsLabel: 'Loading',
-                                      semanticsValue: 'Loading',
-                                    ),
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'بانتظار البيانات',
-                                      style: TextStyle(
-                                        color: Color(0xff45A1B6),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20.0,
-                                      ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        CircularProgressIndicator(
+                                          strokeWidth: 3.0,
+                                        ),
+                                        SizedBox(height: 16),
+                                        RichText(
+                                          text: TextSpan(
+                                            text: 'بانتظار البيانات',
+                                            style: TextStyle(
+                                              color: Color(0xff45A1B6),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],

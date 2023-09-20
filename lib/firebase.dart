@@ -7,10 +7,14 @@ class FirebaseService {
   static var first_name;
   static var last_name;
   static var email;
-  static var healthStatus = false;
+  static var healthStatus;
   static var healthStatusLevel;
   static String switchStatus = '';
   static String automatic = '';
+  static String indoorSensorID = '';
+  static String outdoorSensorID = '';
+  static String indoorSensorURL = '';
+  static String outdoorSensorURL = '';
   //DatabaseReference databaseRef;
   static Future<void> initialize() async {
     await Firebase.initializeApp(
@@ -36,11 +40,95 @@ class FirebaseService {
     if (user != null) {
       final userId = user.uid;
       final userInfo = await fetchUserInfo(userId);
-
       first_name = userInfo.data()!['firstName'];
       email = userInfo.data()!['userEmail'];
       healthStatus = userInfo.data()!['healthStatus'];
       healthStatusLevel = userInfo.data()!['healthStatusLevel'];
+      if (userInfo.data()!.containsKey('IndoorSensorID')) {
+        indoorSensorID = userInfo.data()!['IndoorSensorID'];
+        getIndoorSensorURL(indoorSensorID);
+      } else {
+        indoorSensorID =
+            ''; // Set a default value or handle the absence of the key accordingly
+      }
+
+      if (userInfo.data()!.containsKey('OutdoorSensorID')) {
+        outdoorSensorID = userInfo.data()!['OutdoorSensorID'];
+        getOudoorSensorURL(outdoorSensorID);
+      } else {
+        outdoorSensorID =
+            ''; // Set a default value or handle the absence of the key accordingly
+      }
+    }
+  }
+
+  Future<String> getIndoorSensorID() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userId = user.uid;
+      final userInfo = await fetchUserInfo(userId);
+      if (userInfo.data()!.containsKey('IndoorSensorID')) {
+        indoorSensorID = userInfo.data()!['IndoorSensorID'];
+      } else {
+        indoorSensorID = '';
+      }
+    }
+
+    return indoorSensorID;
+  }
+
+  Future<String> getIndoorSensorURL(String sensorID) async {
+    try {
+      final sensorDoc = await FirebaseFirestore.instance
+          .collection('Sensor')
+          .where('SensorID', isEqualTo: sensorID)
+          .get();
+
+      if (sensorDoc.docs.isNotEmpty) {
+        final sensorDoc1 = sensorDoc.docs.first;
+        indoorSensorURL = sensorDoc1.data()['URL'];
+
+        return indoorSensorURL;
+      } else {
+        return ''; // No sensor document with the given sensorID found
+      }
+    } catch (e) {
+      print('Error retrieving sensor URL: $e');
+      return ''; // Handle any errors that occur during the Firestore operation
+    }
+  }
+
+  Future<String> getOudoorSensorID() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userId = user.uid;
+      final userInfo = await fetchUserInfo(userId);
+      if (userInfo.data()!.containsKey('OutdoorSensorID')) {
+        outdoorSensorID = userInfo.data()!['OutdoorSensorID'];
+      } else {
+        outdoorSensorID = '';
+      }
+    }
+    return outdoorSensorID;
+  }
+
+  Future<String> getOudoorSensorURL(String sensorID) async {
+    try {
+      final sensorDoc = await FirebaseFirestore.instance
+          .collection('Sensor')
+          .where('SensorID', isEqualTo: sensorID)
+          .get();
+      if (sensorDoc.docs.isNotEmpty) {
+        // Assuming there could be multiple documents with the same sensorID, you may choose which one to return or handle them as needed.
+        final sensorDoc1 = sensorDoc.docs.first;
+        outdoorSensorURL = sensorDoc1.data()['URL'];
+        return outdoorSensorURL;
+      } else {
+        return ''; // No sensor document with the given sensorID found
+      }
+    } catch (e) {
+      print('Error retrieving sensor URL: $e');
+      return ''; // Handle any errors that occur during the Firestore operation
     }
   }
 

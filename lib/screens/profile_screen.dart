@@ -67,7 +67,7 @@ class _profilePageState extends State<profilePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'الاسم الأول',
+                        'الاسم',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,

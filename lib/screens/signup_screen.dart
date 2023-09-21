@@ -128,16 +128,20 @@ class _SignupScreenState extends State<SignupScreen> {
                     controller: _firstNameContoroller,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        labelText: "الاسم",
-                        prefixIcon: Icon(Icons.person)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      labelText: "الاسم",
+                      prefixIcon: Icon(Icons.person),
+                    ),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'الرجاء ادخال الاسم ';
+                        return 'الرجاء ادخال الاسم';
                       }
                       return null;
                     },
+                    textAlign: TextAlign.end,
+                    textDirection: TextDirection.ltr,
                   ),
                 ),
 
@@ -211,7 +215,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
 
-                SizedBox(height: 7),
+                SizedBox(height: 10),
 
                 //Confirm password
 
@@ -240,127 +244,25 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
 // هنااا
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(22),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.4),
-                        blurRadius: 7,
-                        offset: Offset(0, 5), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      GestureDetector(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors
-                                .white, // Set the background color of the container
-                            borderRadius: BorderRadius.circular(
-                                20), // Set the border radius
-                          ),
-                          height: 60,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Row(
-                                children: [
-                                  // Container( padding: const EdgeInsets.only(right: 12), child: icon),
-                                  Container(
-                                    padding: const EdgeInsets.only(right: 12),
-                                    child: Center(
-                                      child: Text(
-                                        'هل تعاني من ظروف صحية تنفسية؟',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                key: widget1Key,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 6.0),
-                                    child: Text(
-                                      text,
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 12),
-                                    child: Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 16.0,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(right: 25.0, left: 25, top: 10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(22),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.4),
+                          blurRadius: 7,
+                          offset: Offset(0, 5), // changes position of shadow
                         ),
-                        onTap: () {
-                          final RenderBox? renderBox1 =
-                              widget1Key.currentContext?.findRenderObject()
-                                  as RenderBox?;
-                          if (renderBox1 != null) {
-                            final Offset widget1Position =
-                                renderBox1.localToGlobal(Offset.zero);
-
-                            showMenu(
-                              context: context,
-                              position: RelativeRect.fromLTRB(
-                                widget1Position.dx, // Left
-                                widget1Position.dy +
-                                    renderBox1.size.height, // Top
-                                widget1Position.dx +
-                                    renderBox1.size.width, // Right
-                                widget1Position.dy +
-                                    renderBox1.size.height +
-                                    80.0, // Bottom
-                              ), // Adjust the position as needed
-                              items: [
-                                PopupMenuItem(
-                                  child: Text('نعم'),
-                                  value: 'نعم',
-                                ),
-                                PopupMenuItem(
-                                  child: Text('لا'),
-                                  value: 'لا',
-                                ),
-                              ],
-                            ).then((value) {
-                              if (value != null) {
-                                setState(() {
-                                  text = value;
-                                  menu1Value = value;
-
-                                  if (menu1Value == 'لا') text1 = 'خفيف';
-                                });
-                              }
-                            });
-                          }
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0, right: 16),
-                        child: Divider(
-                          color: Colors.grey, // Specify the color of the line
-                          height: 1.0, // Specify the height of the line
-                          thickness: 0.50, // Specify the thickness of the line
-                        ),
-                      ),
-                      Visibility(
-                        visible: menu1Value == 'نعم',
-                        child: GestureDetector(
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        GestureDetector(
                           child: Container(
                             decoration: BoxDecoration(
                               color: Colors
@@ -379,7 +281,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       padding: const EdgeInsets.only(right: 12),
                                       child: Center(
                                         child: Text(
-                                          'مستوى الحالة الصحية',
+                                          'هل تعاني من ظروف صحية تنفسية؟',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 16,
@@ -390,12 +292,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ],
                                 ),
                                 Row(
-                                  key: widget2Key,
+                                  key: widget1Key,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.only(left: 6.0),
                                       child: Text(
-                                        text1,
+                                        text,
                                         style: TextStyle(color: Colors.grey),
                                       ),
                                     ),
@@ -413,52 +315,163 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
                           ),
                           onTap: () {
-                            final RenderBox? renderBox2 =
-                                widget2Key.currentContext?.findRenderObject()
+                            final RenderBox? renderBox1 =
+                                widget1Key.currentContext?.findRenderObject()
                                     as RenderBox?;
-                            if (renderBox2 != null) {
-                              final Offset widget2Position =
-                                  renderBox2.localToGlobal(Offset.zero);
+                            if (renderBox1 != null) {
+                              final Offset widget1Position =
+                                  renderBox1.localToGlobal(Offset.zero);
 
                               showMenu(
                                 context: context,
                                 position: RelativeRect.fromLTRB(
-                                  widget2Position.dx, // Left
-                                  widget2Position.dy +
-                                      renderBox2.size.height, // Top
-                                  widget2Position.dx +
-                                      renderBox2.size.width, // Right
-                                  widget2Position.dy +
-                                      renderBox2.size.height +
+                                  widget1Position.dx, // Left
+                                  widget1Position.dy +
+                                      renderBox1.size.height, // Top
+                                  widget1Position.dx +
+                                      renderBox1.size.width, // Right
+                                  widget1Position.dy +
+                                      renderBox1.size.height +
                                       80.0, // Bottom
-                                ),
+                                ), // Adjust the position as needed
                                 items: [
                                   PopupMenuItem(
-                                    child: Text('خفيف'),
-                                    value: 'خفيف',
+                                    child: Text('نعم'),
+                                    value: 'نعم',
                                   ),
                                   PopupMenuItem(
-                                    child: Text('متوسط'),
-                                    value: 'متوسط',
-                                  ),
-                                  PopupMenuItem(
-                                    child: Text('شديد'),
-                                    value: 'شديد',
+                                    child: Text('لا'),
+                                    value: 'لا',
                                   ),
                                 ],
                               ).then((value) {
                                 if (value != null) {
                                   setState(() {
-                                    text1 = value;
-                                    menu2Value = value;
+                                    text = value;
+                                    menu1Value = value;
+
+                                    if (menu1Value == 'لا') text1 = 'خفيف';
                                   });
                                 }
                               });
                             }
                           },
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0, right: 16),
+                          child: Divider(
+                            color: Colors.grey, // Specify the color of the line
+                            height: 1.0, // Specify the height of the line
+                            thickness:
+                                0.50, // Specify the thickness of the line
+                          ),
+                        ),
+                        Visibility(
+                          visible: menu1Value == 'نعم',
+                          child: GestureDetector(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors
+                                    .white, // Set the background color of the container
+                                borderRadius: BorderRadius.circular(
+                                    20), // Set the border radius
+                              ),
+                              height: 60,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Row(
+                                    children: [
+                                      // Container( padding: const EdgeInsets.only(right: 12), child: icon),
+                                      Container(
+                                        padding:
+                                            const EdgeInsets.only(right: 12),
+                                        child: Center(
+                                          child: Text(
+                                            'مستوى الحالة الصحية',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    key: widget2Key,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 6.0),
+                                        child: Text(
+                                          text1,
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                      ),
+                                      Container(
+                                        padding:
+                                            const EdgeInsets.only(left: 12),
+                                        child: Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 16.0,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            onTap: () {
+                              final RenderBox? renderBox2 =
+                                  widget2Key.currentContext?.findRenderObject()
+                                      as RenderBox?;
+                              if (renderBox2 != null) {
+                                final Offset widget2Position =
+                                    renderBox2.localToGlobal(Offset.zero);
+
+                                showMenu(
+                                  context: context,
+                                  position: RelativeRect.fromLTRB(
+                                    widget2Position.dx, // Left
+                                    widget2Position.dy +
+                                        renderBox2.size.height, // Top
+                                    widget2Position.dx +
+                                        renderBox2.size.width, // Right
+                                    widget2Position.dy +
+                                        renderBox2.size.height +
+                                        80.0, // Bottom
+                                  ),
+                                  items: [
+                                    PopupMenuItem(
+                                      child: Text('خفيف'),
+                                      value: 'خفيف',
+                                    ),
+                                    PopupMenuItem(
+                                      child: Text('متوسط'),
+                                      value: 'متوسط',
+                                    ),
+                                    PopupMenuItem(
+                                      child: Text('شديد'),
+                                      value: 'شديد',
+                                    ),
+                                  ],
+                                ).then((value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      text1 = value;
+                                      menu2Value = value;
+                                    });
+                                  }
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
 

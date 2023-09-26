@@ -40,6 +40,7 @@ class _HomeSceenState extends State<HomeSceen>
     //هنا صفحة حسابي
     settingsPage,
     //هنا صفحة داخلي
+
     FutureBuilder<bool>(
       future: checkIndoorSensorID(),
       builder: (context, snapshot) {
@@ -51,23 +52,26 @@ class _HomeSceenState extends State<HomeSceen>
                 height: 100,
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 135.0, left: 135),
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
-                        strokeWidth: 4.0,
-                        semanticsLabel: 'Loading',
-                        semanticsValue: 'Loading',
-                      ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        text: 'بانتظار البيانات',
-                        style: TextStyle(
-                          color: Color(0xff45A1B6),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
-                        ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(
+                            strokeWidth: 3.0,
+                          ),
+                          SizedBox(height: 16),
+                          RichText(
+                            text: TextSpan(
+                              text: 'بانتظار البيانات',
+                              style: TextStyle(
+                                color: Color(0xff45A1B6),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -94,23 +98,26 @@ class _HomeSceenState extends State<HomeSceen>
                 height: 100,
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 135.0, left: 135),
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
-                        strokeWidth: 4.0,
-                        semanticsLabel: 'Loading',
-                        semanticsValue: 'Loading',
-                      ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        text: 'بانتظار البيانات',
-                        style: TextStyle(
-                          color: Color(0xff45A1B6),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
-                        ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(
+                            strokeWidth: 3.0,
+                          ),
+                          SizedBox(height: 16),
+                          RichText(
+                            text: TextSpan(
+                              text: 'بانتظار البيانات',
+                              style: TextStyle(
+                                color: Color(0xff45A1B6),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

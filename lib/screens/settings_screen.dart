@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:naqi_app/auth.dart';
 
 class SettingsPage extends StatelessWidget {
   Widget _arrow() {
@@ -173,7 +174,14 @@ class ItemCard extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         FirebaseAuth.instance.signOut();
-                        Navigator.of(context).pop();
+                        // Pop all routes from the navigation stack
+                        Navigator.of(context)
+                            .popUntil((route) => route.isFirst);
+
+                        // Push the login page route
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => Auth(),
+                        ));
                       },
                       child: Text(
                         'نعم',

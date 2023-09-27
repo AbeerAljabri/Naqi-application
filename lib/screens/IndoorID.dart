@@ -217,14 +217,7 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
   }
 
   void navigateToIndoorAirQualityPage(BuildContext context) {
-    // Future<bool> userStatus = checkCurrentUserStatus();
-    //userStatus.then((value) {
-    //   status = value;
-    // });
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage),
-    );
+    Navigator.of(context).pushReplacementNamed('homeScreen');
   }
 
   //

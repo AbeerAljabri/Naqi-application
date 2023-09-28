@@ -475,58 +475,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
 
-                /*  Form(
-                  key: _formKey,
-                  child: Column(
-                    // Your other form fields
-                    children: [
-                      // Your existing TextFormField and other form fields
-
-                      // Add a FormField for showMenu
-                      FormField<String>(
-                        builder: (FormFieldState<String> state) {
-                          return InputDecorator(
-                            decoration: InputDecoration(
-                              labelText: 'Choose from menu',
-                              errorText:
-                                  state.hasError ? state.errorText : null,
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: menu1Value,
-                                onChanged: (value) {
-                                  setState(() {
-                                    menu1Value = value!;
-                                    var isButtonEnabled = true;
-                                    if (menu1Value == 'لا') text1 = 'خفيف';
-                                  });
-                                },
-                                items: [
-                                  DropdownMenuItem(
-                                    child: Text('نعم'),
-                                    value: 'نعم',
-                                  ),
-                                  DropdownMenuItem(
-                                    child: Text('لا'),
-                                    value: 'لا',
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'يرجى اختيار قيمة من القائمة';
-                          }
-                          return null; // Return null if validation succeeds
-                        },
-                      ),
-
-                      // Your "Sign Up" button and other widgets
-                    ],
-                  ),
-                ),*/
                 SizedBox(height: 25),
 //sigup button
                 Row(

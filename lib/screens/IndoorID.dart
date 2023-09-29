@@ -155,7 +155,8 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
                       fontSize: 16.0,
                     ),
                   ),
-                ElevatedButton.icon(
+
+                /*  ElevatedButton.icon(
                   onPressed: (hasIndoorSensor)
                       ? () => navigateToIndoorAirQualityPage(context)
                       : null,
@@ -171,7 +172,7 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
                         .check_circle, // Replace with a different icon if desired
                     size: 35, // Adjust the icon size
                   ),
-                  label: Text(
+                label: Text(
                     'تم',
                     style: TextStyle(
                       fontSize: 25, // Adjust the font size
@@ -179,7 +180,7 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
                           FontWeight.bold, // Apply a different font weight
                     ),
                   ),
-                ),
+                ),*/
               ],
             ),
           ),
@@ -208,6 +209,8 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
         isLoading = false;
         IndoorButtonText = 'تم التوصيل بنجاح';
       });
+      // Navigate to the home screen page
+      Navigator.pushReplacementNamed(context, 'homeScreen');
     } else {
       setState(() {
         errorMessage = 'معرف المستشعر الداخلي خاطئ';
@@ -216,9 +219,9 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
     }
   }
 
-  void navigateToIndoorAirQualityPage(BuildContext context) {
+  /*void navigateToIndoorAirQualityPage(BuildContext context) {
     Navigator.of(context).pushReplacementNamed('homeScreen');
-  }
+  }*/
 
   //
   void updateInfo(var feild, var feildValue) async {

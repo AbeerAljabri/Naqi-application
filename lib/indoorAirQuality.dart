@@ -1,9 +1,9 @@
-//import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:intl/intl.dart';
 
 class IndoorAirQuality {
+  bool flag = true;
   var co2 = 0;
   var temp = 0;
   var hum = 0;
@@ -30,21 +30,65 @@ class IndoorAirQuality {
     return readings;
   }
 
-  Widget checkTime(var time) {
+  Widget checkTime(var time, context) {
     DateTime currDt = DateTime.now();
     var diffDt = currDt.difference(time);
     var Min = diffDt.inMinutes;
+    String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(time);
+    if (Min >= 2 && flag) {
+      flag = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showSnackBar(
+          context,
+          'تعذر الوصول للمستشعر !',
+          duration: Duration(seconds: 5),
+          actionLabel: 'حسنًا',
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          },
+        );
+      });
+    }
     if (Min >= 2) {
-      return Text(
-        'تعذر الوصول للمستشعر',
-        style: TextStyle(color: Colors.black),
+      return Column(
+        children: [
+          SizedBox(height: 14),
+          Text(
+            'آخر تحديث للبيانات:',
+            style: TextStyle(color: Colors.black, fontSize: 12),
+          ),
+          Text(
+            '$formattedDate',
+            style: TextStyle(color: Colors.black, fontSize: 12),
+          ),
+        ],
       );
     } else {
       return Text(
-        'تم الوصول للمستشعر',
-        style: TextStyle(color: Colors.black),
+        '',
       );
     }
+  }
+
+  void showSnackBar(
+    BuildContext context,
+    String message, {
+    Duration? duration,
+    String actionLabel = 'حسنًا',
+    VoidCallback? onPressed,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: duration ?? const Duration(seconds: 3),
+        action: onPressed != null
+            ? SnackBarAction(
+                label: actionLabel,
+                onPressed: onPressed,
+              )
+            : null,
+      ),
+    );
   }
 
   Widget viewIndoorAirQuality(List<dynamic> readings, context) {

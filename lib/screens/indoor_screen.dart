@@ -46,7 +46,8 @@ class _IndoorPageState extends State<IndoorPage>
       });
     });
 
-    Future<String> indoorSensorID = firebase.getIndoorSensorID();
+    // يمكن نحتاجها لو سوينا ايديت اي دي
+    /*Future<String> indoorSensorID = firebase.getIndoorSensorID();
     indoorSensorID.then((value) {
       setState(() {
         indoorSensorID1 = value;
@@ -62,7 +63,7 @@ class _IndoorPageState extends State<IndoorPage>
       });
     });
 
-    Future<String> outdoorSensorID = firebase.getOudoorSensorID();
+   Future<String> outdoorSensorID = firebase.getOudoorSensorID();
     outdoorSensorID.then((value) {
       setState(() {
         outdoorSensorID1 = value;
@@ -76,7 +77,7 @@ class _IndoorPageState extends State<IndoorPage>
           FirebaseService.outdoorSensorURL = outdoorSensorUrl;
         });
       });
-    });
+    });*/
   }
 
   @override
@@ -91,13 +92,12 @@ class _IndoorPageState extends State<IndoorPage>
 
   String isAutomatic = '';
   String status = '';
-  String indoorSensorID1 = '';
-  String indoorSensorUrl = '';
-  String outdoorSensorID1 = '';
-  String outdoorSensorUrl = '';
+  //String indoorSensorID1 = '';
+  //String indoorSensorUrl = '';
+  //String outdoorSensorID1 = '';
+  //String outdoorSensorUrl = '';
 
   Widget build(BuildContext context) {
-    //print(isSwitchOn);
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -162,11 +162,6 @@ class _IndoorPageState extends State<IndoorPage>
                             return Column(children: [
                               Row(
                                 children: [
-                                  sensorReadings.checkTime(readings[3]),
-                                ],
-                              ),
-                              Row(
-                                children: [
                                   sensorReadings.viewIndoorAirQuality(
                                       readings, context),
                                 ],
@@ -174,6 +169,13 @@ class _IndoorPageState extends State<IndoorPage>
                               Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [controlFanWidget()]),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  sensorReadings.checkTime(
+                                      readings[3], context),
+                                ],
+                              ),
                             ]);
                           }
                         },
@@ -194,7 +196,7 @@ class _IndoorPageState extends State<IndoorPage>
     fanStatus.then((value) {
       status = value;
     });
-
+//اتأكد منه اذا شبكنا المروحة
     /* Future<String> automatic = firebase.isAutomatic();
     automatic.then((value) {
       isAutomatic = value;
@@ -210,7 +212,7 @@ class _IndoorPageState extends State<IndoorPage>
     isSwitchOn = FirebaseService.switchStatus == '1' ? true : false;
     isAutomatic = FirebaseService.automatic;
     return Padding(
-      padding: const EdgeInsets.only(top: 20, right: 2),
+      padding: const EdgeInsets.only(top: 14, right: 2),
       child: Container(
         width: 310, // Adjust the width as needed
         height: 100, // Adjust the height as needed

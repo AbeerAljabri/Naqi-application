@@ -26,9 +26,7 @@ class _IndoorPageState extends State<IndoorPage>
       var jsonData = jsonDecode(data);
       List<dynamic> reading = sensorReadings.readData(jsonData);
       var co2 = reading[2];
-      controller.checkAirQualityData(co2);
-      //var pm = reading[4];
-      //controller.checkOutdoorAirQuality(pm);
+      controller.checkIndoorAirQualityData(co2);
     });
 
     Future<String> fanStatus = firebase.getStatus();

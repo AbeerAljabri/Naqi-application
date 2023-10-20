@@ -2,20 +2,20 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:naqi_app/firebase.dart';
 import 'package:naqi_app/fan.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:naqi_app/screens/indoor_screen.dart';
-import 'package:naqi_app/screens/indoor_screen.dart';
+import 'package:naqi_app/firebase.dart';
+import 'package:naqi_app/indoorAirQuality.dart';
 
 class Controller {
+  bool notificationSent = false;
   String status = '';
   String isSwitchOn = '';
   String atomatic = '';
   FirebaseService firebase = FirebaseService();
   Fan fan = Fan();
   // bool switchStatus = IndoorPage.getSwitchStatus();
-  void checkAirQualityData(var co2) {
+  void checkIndoorAirQualityData(var co2) {
     // Get fan status and switch status from databse
     Future<String> fanStatus = firebase.getStatus();
-    Future<String> fanSwitch = firebase.isSwitchOn();
     Future<String> isAutomatic = firebase.isAutomatic();
 
     fanStatus.then((value) {
@@ -42,7 +42,56 @@ class Controller {
     });
   }
 
-  sendNotification(String text) {
+  void checkOutdoorAirQuality(var pm) {
+    // Get user health status imformation from databse
+    bool healthStaus = FirebaseService.healthStatus;
+    String healthStatusLevel = FirebaseService.healthStatusLevel;
+    print(notificationSent);
+    // check to see if a notification has already been sent
+    if (!notificationSent) {
+      // check pm value based on user health status
+      if (healthStaus == true) {
+        if ((healthStatusLevel == 'شديد') && (pm >= 25)) {
+          sendNotification('1');
+          notificationSent = true;
+        }
+        if ((healthStatusLevel == 'متوسط') && (pm >= 35)) {
+          sendNotification('2');
+          notificationSent = true;
+        }
+        if ((healthStatusLevel == 'خفيف') && (pm >= 45)) {
+          sendNotification('3');
+          notificationSent = true;
+        }
+      } else {
+        if (pm >= 50) {
+          sendNotification('4');
+          notificationSent = true;
+        }
+      }
+    }
+    // If a notification has already been sent
+    // check to see if the dust value returns to its normal value
+    if (notificationSent) {
+      if (healthStaus == true) {
+        if ((healthStatusLevel == 'شديد') && (pm < 25)) {
+          notificationSent = false;
+        }
+        if ((healthStatusLevel == 'متوسط') && (pm < 35)) {
+          notificationSent = false;
+        }
+        if ((healthStatusLevel == 'خفيف') && (pm < 45)) {
+          notificationSent = false;
+        }
+      } else {
+        if (pm < 50) {
+          notificationSent = false;
+        }
+      }
+    }
+  }
+
+  void sendNotification(String text) {
     AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: 10, channelKey: "default_channel", title: "تنبيه!", body: text),

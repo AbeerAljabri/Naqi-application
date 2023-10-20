@@ -21,13 +21,16 @@ class _IndoorPageState extends State<IndoorPage>
   void initState() {
     super.initState();
     //Listen to the stream
-    sensor.getReadings().listen((data) {
+    sensor.getIndoorReadings().listen((data) {
       // This callback function is called every time new data is received from the stream
       var jsonData = jsonDecode(data);
       List<dynamic> reading = sensorReadings.readData(jsonData);
       var co2 = reading[2];
       controller.checkAirQualityData(co2);
+      //var pm = reading[4];
+      //controller.checkOutdoorAirQuality(pm);
     });
+
     Future<String> fanStatus = firebase.getStatus();
     fanStatus.then((value) {
       status = value;
@@ -118,7 +121,7 @@ class _IndoorPageState extends State<IndoorPage>
                     children: [
                       const SizedBox(height: 26),
                       StreamBuilder<String>(
-                        stream: sensor.getReadings(),
+                        stream: sensor.getIndoorReadings(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             print("no data");

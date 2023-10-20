@@ -8,6 +8,7 @@ import 'package:naqi_app/screens/indoorID.dart';
 import 'package:naqi_app/screens/OutdoorID.dart';
 import 'package:naqi_app/firebase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:naqi_app/screens/outdoor_screen.dart';
 
 class HomeSceen extends StatefulWidget {
   const HomeSceen({super.key});
@@ -21,6 +22,7 @@ class _HomeSceenState extends State<HomeSceen>
   FirebaseService firebaseService = FirebaseService();
   SettingsPage settingsPage = SettingsPage();
   IndoorPage indoorPage = IndoorPage();
+  OutdoorPage outdoorPage = OutdoorPage();
   IndoorIDPage indoorIdPage = IndoorIDPage();
   OutdoorIDPage outdoorIDPage = OutdoorIDPage();
 
@@ -128,9 +130,7 @@ class _HomeSceenState extends State<HomeSceen>
         } else {
           final hasOutdoorSensorID = snapshot.data ?? false;
 
-          return hasOutdoorSensorID
-              ? Center(child: Text('خارجي', style: TextStyle(fontSize: 37)))
-              : outdoorIDPage;
+          return hasOutdoorSensorID ? outdoorPage : outdoorIDPage;
         }
       },
     ),

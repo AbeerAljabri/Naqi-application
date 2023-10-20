@@ -4,15 +4,33 @@ import 'package:naqi_app/firebase.dart';
 
 class Sensor {
   FirebaseService firebaseService = FirebaseService();
-  String url = '';
+  String indoorURL = '';
+  String outdoorURL = '';
 
-  Stream<String> getReadings() => Stream.periodic(Duration(milliseconds: 500))
-      .asyncMap((_) => getReading());
+  Stream<String> getIndoorReadings() =>
+      Stream.periodic(Duration(milliseconds: 500))
+          .asyncMap((_) => getIndoorReading());
 
-  Future<String> getReading() async {
-    url = FirebaseService.indoorSensorURL;
+  Future<String> getIndoorReading() async {
+    indoorURL = FirebaseService.indoorSensorURL;
 
-    final response = await http.get(Uri.parse(url));
+    final response = await http.get(Uri.parse(indoorURL));
+    if (response.statusCode == 200) {
+      return response.body.toString();
+    } else {
+      print("Connection Error");
+      throw Exception("faild");
+    }
+  }
+
+  Stream<String> getOutdoorReadings() =>
+      Stream.periodic(Duration(milliseconds: 500))
+          .asyncMap((_) => getOutdoorReading());
+
+  Future<String> getOutdoorReading() async {
+    outdoorURL = FirebaseService.outdoorSensorURL;
+
+    final response = await http.get(Uri.parse(outdoorURL));
     if (response.statusCode == 200) {
       return response.body.toString();
     } else {

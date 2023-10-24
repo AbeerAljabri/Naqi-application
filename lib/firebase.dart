@@ -15,6 +15,8 @@ class FirebaseService {
   static String outdoorSensorID = '';
   static String indoorSensorURL = '';
   static String outdoorSensorURL = '';
+
+  static num dust = 0;
   //DatabaseReference databaseRef;
   static Future<void> initialize() async {
     await Firebase.initializeApp(
@@ -164,5 +166,20 @@ class FirebaseService {
       print('No data available.');
     }
     return automatic;
+  }
+
+  Future<num> getdust() async {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref.child('PM10').orderByKey().limitToLast(1).get();
+    if (snapshot.exists) {
+      final values = snapshot.value as Map<dynamic, dynamic>;
+      if (values != null) {
+        dust = values.values.first;
+      }
+    } else {
+      print('No data available.');
+    }
+
+    return dust;
   }
 }

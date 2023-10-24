@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:intl/intl.dart';
+import 'package:naqi_app/firebase.dart';
+import 'package:naqi_app/sensor.dart';
 
 class OutdoorAirQuality {
   static bool notificationSent = false;
   bool flag = true;
-  var co2 = 10;
   var temp = 0;
   var hum = 0;
+  var co2 = 0;
+  num pm = 0.0;
   var time = DateTime(2000);
+  FirebaseService firebase = FirebaseService();
 
   dynamic readData(dynamic data) {
     if (data.containsKey('uplink_message')) {
@@ -25,7 +29,8 @@ class OutdoorAirQuality {
       }
     }
     time = DateTime.parse((data as Map)['received_at']);
-    List<dynamic> readings = [temp, hum, co2, time];
+    pm = Sensor.pm;
+    List<dynamic> readings = [temp, hum, pm, time];
     return readings;
   }
 

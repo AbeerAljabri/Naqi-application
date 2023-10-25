@@ -42,7 +42,7 @@ class Controller {
     });
   }
 
-  void checkOutdoorAirQuality(var pm) {
+  void checkOutdoorAirQuality(var dust) {
     // Get user health status imformation from databse
     bool healthStaus = FirebaseService.healthStatus;
     String healthStatusLevel = FirebaseService.healthStatusLevel;
@@ -51,20 +51,20 @@ class Controller {
     if (!notificationSent) {
       // check pm value based on user health status
       if (healthStaus == true) {
-        if ((healthStatusLevel == 'شديد') && (pm >= 25)) {
+        if ((healthStatusLevel == 'شديد') && (dust >= 15000)) {
           sendNotification('1');
           notificationSent = true;
         }
-        if ((healthStatusLevel == 'متوسط') && (pm >= 35)) {
+        if ((healthStatusLevel == 'متوسط') && (dust >= 20000)) {
           sendNotification('2');
           notificationSent = true;
         }
-        if ((healthStatusLevel == 'خفيف') && (pm >= 45)) {
+        if ((healthStatusLevel == 'خفيف') && (dust >= 25000)) {
           sendNotification('3');
           notificationSent = true;
         }
       } else {
-        if (pm >= 50) {
+        if (dust > 30000) {
           sendNotification('4');
           notificationSent = true;
         }
@@ -74,17 +74,17 @@ class Controller {
     // check to see if the dust value returns to its normal value
     if (notificationSent) {
       if (healthStaus == true) {
-        if ((healthStatusLevel == 'شديد') && (pm < 25)) {
+        if ((healthStatusLevel == 'شديد') && (dust < 15000)) {
           notificationSent = false;
         }
-        if ((healthStatusLevel == 'متوسط') && (pm < 35)) {
+        if ((healthStatusLevel == 'متوسط') && (dust < 20000)) {
           notificationSent = false;
         }
-        if ((healthStatusLevel == 'خفيف') && (pm < 45)) {
+        if ((healthStatusLevel == 'خفيف') && (dust < 25000)) {
           notificationSent = false;
         }
       } else {
-        if (pm < 50) {
+        if (dust <= 30000) {
           notificationSent = false;
         }
       }

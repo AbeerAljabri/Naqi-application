@@ -26,10 +26,9 @@ class _OutdoorPageState extends State<OutdoorPage>
       // This callback function is called every time new data is received from the stream
       var jsonData = jsonDecode(data);
       List<dynamic> reading = sensorReadings.readData(jsonData);
-      var co2 = reading[2];
-      controller.checkOutdoorAirQuality(co2);
-      //var pm = reading[4];
-      //controller.checkOutdoorAirQuality(pm);
+      var pm = reading[2];
+      controller.checkOutdoorAirQuality(pm);
+   
     });
 
     // يمكن نحتاجها لو سوينا ايديت اي دي

@@ -9,7 +9,6 @@ class OutdoorAirQuality {
   bool flag = true;
   var temp = 0;
   var hum = 0;
-  var co2 = 0;
   num pm = 0.0;
   var time = DateTime(2000);
   FirebaseService firebase = FirebaseService();
@@ -168,7 +167,7 @@ class OutdoorAirQuality {
               children: [
                 _cardMenu(
                   context: context,
-                  title: 'ثاني أكسيد الكربون',
+                  title: 'مستوى الغبار',
                   reading: readings[2].toString(),
                   level: levels[2],
                   percent: calculatePercentege(readings)[2],
@@ -189,7 +188,7 @@ class OutdoorAirQuality {
     // humidity percentage
     percentages.add(readings[1] / 100);
 
-    // co2 percantsge
+    // pm percantsge
     percentages.add(readings[2] / 2000);
 
     return percentages;
@@ -213,13 +212,13 @@ class OutdoorAirQuality {
     } else if (readings[1] > 60) {
       levels.add("عالي");
     }
-    // co2 level
-    if (readings[2] <= 1000) {
+    // pm level
+    if (readings[2] <= 10000) {
       levels.add("ممتاز");
-    } else if ((readings[2] > 1000) & (readings[2] < 1500)) {
+    } else if ((readings[2] > 10000) & (readings[2] <= 30000)) {
+      levels.add("متوسط");
+    } else if (readings[2] > 30000) {
       levels.add("ملوث");
-    } else if (readings[2] >= 1500) {
-      levels.add("ملوث جدا");
     }
 
     return levels;
@@ -310,7 +309,7 @@ class OutdoorAirQuality {
                     ),
                   ),
                 ),
-              if (title == 'ثاني أكسيد الكربون')
+              if (title == 'مستوى الغبار')
                 Padding(
                   padding: EdgeInsets.only(right: 20, left: 0),
                   child: Container(
@@ -322,7 +321,7 @@ class OutdoorAirQuality {
                     ),
                     child: CircleAvatar(
                       child: Icon(
-                        Icons.cloud,
+                        Icons.grain,
                         color: Color(0xff45A1B6),
                         size: 25,
                       ),
@@ -365,11 +364,11 @@ class OutdoorAirQuality {
                             ),
                           ),
                         ),
-                      if (title == 'ثاني أكسيد الكربون')
+                      if (title == 'مستوى الغبار')
                         Align(
                           alignment: Alignment.centerRight,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 0),
+                            padding: const EdgeInsets.only(left: 50),
                             child: Text(
                               title,
                               style: TextStyle(
@@ -434,7 +433,7 @@ class OutdoorAirQuality {
             child: infoWidget(context,
                 ' - يعتبر مستوى الرطوبة منخفض إذا كان أقل من ٣٠  \n - يعتبر مستوى الرطوبة متوسط إذا كان أعلى من أو يساوي ٣٠ وأقل من أو يساوي ٦٠  \n  - يعتبر مستوى الرطوبة عالي إذا كان أعلى من ٦٠'),
           ),
-        if (title == 'ثاني أكسيد الكربون')
+        if (title == 'مستوى الغبار')
           Positioned(
             bottom: 0.0,
             left: 0.0,

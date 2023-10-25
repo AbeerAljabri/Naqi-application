@@ -27,7 +27,7 @@ class _OutdoorPageState extends State<OutdoorPage>
       var jsonData = jsonDecode(data);
       List<dynamic> reading = sensorReadings.readData(jsonData);
       var co2 = reading[2];
-      controller.checkAirQualityData(co2);
+      controller.checkOutdoorAirQuality(co2);
       //var pm = reading[4];
       //controller.checkOutdoorAirQuality(pm);
     });

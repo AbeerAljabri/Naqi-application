@@ -170,7 +170,7 @@ class FirebaseService {
 
   Future<num> getdust() async {
     final ref = FirebaseDatabase.instance.ref();
-    final snapshot = await ref.child('PM10').orderByKey().limitToLast(1).get();
+    final snapshot = await ref.child('Dust').orderByKey().limitToLast(1).get();
     if (snapshot.exists) {
       final values = snapshot.value as Map<dynamic, dynamic>;
       if (values != null) {

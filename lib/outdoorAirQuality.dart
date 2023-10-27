@@ -189,10 +189,11 @@ class OutdoorAirQuality {
     percentages.add(readings[1] / 100);
 
     // pm percantsge
-    percentages.add(readings[2] / 2000);
+    percentages.add(readings[2] / 30000);
 
     return percentages;
   }
+
 
   List<String> calculateLevel(List<dynamic> readings) {
     List<String> levels = [];
@@ -207,9 +208,9 @@ class OutdoorAirQuality {
     // humidity level
     if (readings[1] < 30) {
       levels.add("منخفض");
-    } else if ((readings[1] >= 30) & (readings[1] <= 60)) {
+    } else if ((readings[1] >= 30) & (readings[1] <= 70)) {
       levels.add("متوسط");
-    } else if (readings[1] > 60) {
+    } else if (readings[1] > 70) {
       levels.add("عالي");
     }
     // pm level
@@ -223,6 +224,7 @@ class OutdoorAirQuality {
 
     return levels;
   }
+
 
   Map<String, Color> calculateAirQuality(List<String> levels) {
     String airQuality = 'ممتاز';

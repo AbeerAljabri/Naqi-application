@@ -15,7 +15,7 @@ class OutdoorIDPage extends StatefulWidget {
   _OutdoorIDPageState createState() => _OutdoorIDPageState();
 }
 
-HomeSceen HomePage = HomeSceen();
+HomeSceen HomePage = HomeSceen(index: 2);
 SignupScreen signupscreen = SignupScreen();
 //IndoorPage indoorPage = IndoorPage(); هنا الاوتدور اذا زانت
 

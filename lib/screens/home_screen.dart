@@ -11,10 +11,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:naqi_app/screens/outdoor_screen.dart';
 
 class HomeSceen extends StatefulWidget {
-  const HomeSceen({super.key});
+  int index;
+  HomeSceen({required this.index});
 
   @override
-  State<HomeSceen> createState() => _HomeSceenState();
+  State<HomeSceen> createState() => _HomeSceenState(index: index);
 }
 
 class _HomeSceenState extends State<HomeSceen>
@@ -37,7 +38,8 @@ class _HomeSceenState extends State<HomeSceen>
     firebaseService.getUserInfo();
   }
 
-  int index = 1;
+  late int index = index;
+  _HomeSceenState({required this.index});
   late final pages = [
     //هنا صفحة حسابي
     settingsPage,

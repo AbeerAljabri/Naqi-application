@@ -155,7 +155,7 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
                       fontSize: 16.0,
                     ),
                   ),
-                ElevatedButton.icon(
+                /*  ElevatedButton.icon(
                   onPressed: (hasOutdoorSensor)
                       ? () => navigateToIndoorAirQualityPage(context)
                       : null,
@@ -179,7 +179,7 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
                           FontWeight.bold, // Apply a different font weight
                     ),
                   ),
-                ),
+                ),*/
               ],
             ),
           ),
@@ -208,6 +208,11 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
         isLoading = false;
         OutdoorButtonText = 'تم التوصيل بنجاح';
       });
+      //Navigator.pushReplacementNamed(context, 'homescreen');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage),
+      );
     } else {
       setState(() {
         errorMessage = 'معرف المستشعر الخارجي خاطئ';
@@ -216,7 +221,7 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
     }
   }
 
-  void navigateToIndoorAirQualityPage(BuildContext context) {
+  /*void navigateToIndoorAirQualityPage(BuildContext context) {
     // Future<bool> userStatus = checkCurrentUserStatus();
     //userStatus.then((value) {
     //   status = value;
@@ -225,7 +230,7 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
       context,
       MaterialPageRoute(builder: (context) => HomePage),
     );
-  }
+  }*/
 
   //
   void updateInfo(var feild, var feildValue) async {

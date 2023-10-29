@@ -29,7 +29,7 @@ class OutdoorAirQuality {
     }
     time = DateTime.parse((data as Map)['received_at']);
     pm = Sensor.pm;
-    List<dynamic> readings = [temp, hum, pm, time];
+    List<dynamic> readings = [temp, hum, 15000, time];
     return readings;
   }
 
@@ -222,20 +222,26 @@ class OutdoorAirQuality {
       levels.add("ملوث");
     }
     if (healthStaus == true) {
-      if ((healthStatusLevel == 'شديد') && (readings[2] >= 15000)) {
-        levels.add("ملوث بالنسبة للحالة الصحية");
+      if ((healthStatusLevel == 'شديد') &&
+          (readings[2] >= 15000) &&
+          (readings[2] <= 30000)) {
+        levels.add("ملوث لحالتك الصحية");
       } else if ((healthStatusLevel == 'شديد') &&
           (readings[2] > 10000) &&
           (readings[2] < 15000)) {
         levels.add("متوسط");
-      } else if ((healthStatusLevel == 'متوسط') && (readings[2] >= 20000)) {
-        levels.add("ملوث بالنسبة للحالة الصحية");
+      } else if ((healthStatusLevel == 'متوسط') &&
+          (readings[2] >= 20000) &&
+          (readings[2] <= 30000)) {
+        levels.add("ملوث لحالتك الصحية");
       } else if ((healthStatusLevel == 'متوسط') &&
           (readings[2] > 10000) &&
           (readings[2] < 20000)) {
         levels.add("متوسط");
-      } else if ((healthStatusLevel == 'خفيف') && (readings[2] >= 25000)) {
-        levels.add("ملوث بالنسبة للحالة الصحية");
+      } else if ((healthStatusLevel == 'خفيف') &&
+          (readings[2] >= 25000) &&
+          (readings[2] <= 30000)) {
+        levels.add("ملوث  لحالتك الصحية");
       } else if ((healthStatusLevel == 'خفيف') &&
           (readings[2] > 10000) &&
           (readings[2] < 25000)) {
@@ -249,17 +255,17 @@ class OutdoorAirQuality {
   }
 
   Map<String, Color> calculateAirQuality(List<String> levels) {
-    String airQuality = 'ممتاز';
-    for (String level in levels) {
-      if (level == "ملوث جدا") {
-        airQuality = level;
-        return {airQuality: Colors.red};
-      }
-      if (level == "ملوث") {
-        airQuality = level;
-        return {airQuality: Colors.orange};
-      }
+    String airQuality = levels[2];
+
+    if (airQuality == "ملوث") {
+      return {airQuality: Colors.red};
     }
+    if (airQuality == "ملوث لحالتك الصحية") {
+      return {airQuality: Colors.orange};
+    }
+    if (airQuality == "متوسط")
+      return {airQuality: Color.fromARGB(255, 224, 228, 98)};
+
     return {airQuality: Colors.green};
   }
 
@@ -462,7 +468,7 @@ class OutdoorAirQuality {
             bottom: 0.0,
             left: 0.0,
             child: infoWidget(context,
-                '\n - يعتبر مستوى الغبار ممتاز إذا كان اقل من أو يساي ١٠٠٠٠  \n - يعتبر مستوى الغبار ملوث إذا كان أعلى من ١٠٠٠٠ وأقل من ٣٠٠٠٠ \n  - يعتبر مستوى الغبار ملوث جدًا إذا كان أعلى من أو يساوي ٣٠٠٠٠'),
+                '\n - يعتبر مستوى الغبار ممتاز إذا كان اقل من أو يساي ١٠٠٠٠  \n - يعتبر مستوى الغبار متوسط إذا كان أعلى من ١٠٠٠٠ وأقل من ٣٠٠٠٠ \n  - يعتبر مستوى الغبار ملوث إذا كان أعلى من أو يساوي ٣٠٠٠٠'),
           ),
       ],
     );

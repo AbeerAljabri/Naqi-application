@@ -183,19 +183,21 @@ class OutdoorAirQuality {
   List<double> calculatePercentege(List<dynamic> readings) {
     List<double> percentages = [];
     // temp percentage
-    percentages.add(readings[0] / 40);
+    percentages.add(readings[0] / 55);
 
     // humidity percentage
     percentages.add(readings[1] / 100);
 
     // pm percantsge
-    percentages.add(readings[2] / 30000);
+    percentages.add(readings[2] / 50000);
 
     return percentages;
   }
 
-
   List<String> calculateLevel(List<dynamic> readings) {
+    // Get user health status imformation from databse
+    bool healthStaus = FirebaseService.healthStatus;
+    String healthStatusLevel = FirebaseService.healthStatusLevel;
     List<String> levels = [];
     // temprature level
     if (readings[0] < 10) {
@@ -216,15 +218,35 @@ class OutdoorAirQuality {
     // pm level
     if (readings[2] <= 10000) {
       levels.add("ممتاز");
-    } else if ((readings[2] > 10000) & (readings[2] <= 30000)) {
-      levels.add("متوسط");
     } else if (readings[2] > 30000) {
       levels.add("ملوث");
+    }
+    if (healthStaus == true) {
+      if ((healthStatusLevel == 'شديد') && (readings[2] >= 15000)) {
+        levels.add("ملوث بالنسبة للحالة الصحية");
+      } else if ((healthStatusLevel == 'شديد') &&
+          (readings[2] > 10000) &&
+          (readings[2] < 15000)) {
+        levels.add("متوسط");
+      } else if ((healthStatusLevel == 'متوسط') && (readings[2] >= 20000)) {
+        levels.add("ملوث بالنسبة للحالة الصحية");
+      } else if ((healthStatusLevel == 'متوسط') &&
+          (readings[2] > 10000) &&
+          (readings[2] < 20000)) {
+        levels.add("متوسط");
+      } else if ((healthStatusLevel == 'خفيف') && (readings[2] >= 25000)) {
+        levels.add("ملوث بالنسبة للحالة الصحية");
+      } else if ((healthStatusLevel == 'خفيف') &&
+          (readings[2] > 10000) &&
+          (readings[2] < 25000)) {
+        levels.add("متوسط");
+      }
+    } else if ((readings[2] > 10000) && (readings[2] < 25000)) {
+      levels.add("متوسط");
     }
 
     return levels;
   }
-
 
   Map<String, Color> calculateAirQuality(List<String> levels) {
     String airQuality = 'ممتاز';
@@ -433,14 +455,14 @@ class OutdoorAirQuality {
             bottom: 0.0,
             left: 0.0,
             child: infoWidget(context,
-                ' - يعتبر مستوى الرطوبة منخفض إذا كان أقل من ٣٠  \n - يعتبر مستوى الرطوبة متوسط إذا كان أعلى من أو يساوي ٣٠ وأقل من أو يساوي ٦٠  \n  - يعتبر مستوى الرطوبة عالي إذا كان أعلى من ٦٠'),
+                ' - يعتبر مستوى الرطوبة منخفض إذا كان أقل من ٣٠  \n - يعتبر مستوى الرطوبة متوسط إذا كان أعلى من أو يساوي ٣٠ وأقل من أو يساوي ٧٠  \n  - يعتبر مستوى الرطوبة عالي إذا كان أعلى من ٧٠'),
           ),
         if (title == 'مستوى الغبار')
           Positioned(
             bottom: 0.0,
             left: 0.0,
             child: infoWidget(context,
-                'يمكن أن تؤثر المستويات العالية من ثاني أكسيد الكربون في الهواء الداخلي سلبًا على جودة الهواء وقد تضر بصحة الإنسان. \n تشمل الأعراض الشائعة المرتبطة بارتفاع مستويات ثاني أكسيد الكربون الصداع والتعب والغثيان والإغماء.  \n - يعتبر مستوى ثاني أكسيد الكربون ممتاز إذا كان اقل من أو يساي ١٠٠٠  \n - يعتبر مستوى ثاني أكسيد الكربون ملوث إذا كان أعلى من ١٠٠٠ وأقل من ١٥٠٠ \n  - يعتبر مستوى ثاني أكسيد الكربون ملوث جدًا إذا كان أعلى من أو يساوي ١٥٠٠'),
+                '\n - يعتبر مستوى الغبار ممتاز إذا كان اقل من أو يساي ١٠٠٠٠  \n - يعتبر مستوى الغبار ملوث إذا كان أعلى من ١٠٠٠٠ وأقل من ٣٠٠٠٠ \n  - يعتبر مستوى الغبار ملوث جدًا إذا كان أعلى من أو يساوي ٣٠٠٠'),
           ),
       ],
     );

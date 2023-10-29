@@ -52,20 +52,20 @@ class Controller {
       // check pm value based on user health status
       if (healthStaus == true) {
         if ((healthStatusLevel == 'شديد') && (dust >= 15000)) {
-          sendNotification('1');
+          sendNotification('جودة الهواء الخارجي: ملوث بالنسبة لحالتك الصحية');
           notificationSent = true;
         }
         if ((healthStatusLevel == 'متوسط') && (dust >= 20000)) {
-          sendNotification('2');
+          sendNotification('جودة الهواء الخارجي: ملوث بالنسبة لحالتك الصحية');
           notificationSent = true;
         }
         if ((healthStatusLevel == 'خفيف') && (dust >= 25000)) {
-          sendNotification('3');
+          sendNotification('جودة الهواء الخارجي: ملوث بالنسبة لحالتك الصحية');
           notificationSent = true;
         }
       } else {
         if (dust > 30000) {
-          sendNotification('4');
+          sendNotification('جودة الهواء الخارجي: ملوث');
           notificationSent = true;
         }
       }

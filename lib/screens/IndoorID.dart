@@ -15,7 +15,7 @@ class IndoorIDPage extends StatefulWidget {
   _IndoorIDPageState createState() => _IndoorIDPageState();
 }
 
-HomeSceen HomePage = HomeSceen();
+HomeSceen HomePage = HomeSceen(index: 1);
 SignupScreen signupscreen = SignupScreen();
 IndoorPage indoorPage = IndoorPage();
 

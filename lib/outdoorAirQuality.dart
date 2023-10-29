@@ -29,7 +29,7 @@ class OutdoorAirQuality {
     }
     time = DateTime.parse((data as Map)['received_at']);
     pm = Sensor.pm;
-    List<dynamic> readings = [temp, hum, 15000, time];
+    List<dynamic> readings = [temp, hum, pm, time];
     return readings;
   }
 
@@ -108,7 +108,7 @@ class OutdoorAirQuality {
               Text(
                 "مستوى جودة الهواء: ",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -122,7 +122,7 @@ class OutdoorAirQuality {
                 child: Text(
                   airQuality,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     color: Colors.white,
                   ),
                 ),
@@ -241,7 +241,7 @@ class OutdoorAirQuality {
       } else if ((healthStatusLevel == 'خفيف') &&
           (readings[2] >= 25000) &&
           (readings[2] <= 30000)) {
-        levels.add("ملوث  لحالتك الصحية");
+        levels.add("ملوث لحالتك الصحية");
       } else if ((healthStatusLevel == 'خفيف') &&
           (readings[2] > 10000) &&
           (readings[2] < 25000)) {

@@ -105,7 +105,7 @@ class IndoorAirQuality {
               Text(
                 "مستوى جودة الهواء: ",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -119,7 +119,7 @@ class IndoorAirQuality {
                 child: Text(
                   airQuality,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     color: Colors.white,
                   ),
                 ),

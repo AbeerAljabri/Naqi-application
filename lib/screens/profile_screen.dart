@@ -20,7 +20,7 @@ class _profilePageState extends State<profilePage> {
   bool changesMade = false; // Add a boolean variable to track changes
   bool isButtonEnabled = false; // Add a boolean variable to track button state
 
- internetConnection connection = internetConnection();
+  internetConnection connection = internetConnection();
   @override
   void initState() {
     super.initState();
@@ -57,8 +57,7 @@ class _profilePageState extends State<profilePage> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(12),
-          child: Center(
-              child: SingleChildScrollView(
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 Padding(
@@ -115,7 +114,6 @@ class _profilePageState extends State<profilePage> {
                   ),
                 ),
 
-               
                 SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -153,11 +151,11 @@ class _profilePageState extends State<profilePage> {
                 ElevatedButton(
                   onPressed: (isButtonEnabled &&
                           originalFirstName != null &&
-                          originalFirstName.isNotEmpty
-                    )
+                          originalFirstName.isNotEmpty)
                       ? () async {
                           // Check for internet connection
-                          bool isConnected = await connection.checkInternetConnection();
+                          bool isConnected =
+                              await connection.checkInternetConnection();
 
                           if (!isConnected) {
                             // Show a Snackbar for no internet connection
@@ -221,8 +219,7 @@ class _profilePageState extends State<profilePage> {
                     style: TextStyle(
                       color: (isButtonEnabled &&
                               originalFirstName != null &&
-                              originalFirstName.isNotEmpty
-                             )
+                              originalFirstName.isNotEmpty)
                           ? Colors.white
                           : Colors.grey[700],
                     ),
@@ -238,7 +235,7 @@ class _profilePageState extends State<profilePage> {
                 SizedBox(height: 30),
               ],
             ),
-          )),
+          ),
         ),
       ),
     );

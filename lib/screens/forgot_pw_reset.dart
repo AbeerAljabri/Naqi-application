@@ -27,7 +27,7 @@ class _forgotPasswordPageState extends State<forgotPasswordPage> {
         builder: (context) {
           return AlertDialog(
             content: Text(
-                'لقد تم إرسال رابط إعادة تعيين كلمة المرور! قم بفحص ايميلك '),
+                'لقد تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الالكتروني'),
           );
         },
       );
@@ -48,16 +48,23 @@ class _forgotPasswordPageState extends State<forgotPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 139, 147, 152),
-        elevation: 0,
-      ),
+          backgroundColor: Colors.white,
+          elevation: 2,
+          title: Image.asset(
+            'images/IMG_1270.jpg',
+            fit: BoxFit.fitWidth,
+            height: MediaQuery.of(context).size.height * 0.1,
+            width: MediaQuery.of(context).size.width * 0.1,
+          ),
+         
+        ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
             child: Text(
-              'قم بإدخال ايميلك لإعادة تعيين كلمة المرور',
+              'قم بإدخال بريدك الإلكتروني لإعادة تعيين كلمة المرور',
               textAlign: TextAlign.center,
             ),
           ),
@@ -74,7 +81,7 @@ class _forgotPasswordPageState extends State<forgotPasswordPage> {
               decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
-                  labelText: "البريد الالكتروني",
+                  labelText: "البريد الإلكتروني",
 
                   // ignore: prefer_const_constructors
                   prefixIcon: Icon(Icons.email)),
@@ -92,11 +99,15 @@ class _forgotPasswordPageState extends State<forgotPasswordPage> {
           ),
           SizedBox(height: 10),
 
-          MaterialButton(
-            onPressed: passwordReset,
-            child: Text('إعادة تعيين كلمة المرور'),
-            color: Color.fromARGB(255, 98, 127, 145),
-          ),
+        MaterialButton(
+  onPressed: passwordReset,
+  child: Text(
+    'إعادة تعيين كلمة المرور',
+    style: TextStyle(color: Colors.white),
+  ),
+  color: Color.fromARGB(255, 43, 138, 159),
+)
+
         ],
       ),
     );

@@ -108,7 +108,7 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
                     infoWidget(
                         context,
                         "تستطيع إيجاد المعرف على المستشعر في الأسفل",
-                        'images/IMG_1270.jpg'),
+                        'images/outdoorSensorID.jpeg'),
                   ],
                 ),
                 SizedBox(height: 8.0),
@@ -267,8 +267,8 @@ Widget infoWidget(BuildContext context, String text, String imageUrl) {
                   children: [
                     Image.asset(
                       imageUrl,
-                      width: 100,
-                      height: 100,
+                      width: 400,
+                      height: 200,
                     ),
                     SizedBox(height: 10),
                     Text(

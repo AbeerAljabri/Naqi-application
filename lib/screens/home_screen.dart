@@ -9,6 +9,7 @@ import 'package:naqi_app/screens/OutdoorID.dart';
 import 'package:naqi_app/firebase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:naqi_app/screens/outdoor_screen.dart';
+import 'package:naqi_app/screens/report_screen.dart';
 
 class HomeSceen extends StatefulWidget {
   int index;
@@ -26,6 +27,7 @@ class _HomeSceenState extends State<HomeSceen>
   OutdoorPage outdoorPage = OutdoorPage();
   IndoorIDPage indoorIdPage = IndoorIDPage();
   OutdoorIDPage outdoorIDPage = OutdoorIDPage();
+  ReportPage reportPage = ReportPage();
 
   @override
   void initState() {
@@ -138,7 +140,8 @@ class _HomeSceenState extends State<HomeSceen>
     ),
     //Center(child: Text('خارجي', style: TextStyle(fontSize: 37))),
     //هنا صفحة التقارير
-    Center(child: Text('التقارير', style: TextStyle(fontSize: 37))),
+    reportPage,
+   // Center(child: Text('التقارير', style: TextStyle(fontSize: 37))),
   ];
   @override
   Widget build(BuildContext context) {

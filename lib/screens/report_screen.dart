@@ -513,7 +513,7 @@ class _ReportPageState extends State<ReportPage> {
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexDO == 1
+                        primary: selectedButtonIndexMO == 1
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),

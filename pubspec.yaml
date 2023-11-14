@@ -39,6 +39,7 @@ dependencies:
   percent_indicator: ^3.4.0
   awesome_notifications: ^0.7.4+1
   toggle_switch: ^2.1.0
+  charts_flutter: ^0.12.0
   
 
   # The following adds the Cupertino Icons font to your application.
@@ -53,7 +54,7 @@ dependencies:
   git: ^2.2.1
   internet_connection_checker: ^1.0.0+1
   connectivity_plus: ^4.0.1
-
+  fl_chart: ^0.60.0
 
 dependency_overrides:
   intl: ^0.17.0
@@ -109,3 +110,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+     

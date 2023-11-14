@@ -27,7 +27,7 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
   bool isLoading = false;
   String errorMessage = '';
 
-  String OutdoorButtonText = "توصيل المستشعر الداخلي";
+  String OutdoorButtonText = "توصيل المستشعر الخارجي";
 
   @override
   Widget build(BuildContext context) {

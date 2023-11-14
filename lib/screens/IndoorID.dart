@@ -124,28 +124,32 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
                   ),
                 ),
                 SizedBox(height: 10.0),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      const Color(0xff45A1B6),
-                    ), // Set the background color
-                    foregroundColor: MaterialStateProperty.all<Color>(
-                      const Color.fromARGB(255, 255, 255, 255),
-                    ), // Set the text color
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(10), // Set the border radius
-                      ),
+            Center(
+              child: Container(
+              width: 180,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    const Color(0xff45A1B6),
+                  ), // Set the background color
+                  foregroundColor: MaterialStateProperty.all<Color>(
+                    const Color.fromARGB(255, 255, 255, 255),
+                  ), // Set the text color
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // Set the border radius
                     ),
                   ),
-                  onPressed: isLoading ? null : connectIndoorSensor,
-                  child: isLoading
-                      ? CircularProgressIndicator()
-                      : Center(
-                          child: Text(IndoorButtonText),
-                        ),
                 ),
+                onPressed: isLoading ? null : connectIndoorSensor,
+                child: isLoading
+                    ? CircularProgressIndicator()
+                    : Center(
+              child: Text(IndoorButtonText),
+                      ),
+              ),
+            ),
+            ),
                 SizedBox(height: 15.0),
                 if (errorMessage.isNotEmpty)
                   Text(
@@ -156,31 +160,7 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
                     ),
                   ),
 
-                /*  ElevatedButton.icon(
-                  onPressed: (hasIndoorSensor)
-                      ? () => navigateToIndoorAirQualityPage(context)
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    primary: Color.fromARGB(255, 84, 185, 146),
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(20), // Adjust the border radius
-                    ),
-                  ),
-                  icon: Icon(
-                    Icons
-                        .check_circle, // Replace with a different icon if desired
-                    size: 35, // Adjust the icon size
-                  ),
-                label: Text(
-                    'تم',
-                    style: TextStyle(
-                      fontSize: 25, // Adjust the font size
-                      fontWeight:
-                          FontWeight.bold, // Apply a different font weight
-                    ),
-                  ),
-                ),*/
+          
               ],
             ),
           ),

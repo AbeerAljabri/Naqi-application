@@ -21,7 +21,20 @@ class _ReportPageState extends State<ReportPage> {
   int selectedButtonIndexWO = 0;
   int selectedButtonIndexMI = 0;
   int selectedButtonIndexMO = 0;
-  final List Summary = [30.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0];
+  final List Summary = [
+    30.0,
+    50.0,
+    30.0,
+    40.0,
+    50.0,
+    60.0,
+    70.0,
+    60.0,
+    60.0,
+    60.0,
+    60.0,
+    60.0
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,13 +57,14 @@ class _ReportPageState extends State<ReportPage> {
                 onToggle: (index) {
                   setState(() {
                     selectedIndex = index!;
+                    print(selectedIndex);
                   });
                 },
               ),
             ),
             Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: graph.showTempbar(Summary, selectedIndex, 0)),
+                child: graph.showTempbar(Summary, selectedIndex, 1)),
 
             /* SizedBox(height: 350),
 

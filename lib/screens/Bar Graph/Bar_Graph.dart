@@ -8,7 +8,7 @@ class MyBarGraph {
   Widget showTempbar(List Summary, int type, int reading) {
     late BarData myBarData;
 
-    /* if (type == 0) {
+    if (type == 0) {
       myBarData = BarData(
         hour0: Summary[0],
         hour1: Summary[1],
@@ -17,38 +17,38 @@ class MyBarGraph {
         hour4: Summary[4],
         hour5: Summary[5],
         hour6: Summary[6],
-         hour7: Summary[7],
+        hour7: Summary[7],
         hour8: Summary[8],
         hour9: Summary[9],
         hour10: Summary[10],
         hour11: Summary[11],
       );
-      // myBarData.initializeBarData();
-    }*/
+      myBarData.initializeBarData(type);
+    }
 
-    // if (type == 1) {
-    myBarData = BarData(
-      sunAmount: Summary[0],
-      monAmount: Summary[1],
-      tueAmount: Summary[2],
-      wedAmount: Summary[3],
-      thurAmount: Summary[4],
-      friAmount: Summary[5],
-      satAmount: Summary[6],
-    );
-    myBarData.initializeBarData();
-    // myBarData.initializeBarData();
-    //  }
-    /* if (type == 2) {
+    if (type == 1) {
       myBarData = BarData(
-        week1: Summary[1],
+        sunAmount: Summary[0],
+        monAmount: Summary[1],
+        tueAmount: Summary[2],
+        wedAmount: Summary[3],
+        thurAmount: Summary[4],
+        friAmount: Summary[5],
+        satAmount: Summary[6],
+      );
+      myBarData.initializeBarData(type);
+      // myBarData.initializeBarData();
+    }
+    if (type == 2) {
+      myBarData = BarData(
+        week1: Summary[0],
         week2: Summary[1],
         week3: Summary[2],
         week4: Summary[3],
       );
 
-      myBarData.initializeBarData();
-    }*/
+      myBarData.initializeBarData(type);
+    }
     if (reading == 0) {
       max = 40;
     }
@@ -80,7 +80,7 @@ class MyBarGraph {
             bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
               showTitles: true,
-              //getTitles: getBottomTitles (type) ,
+              getTitlesWidget: getBottomTitles,
             )),
           ),
           barGroups: myBarData.barData
@@ -98,7 +98,7 @@ class MyBarGraph {
                         fromY: max,
                         color: Colors.grey[200],
                       ),
-                      toY: 20,
+                      toY: 0,
                     ),
                   ],
                 ),
@@ -109,86 +109,110 @@ class MyBarGraph {
     );
   }
 
-  /*Widget getBottomTitles (double value, TitleMeta meta, int type) {
-  const style = TextStyle(
-color: Colors.grey, fontWeight: FontWeight.bold, 
-fontSize: 14,
-);
-Widget text;*/
+  Widget getBottomTitles(double value, TitleMeta meta) {
+    const style = TextStyle(
+      color: Colors.grey,
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+    );
+    Widget text;
 
-  String getBottomTitles(double value, int type) {
-    /*  if (type == 0) {
+    //String getBottomTitles(double value, int type) {
+    // if (type == 0) {
+    switch (value.toInt()) {
+      case 0:
+        text = const Text('00', style: style);
+        break;
+      case 1:
+        text = const Text('02', style: style);
+        break;
+      case 2:
+        text = const Text('04', style: style);
+        break;
+      case 3:
+        text = const Text('06', style: style);
+        break;
+      case 4:
+        text = const Text('08', style: style);
+        break;
+      case 5:
+        text = const Text('10', style: style);
+        break;
+      case 6:
+        text = const Text('12', style: style);
+        break;
+      case 7:
+        text = const Text('14', style: style);
+        break;
+      case 8:
+        text = const Text('16', style: style);
+        break;
+      case 9:
+        text = const Text('18', style: style);
+        break;
+      case 10:
+        text = const Text('20', style: style);
+        break;
+
+      case 11:
+        text = const Text('22', style: style);
+        break;
+      default:
+        text = const Text('', style: style);
+        break;
+    }
+    return SideTitleWidget(child: text, axisSide: meta.axisSide);
+    // }
+    /* if (type == 1) {
       switch (value.toInt()) {
-        case 0:
-          return '00-01';
-        case 1:
-          return '02-03';
-        case 2:
-          return '04-05';
-        case 3:
-          return '06-07';
-        case 4:
-          return '08-09';
-        case 5:
-          return '10-11';
-        case 6:
-          return '12-13';
-        case 7:
-          return '14-15';
-        case 8:
-          return '16-17';
-        case 9:
-          return '18-19';
-        case 10:
-          return '20-21';
-        case 11:
-          return '22-23';
-        default:
-          return '';
+          case 0:
+        text = const Text('الاحد', style: style);
+        break;
+      case 1:
+        text = const Text('الأثنين', style: style);
+        break;
+      case 2:
+        text = const Text('الثلاثاء', style: style);
+        break;
+      case 3:
+        text = const Text('الأربعاء', style: style);
+        break;
+      case 4:
+        text = const Text('الخميس', style: style);
+        break;
+      case 5:
+        text = const Text('الجمعة', style: style);
+        break;
+      case 6:
+        text = const Text('السبت', style: style);
+        break;
+    
       }
-    }*/
-    if (type == 1) {
-      switch (value.toInt()) {
-        case 0:
-          return 'S';
-        case 1:
-          return 'M';
-        case 2:
-          return 'T';
-        case 3:
-          return 'W';
-        case 4:
-          return 'T';
-        case 5:
-          return 'F';
-        case 6:
-          return 'S';
-        default:
-          return '';
-      }
+       return SideTitleWidget(child: text, axisSide: meta.axisSide);
     }
 
-    /*  if (type == 2) {
+    if (type == 2) {
       switch (value.toInt()) {
         case 0:
-          return 'week1';
-        case 1:
-          return 'week2';
-        case 2:
-          return 'week3';
-        case 3:
-          return 'week4';
-        default:
-          return '';
+        text = const Text('الأسبوع الأول', style: style);
+        break;
+      case 1:
+        text = const Text('الأسبوع الثاني', style: style);
+        break;
+      case 2:
+        text = const Text('الأسبوع الثالث', style: style);
+        break;
+      case 3:
+        text = const Text('الأسبوع الرابع', style: style);
+        break;
       }
-    }*/
-
-    return '';
+         return SideTitleWidget(child: text, axisSide: meta.axisSide);
+    }
+  }*/
+    //  return SideTitleWidget(child: text, axisSide: meta.axisSide);
   }
-}
 
-
- /*class MyBarGraph extends StatelessWidget {
+  /*class MyBarGraph extends StatelessWidget {
  final List weeklySummary; // [sunAmount, monAmount, .., satAmount]
   const MyBarGraph({
     Key? key,
@@ -273,3 +297,4 @@ Widget text;*/
     }
   }
 }*/
+}

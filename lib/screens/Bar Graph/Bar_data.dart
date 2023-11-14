@@ -1,7 +1,7 @@
 import 'package:naqi_app/screens/Bar%20Graph/individual_bar.dart';
 
 class BarData {
-  /*final double hour0;
+  final double hour0;
   final double hour1;
   final double hour2;
   final double hour3;
@@ -12,7 +12,7 @@ class BarData {
   final double hour8;
   final double hour9;
   final double hour10;
-  final double hour11;*/
+  final double hour11;
   final double sunAmount;
   final double monAmount;
   final double tueAmount;
@@ -20,13 +20,13 @@ class BarData {
   final double thurAmount;
   final double friAmount;
   final double satAmount;
-  /*final double week1;
+  final double week1;
   final double week2;
   final double week3;
-  final double week4;*/
+  final double week4;
 
   BarData({
-    /*this.hour0 = 0.0,
+    this.hour0 = 0.0,
     this.hour1 = 0.0,
     this.hour2 = 0.0,
     this.hour3 = 0.0,
@@ -37,7 +37,7 @@ class BarData {
     this.hour8 = 0.0,
     this.hour9 = 0.0,
     this.hour10 = 0.0,
-    this.hour11 = 0.0,*/
+    this.hour11 = 0.0,
     this.sunAmount = 0.0,
     this.monAmount = 0.0,
     this.tueAmount = 0.0,
@@ -45,19 +45,19 @@ class BarData {
     this.thurAmount = 0.0,
     this.friAmount = 0.0,
     this.satAmount = 0.0,
-    /* this.week1 = 0.0,
+    this.week1 = 0.0,
     this.week2 = 0.0,
     this.week3 = 0.0,
-    this.week4 = 0.0,*/
+    this.week4 = 0.0,
   });
 
   List<IndividualBar> barData = [];
 
 // initialize bar data
-  void initializeBarData() {
+  void initializeBarData(int type) {
     // if sttamet fot type
-    // var type;
-    /* if (type == 0) {
+    //var type;
+    if (type == 0) {
       barData = [
         IndividualBar(x: 0, y: hour0),
         IndividualBar(x: 1, y: hour1),
@@ -74,31 +74,31 @@ class BarData {
       ];
     }
 
-    if (type == 1) {*/
-    barData = [
+    if (type == 1) {
+      barData = [
 // sun
-      IndividualBar(x: 0, y: sunAmount),
+        IndividualBar(x: 0, y: sunAmount),
 // mon
-      IndividualBar(x: 1, y: monAmount),
+        IndividualBar(x: 1, y: monAmount),
 // tue
-      IndividualBar(x: 2, y: tueAmount),
+        IndividualBar(x: 2, y: tueAmount),
 // wed
-      IndividualBar(x: 3, y: wedAmount),
+        IndividualBar(x: 3, y: wedAmount),
 // thur
-      IndividualBar(x: 4, y: thurAmount),
+        IndividualBar(x: 4, y: thurAmount),
 // fri
-      IndividualBar(x: 5, y: friAmount),
+        IndividualBar(x: 5, y: friAmount),
 // sat
-      IndividualBar(x: 6, y: satAmount),
-    ];
-
-    /* if (type == 2) {
-    barData = [
-      IndividualBar(x: 0, y: week1),
-      IndividualBar(x: 1, y: week2),
-      IndividualBar(x: 2, y: week3),
-      IndividualBar(x: 3, y: week4),
-    ];
-       }*/
+        IndividualBar(x: 6, y: satAmount),
+      ];
+    }
+    if (type == 2) {
+      barData = [
+        IndividualBar(x: 0, y: week1),
+        IndividualBar(x: 1, y: week2),
+        IndividualBar(x: 2, y: week3),
+        IndividualBar(x: 3, y: week4),
+      ];
+    }
   }
 }

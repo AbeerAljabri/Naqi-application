@@ -22,18 +22,18 @@ class _ReportPageState extends State<ReportPage> {
   int selectedButtonIndexMI = 0;
   int selectedButtonIndexMO = 0;
   final List Summary = [
-    30.0,
-    50.0,
-    30.0,
-    40.0,
-    50.0,
-    60.0,
-    70.0,
-    60.0,
-    60.0,
-    60.0,
-    60.0,
-    60.0
+    23.0,
+    20.0,
+    18.0,
+    22.0,
+    20.0,
+    25.0,
+    20.0,
+    25.0,
+    22.0,
+    24.0,
+    20.0,
+    21.0
   ];
   @override
   Widget build(BuildContext context) {
@@ -64,9 +64,9 @@ class _ReportPageState extends State<ReportPage> {
             ),
             Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: graph.showTempbar(Summary, selectedIndex, 1)),
+                child: graph.showTempbar(Summary, selectedIndex, 0)),
 
-            /* SizedBox(height: 350),
+            SizedBox(height: 16),
 
             if (selectedIndex == 0) ...[
               Padding(
@@ -553,7 +553,7 @@ class _ReportPageState extends State<ReportPage> {
                   ],
                 ),
               ],
-            ],*/
+            ],
           ],
         ),
       ),

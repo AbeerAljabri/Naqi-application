@@ -64,8 +64,8 @@ class MyBarGraph {
     // myBarData.initializeBarData();
 
     return SizedBox(
-      height: 200,
-      width: 400,
+      height: 310,
+      width: 350,
       child: BarChart(
         BarChartData(
           maxY: max,

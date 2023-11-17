@@ -7,6 +7,7 @@ import 'package:naqi_app/screens/home_screen.dart';
 import 'package:naqi_app/screens/signup_screen.dart';
 import 'package:naqi_app/screens/indoor_screen.dart';
 import 'dart:ui';
+import '../internetConnection.dart';
 
 class IndoorIDPage extends StatefulWidget {
   IndoorIDPage({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class IndoorIDPage extends StatefulWidget {
 HomeSceen HomePage = HomeSceen(index: 1);
 SignupScreen signupscreen = SignupScreen();
 IndoorPage indoorPage = IndoorPage();
-
+internetConnection connection = internetConnection();
 class _IndoorIDPageState extends State<IndoorIDPage> {
   String indoorSensorId = '';
 
@@ -28,6 +29,8 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
   String errorMessage = '';
 
   String IndoorButtonText = "توصيل المستشعر الداخلي";
+
+  bool isInButtonEnabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -124,32 +127,51 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
                   ),
                 ),
                 SizedBox(height: 10.0),
-            Center(
-              child: Container(
-              width: 180,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    const Color(0xff45A1B6),
-                  ), // Set the background color
-                  foregroundColor: MaterialStateProperty.all<Color>(
-                    const Color.fromARGB(255, 255, 255, 255),
-                  ), // Set the text color
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8), // Set the border radius
+                Center(
+                  child: Container(
+                    width: 180,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.disabled)) {
+                              return Colors.grey[
+                                  300]!; // Set the background color to grey when disabled
+                            }
+                            return const Color(
+                                0xff45A1B6); // Set the background color when enabled
+                          },
+                        ),
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                          const Color.fromARGB(255, 255, 255, 255),
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                      onPressed: indoorSensorId.isNotEmpty && !isLoading
+                          ? connectIndoorSensor
+                          : null,
+                      child: isLoading
+                          ? CircularProgressIndicator()
+                          : Center(
+                              child: Text(
+                                IndoorButtonText,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: indoorSensorId.isNotEmpty
+                                      ? Colors.white
+                                      : Colors.grey[700],
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                 ),
-                onPressed: isLoading ? null : connectIndoorSensor,
-                child: isLoading
-                    ? CircularProgressIndicator()
-                    : Center(
-              child: Text(IndoorButtonText),
-                      ),
-              ),
-            ),
-            ),
                 SizedBox(height: 15.0),
                 if (errorMessage.isNotEmpty)
                   Text(
@@ -159,8 +181,6 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
                       fontSize: 16.0,
                     ),
                   ),
-
-          
               ],
             ),
           ),

@@ -7,6 +7,7 @@ import 'package:naqi_app/screens/home_screen.dart';
 import 'package:naqi_app/screens/signup_screen.dart';
 import 'package:naqi_app/screens/indoor_screen.dart';
 import 'dart:ui';
+import '../internetConnection.dart';
 
 class OutdoorIDPage extends StatefulWidget {
   OutdoorIDPage({Key? key}) : super(key: key);
@@ -17,7 +18,8 @@ class OutdoorIDPage extends StatefulWidget {
 
 HomeSceen HomePage = HomeSceen(index: 2);
 SignupScreen signupscreen = SignupScreen();
-//IndoorPage indoorPage = IndoorPage(); هنا الاوتدور اذا زانت
+internetConnection connection = internetConnection();
+
 
 class _OutdoorIDPageState extends State<OutdoorIDPage> {
   String outdoorSensorId = '';
@@ -129,24 +131,39 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
                      width: 180,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color(0xff45A1B6),
-                        ), // Set the background color
+                         backgroundColor:
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.disabled)) {
+                              return Colors.grey[
+                                  300]!; // Set the background color to grey when disabled
+                            }
+                            return const Color(
+                                0xff45A1B6); // Set the background color when enabled
+                          },
+                        ),
                         foregroundColor: MaterialStateProperty.all<Color>(
                           const Color.fromARGB(255, 255, 255, 255),
                         ), // Set the text color
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(10), // Set the border radius
+                                BorderRadius.circular(8), // Set the border radius
                           ),
                         ),
                       ),
-                      onPressed: isLoading ? null : connectOutdoorSensor,
+                     onPressed: outdoorSensorId.isNotEmpty && !isLoading
+                          ? connectOutdoorSensor
+                          : null,
                       child: isLoading
                           ? CircularProgressIndicator()
                           : Center(
-                              child: Text(OutdoorButtonText),
+                              child: Text(OutdoorButtonText, style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: outdoorSensorId.isNotEmpty
+                                      ? Colors.white
+                                      : Colors.grey[700],
+                                ),),
                             ),
                     ),
                   ),

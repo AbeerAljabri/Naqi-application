@@ -28,7 +28,6 @@ class _OutdoorPageState extends State<OutdoorPage>
       List<dynamic> reading = sensorReadings.readData(jsonData);
       var pm = reading[2];
       controller.checkOutdoorAirQuality(pm);
-   
     });
 
     // يمكن نحتاجها لو سوينا ايديت اي دي
@@ -138,7 +137,7 @@ class _OutdoorPageState extends State<OutdoorPage>
                             var data = jsonDecode(snapshot.data.toString());
                             List<dynamic> readings =
                                 sensorReadings.readData(data);
-                            List<String> levels =
+                            List<Map<String, dynamic>> levels =
                                 sensorReadings.calculateLevel(readings);
 
                             return Column(children: [
@@ -148,13 +147,13 @@ class _OutdoorPageState extends State<OutdoorPage>
                                       readings, context),
                                 ],
                               ),
-                              Row(
+                              /*Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   sensorReadings.checkTime(
                                       readings[3], context),
                                 ],
-                              ),
+                              ),*/
                             ]);
                           }
                         },

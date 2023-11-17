@@ -95,7 +95,7 @@ class OutdoorAirQuality {
   }
 
   Widget viewOutdoorAirQuality(List<dynamic> readings, context) {
-    List<String> levels = calculateLevel(readings);
+    List<Map<String, dynamic>> levels = calculateLevel(readings);
     Map<String, Color> airQuality_color = calculateAirQuality(levels);
     String airQuality = airQuality_color.keys.first;
     Color color = airQuality_color.values.first;
@@ -139,8 +139,11 @@ class OutdoorAirQuality {
                   context: context,
                   title: 'درجة الحرارة',
                   reading: readings[0].toString() + '\u00B0',
-                  level: levels[0],
-                  percent: calculatePercentege(readings)[0],
+                  level: levels[0]["level"]!,
+                  colorIndicator: levels[0]["color"]!,
+                  percent: (calculatePercentege(readings)[0] <= 1)
+                      ? calculatePercentege(readings)[0]
+                      : 1,
                 ),
               ],
             ),
@@ -154,8 +157,11 @@ class OutdoorAirQuality {
                   context: context,
                   title: 'مستوى الرطوبة',
                   reading: readings[1].toString() + '%',
-                  level: levels[1],
-                  percent: calculatePercentege(readings)[1],
+                  level: levels[1]["level"]!,
+                  colorIndicator: levels[1]["color"]!,
+                  percent: (calculatePercentege(readings)[1] <= 1)
+                      ? calculatePercentege(readings)[1]
+                      : 1,
                 ),
               ],
             ),
@@ -169,8 +175,11 @@ class OutdoorAirQuality {
                   context: context,
                   title: 'مستوى الغبار',
                   reading: readings[2].toString(),
-                  level: levels[2],
-                  percent: calculatePercentege(readings)[2],
+                  level: levels[2]["level"]!,
+                  colorIndicator: levels[2]["color"]!,
+                  percent: (calculatePercentege(readings)[2] <= 1)
+                      ? calculatePercentege(readings)[2]
+                      : 1,
                 ),
               ],
             ),
@@ -194,68 +203,72 @@ class OutdoorAirQuality {
     return percentages;
   }
 
-  List<String> calculateLevel(List<dynamic> readings) {
+  List<Map<String, dynamic>> calculateLevel(List<dynamic> readings) {
     // Get user health status imformation from databse
     bool healthStaus = FirebaseService.healthStatus;
     String healthStatusLevel = FirebaseService.healthStatusLevel;
-    List<String> levels = [];
+    List<Map<String, dynamic>> levels = [];
     // temprature level
-    if (readings[0] < 10) {
-      levels.add("بارد");
-    } else if ((readings[0] >= 10) & (readings[0] < 28)) {
-      levels.add("معتدل");
-    } else if (readings[0] >= 28) {
-      levels.add("حار");
+    // Temperature level
+    if (readings[0] <= 15) {
+      levels.add({"level": "بارد", "color": Colors.green});
+    } else if ((readings[0] > 15) && (readings[0] < 30)) {
+      levels.add({"level": "معتدل", "color": Colors.yellow});
+    } else if (readings[0] >= 30) {
+      levels.add({"level": "حار", "color": Colors.red});
     }
-    // humidity level
+
+    // Humidity level
     if (readings[1] < 30) {
-      levels.add("منخفض");
-    } else if ((readings[1] >= 30) & (readings[1] <= 70)) {
-      levels.add("متوسط");
+      levels.add({"level": "منخفض", "color": Colors.green});
+    } else if ((readings[1] >= 30) && (readings[1] <= 70)) {
+      levels.add({"level": "متوسط", "color": Colors.yellow});
     } else if (readings[1] > 70) {
-      levels.add("عالي");
+      levels.add({"level": "عالي", "color": Colors.red});
     }
-    // pm level
+
+    // dust level
     if (readings[2] <= 10000) {
-      levels.add("ممتاز");
+      levels.add({"level": "ممتاز", "color": Colors.green});
     } else if (readings[2] > 30000) {
-      levels.add("ملوث");
+      levels.add({"level": "ملوث", "color": Colors.red});
     }
     if (healthStaus == true) {
       if ((healthStatusLevel == 'شديد') &&
           (readings[2] >= 15000) &&
           (readings[2] <= 30000)) {
-        levels.add("ملوث لحالتك الصحية");
+        levels.add({"level": "ملوث لحالتك الصحية", "color": Colors.orange});
       } else if ((healthStatusLevel == 'شديد') &&
           (readings[2] > 10000) &&
           (readings[2] < 15000)) {
-        levels.add("متوسط");
+        levels.add({"level": "متوسط", "color": Colors.yellow});
       } else if ((healthStatusLevel == 'متوسط') &&
           (readings[2] >= 20000) &&
           (readings[2] <= 30000)) {
-        levels.add("ملوث لحالتك الصحية");
+        levels.add({"level": "ملوث لحالتك الصحية", "color": Colors.orange});
       } else if ((healthStatusLevel == 'متوسط') &&
           (readings[2] > 10000) &&
           (readings[2] < 20000)) {
-        levels.add("متوسط");
+        levels.add({"level": "متوسط", "color": Colors.yellow});
       } else if ((healthStatusLevel == 'خفيف') &&
           (readings[2] >= 25000) &&
           (readings[2] <= 30000)) {
-        levels.add("ملوث لحالتك الصحية");
+        levels.add({"level": "ملوث لحالتك الصحية", "color": Colors.orange});
       } else if ((healthStatusLevel == 'خفيف') &&
           (readings[2] > 10000) &&
           (readings[2] < 25000)) {
-        levels.add("متوسط");
+        levels.add({"level": "متوسط", "color": Colors.yellow});
       }
     } else if ((readings[2] > 10000) && (readings[2] < 25000)) {
-      levels.add("متوسط");
+      levels.add({"level": "متوسط", "color": Colors.yellow});
     }
 
     return levels;
   }
 
-  Map<String, Color> calculateAirQuality(List<String> levels) {
-    String airQuality = levels[2];
+  Map<String, Color> calculateAirQuality(List<Map<String, dynamic>> levels) {
+    //String airQuality = levels[2];
+    String airQuality = levels[2]["level"];
 
     if (airQuality == "ملوث") {
       return {airQuality: Colors.red};
@@ -263,8 +276,7 @@ class OutdoorAirQuality {
     if (airQuality == "ملوث لحالتك الصحية") {
       return {airQuality: Colors.orange};
     }
-    if (airQuality == "متوسط")
-      return {airQuality: Color.fromARGB(255, 224, 228, 98)};
+    if (airQuality == "متوسط") return {airQuality: Colors.yellow};
 
     return {airQuality: Colors.green};
   }
@@ -274,6 +286,7 @@ class OutdoorAirQuality {
     required String title,
     required String reading,
     required String level,
+    required Color colorIndicator,
     required double percent,
     Color color = Colors.white,
     Color fontColor = const Color.fromARGB(255, 107, 107, 107),
@@ -436,7 +449,8 @@ class OutdoorAirQuality {
                   radius: 65,
                   lineWidth: 5,
                   percent: percent,
-                  progressColor: const Color(0xff45A1B6),
+                  progressColor: colorIndicator,
+                  backgroundColor: Color.fromARGB(255, 227, 230, 231),
                   center: Text(
                     reading.toString(),
                     style: TextStyle(

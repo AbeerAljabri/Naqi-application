@@ -92,7 +92,7 @@ class IndoorAirQuality {
   }
 
   Widget viewIndoorAirQuality(List<dynamic> readings, context) {
-    List<String> levels = calculateLevel(readings);
+    List<Map<String, dynamic>> levels = calculateLevel(readings);
     Map<String, Color> airQuality_color = calculateAirQuality(levels);
     String airQuality = airQuality_color.keys.first;
     Color color = airQuality_color.values.first;
@@ -136,8 +136,11 @@ class IndoorAirQuality {
                   context: context,
                   title: 'درجة الحرارة',
                   reading: readings[0].toString() + '\u00B0',
-                  level: levels[0],
-                  percent: calculatePercentege(readings)[0],
+                  level: levels[0]["level"]!,
+                  colorIndicator: levels[0]["color"]!,
+                  percent: (calculatePercentege(readings)[0] <= 1)
+                      ? calculatePercentege(readings)[0]
+                      : 1,
                 ),
               ],
             ),
@@ -151,8 +154,11 @@ class IndoorAirQuality {
                   context: context,
                   title: 'مستوى الرطوبة',
                   reading: readings[1].toString() + '%',
-                  level: levels[1],
-                  percent: calculatePercentege(readings)[1],
+                  level: levels[1]["level"]!,
+                  colorIndicator: levels[1]["color"]!,
+                  percent: (calculatePercentege(readings)[1] <= 1)
+                      ? calculatePercentege(readings)[1]
+                      : 1,
                 ),
               ],
             ),
@@ -166,8 +172,11 @@ class IndoorAirQuality {
                   context: context,
                   title: 'ثاني أكسيد الكربون',
                   reading: readings[2].toString(),
-                  level: levels[2],
-                  percent: calculatePercentege(readings)[2],
+                  level: levels[2]["level"]!,
+                  colorIndicator: levels[2]["color"]!,
+                  percent: (calculatePercentege(readings)[2] <= 1)
+                      ? calculatePercentege(readings)[2]
+                      : 1,
                 ),
               ],
             ),
@@ -191,48 +200,50 @@ class IndoorAirQuality {
     return percentages;
   }
 
-  List<String> calculateLevel(List<dynamic> readings) {
-    List<String> levels = [];
-    // temprature level
-    if (readings[0] < 10) {
-      levels.add("بارد");
-    } else if ((readings[0] >= 10) & (readings[0] < 28)) {
-      levels.add("معتدل");
-    } else if (readings[0] >= 28) {
-      levels.add("حار");
+  List<Map<String, dynamic>> calculateLevel(List<dynamic> readings) {
+    List<Map<String, dynamic>> levels = [];
+
+    // Temperature level
+    if (readings[0] <= 15) {
+      levels.add({"level": "بارد", "color": Colors.green});
+    } else if ((readings[0] > 15) && (readings[0] < 30)) {
+      levels.add({"level": "معتدل", "color": Colors.yellow});
+    } else if (readings[0] >= 30) {
+      levels.add({"level": "حار", "color": Colors.red});
     }
-    // humidity level
+
+    // Humidity level
     if (readings[1] < 30) {
-      levels.add("منخفض");
-    } else if ((readings[1] >= 30) & (readings[1] <= 60)) {
-      levels.add("متوسط");
+      levels.add({"level": "منخفض", "color": Colors.green});
+    } else if ((readings[1] >= 30) && (readings[1] <= 60)) {
+      levels.add({"level": "متوسط", "color": Colors.yellow});
     } else if (readings[1] > 60) {
-      levels.add("عالي");
+      levels.add({"level": "عالي", "color": Colors.red});
     }
-    // co2 level
+
+    // CO2 level
     if (readings[2] <= 1000) {
-      levels.add("ممتاز");
-    } else if ((readings[2] > 1000) & (readings[2] < 1500)) {
-      levels.add("ملوث");
+      levels.add({"level": "ممتاز", "color": Colors.green});
+    } else if ((readings[2] > 1000) && (readings[2] < 1500)) {
+      levels.add({"level": "ملوث", "color": Colors.orange});
     } else if (readings[2] >= 1500) {
-      levels.add("ملوث جدا");
+      levels.add({"level": "ملوث جدا", "color": Colors.red});
     }
 
     return levels;
   }
 
-  Map<String, Color> calculateAirQuality(List<String> levels) {
-    String airQuality = 'ممتاز';
-    for (String level in levels) {
-      if (level == "ملوث جدا") {
-        airQuality = level;
-        return {airQuality: Colors.red};
-      }
-      if (level == "ملوث") {
-        airQuality = level;
-        return {airQuality: Colors.orange};
-      }
+  Map<String, Color> calculateAirQuality(List<Map<String, dynamic>> levels) {
+    // String airQuality = 'ممتاز';
+    String airQuality = levels[2]["level"];
+
+    if (airQuality == "ملوث جدا") {
+      return {airQuality: Colors.red};
     }
+    if (airQuality == "ملوث") {
+      return {airQuality: Colors.orange};
+    }
+
     return {airQuality: Colors.green};
   }
 
@@ -242,6 +253,7 @@ class IndoorAirQuality {
     required String reading,
     required String level,
     required double percent,
+    required Color colorIndicator,
     Color color = Colors.white,
     Color fontColor = const Color.fromARGB(255, 107, 107, 107),
   }) {
@@ -403,7 +415,9 @@ class IndoorAirQuality {
                   radius: 65,
                   lineWidth: 5,
                   percent: percent,
-                  progressColor: const Color(0xff45A1B6),
+                  // progressColor: const Color(0xff45A1B6),
+                  progressColor: colorIndicator,
+                  backgroundColor: Color.fromARGB(255, 227, 230, 231),
                   center: Text(
                     reading.toString(),
                     style: TextStyle(

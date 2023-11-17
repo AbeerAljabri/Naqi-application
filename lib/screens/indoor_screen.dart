@@ -157,7 +157,7 @@ class _IndoorPageState extends State<IndoorPage>
                             var data = jsonDecode(snapshot.data.toString());
                             List<dynamic> readings =
                                 sensorReadings.readData(data);
-                            List<String> levels =
+                            List<Map<String, dynamic>> levels =
                                 sensorReadings.calculateLevel(readings);
 
                             return Column(children: [

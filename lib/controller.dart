@@ -49,24 +49,25 @@ class Controller {
     print(notificationSent);
     // check to see if a notification has already been sent
     if (!notificationSent) {
+      if (dust > 30000) {
+        sendNotification('جودة الهواء الخارجي: ملوث');
+        notificationSent = true;
+      }
       // check pm value based on user health status
-      if (healthStaus == true) {
-        if ((healthStatusLevel == 'شديد') && (dust >= 15000)) {
-          sendNotification('جودة الهواء الخارجي: ملوث بالنسبة لحالتك الصحية');
-          notificationSent = true;
-        }
-        if ((healthStatusLevel == 'متوسط') && (dust >= 20000)) {
-          sendNotification('جودة الهواء الخارجي: ملوث بالنسبة لحالتك الصحية');
-          notificationSent = true;
-        }
-        if ((healthStatusLevel == 'خفيف') && (dust >= 25000)) {
-          sendNotification('جودة الهواء الخارجي: ملوث بالنسبة لحالتك الصحية');
-          notificationSent = true;
-        }
-      } else {
-        if (dust > 30000) {
-          sendNotification('جودة الهواء الخارجي: ملوث');
-          notificationSent = true;
+      else {
+        if (healthStaus == true) {
+          if ((healthStatusLevel == 'شديد') && (dust >= 15000)) {
+            sendNotification('جودة الهواء الخارجي: ملوث بالنسبة لحالتك الصحية');
+            notificationSent = true;
+          }
+          if ((healthStatusLevel == 'متوسط') && (dust >= 20000)) {
+            sendNotification('جودة الهواء الخارجي: ملوث بالنسبة لحالتك الصحية');
+            notificationSent = true;
+          }
+          if ((healthStatusLevel == 'خفيف') && (dust >= 25000)) {
+            sendNotification('جودة الهواء الخارجي: ملوث بالنسبة لحالتك الصحية');
+            notificationSent = true;
+          }
         }
       }
     }

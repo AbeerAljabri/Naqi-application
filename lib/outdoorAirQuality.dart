@@ -29,7 +29,7 @@ class OutdoorAirQuality {
     }
     time = DateTime.parse((data as Map)['received_at']);
     pm = Sensor.pm;
-    List<dynamic> readings = [temp, hum, pm, time];
+    List<dynamic> readings = [temp, hum, 5000, time];
     return readings;
   }
 
@@ -259,7 +259,7 @@ class OutdoorAirQuality {
           (readings[2] < 25000)) {
         levels.add({"level": "متوسط", "color": Colors.yellow});
       }
-    } else if ((readings[2] > 10000) && (readings[2] < 25000)) {
+    } else if ((readings[2] > 10000) && (readings[2] <= 30000)) {
       levels.add({"level": "متوسط", "color": Colors.yellow});
     }
 

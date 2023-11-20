@@ -7,6 +7,8 @@ import 'package:naqi_app/indoorAirQuality.dart';
 
 class Controller {
   bool notificationSent = false;
+  bool general = false;
+  bool custom = false;
   String status = '';
   String isSwitchOn = '';
   String atomatic = '';
@@ -46,12 +48,14 @@ class Controller {
     // Get user health status imformation from databse
     bool healthStaus = FirebaseService.healthStatus;
     String healthStatusLevel = FirebaseService.healthStatusLevel;
+
     print(notificationSent);
     // check to see if a notification has already been sent
     if (!notificationSent) {
       if (dust > 30000) {
         sendNotification('جودة الهواء الخارجي: ملوث');
         notificationSent = true;
+        general = true;
       }
       // check pm value based on user health status
       else {
@@ -59,14 +63,20 @@ class Controller {
           if ((healthStatusLevel == 'شديد') && (dust >= 15000)) {
             sendNotification('جودة الهواء الخارجي: ملوث بالنسبة لحالتك الصحية');
             notificationSent = true;
+            custom = true;
+            general = false;
           }
           if ((healthStatusLevel == 'متوسط') && (dust >= 20000)) {
             sendNotification('جودة الهواء الخارجي: ملوث بالنسبة لحالتك الصحية');
             notificationSent = true;
+            custom = true;
+            general = false;
           }
           if ((healthStatusLevel == 'خفيف') && (dust >= 25000)) {
             sendNotification('جودة الهواء الخارجي: ملوث بالنسبة لحالتك الصحية');
             notificationSent = true;
+            custom = true;
+            general = false;
           }
         }
       }
@@ -82,6 +92,14 @@ class Controller {
           notificationSent = false;
         }
         if ((healthStatusLevel == 'خفيف') && (dust < 25000)) {
+          notificationSent = false;
+        }
+        if ((dust > 30000) && (custom == true)) {
+          sendNotification('جودة الهواء الخارجي: ملوث');
+          custom = false;
+          general = true;
+        }
+        if ((dust <= 30000) && (general == true)) {
           notificationSent = false;
         }
       } else {

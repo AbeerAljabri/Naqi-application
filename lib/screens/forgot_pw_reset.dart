@@ -99,13 +99,16 @@ class _forgotPasswordPageState extends State<forgotPasswordPage> {
           ),
           SizedBox(height: 10),
 
-        MaterialButton(
+ MaterialButton(
   onPressed: passwordReset,
   child: Text(
     'إعادة تعيين كلمة المرور',
     style: TextStyle(color: Colors.white),
   ),
   color: Color.fromARGB(255, 43, 138, 159),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(9), // Adjust the radius as needed
+  ),
 )
 
         ],

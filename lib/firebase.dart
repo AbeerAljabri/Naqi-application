@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+import 'package:naqi_app/sensor.dart';
 
 class FirebaseService {
   static var first_name;
@@ -11,11 +13,12 @@ class FirebaseService {
   static var healthStatusLevel;
   static String switchStatus = '';
   static String automatic = '';
+  static String status = '';
+  static String fanID = '';
   static String indoorSensorID = '';
   static String outdoorSensorID = '';
   static String indoorSensorURL = '';
   static String outdoorSensorURL = '';
-
   static num dust = 0;
   //DatabaseReference databaseRef;
   static Future<void> initialize() async {
@@ -46,6 +49,7 @@ class FirebaseService {
       email = userInfo.data()!['userEmail'];
       healthStatus = userInfo.data()!['healthStatus'];
       healthStatusLevel = userInfo.data()!['healthStatusLevel'];
+      fanID = userInfo.data()!['fanID'];
       if (userInfo.data()!.containsKey('IndoorSensorID')) {
         indoorSensorID = userInfo.data()!['IndoorSensorID'];
         getIndoorSensorURL(indoorSensorID);
@@ -115,6 +119,7 @@ class FirebaseService {
   }
 
   Future<String> getOudoorSensorURL(String sensorID) async {
+    Sensor sensor = Sensor();
     try {
       final sensorDoc = await FirebaseFirestore.instance
           .collection('Sensor')
@@ -124,6 +129,7 @@ class FirebaseService {
         // Assuming there could be multiple documents with the same sensorID, you may choose which one to return or handle them as needed.
         final sensorDoc1 = sensorDoc.docs.first;
         outdoorSensorURL = sensorDoc1.data()['URL'];
+
         return outdoorSensorURL;
       } else {
         return ''; // No sensor document with the given sensorID found
@@ -135,51 +141,56 @@ class FirebaseService {
   }
 
   Future<String> getStatus() async {
-    String status = '';
-    final ref = FirebaseDatabase.instance.ref();
-    final snapshot = await ref.child('Fan/Status').get();
-    if (snapshot.exists) {
-      status = snapshot.value.toString();
-    } else {
-      print('No data available.');
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('Fan').limit(1).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        status = querySnapshot.docs.first['Status'];
+        print('Statusfirebase: $status');
+      } else {
+        print('No data available.');
+      }
+    } catch (e) {
+      print('Error retrieving status: $e');
     }
+
     return status;
   }
 
   Future<String> isSwitchOn() async {
-    final ref = FirebaseDatabase.instance.ref();
-    final snapshot = await ref.child('Fan/isSwitchOn').get();
-    if (snapshot.exists) {
-      switchStatus = snapshot.value.toString();
-    } else {
-      print('No data available.');
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('Fan').limit(1).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        switchStatus = querySnapshot.docs.first['isSwitchOn'];
+        print('isSwitchOnfirebase: $switchStatus');
+      } else {
+        print('No data available.');
+      }
+    } catch (e) {
+      print('Error retrieving status: $e');
     }
+
     return switchStatus;
   }
 
   Future<String> isAutomatic() async {
-    final ref = FirebaseDatabase.instance.ref();
-    final snapshot = await ref.child('Fan/isAutomatic').get();
-    if (snapshot.exists) {
-      automatic = snapshot.value.toString();
-    } else {
-      print('No data available.');
-    }
-    return automatic;
-  }
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('Fan').limit(1).get();
 
-  Future<num> getdust() async {
-    final ref = FirebaseDatabase.instance.ref();
-    final snapshot = await ref.child('Dust').orderByKey().limitToLast(1).get();
-    if (snapshot.exists) {
-      final values = snapshot.value as Map<dynamic, dynamic>;
-      if (values != null) {
-        dust = values.values.first;
+      if (querySnapshot.docs.isNotEmpty) {
+        automatic = querySnapshot.docs.first['isAutomatic'];
+        print('isAutomaticfirebase: $automatic');
+      } else {
+        print('No data available.');
       }
-    } else {
-      print('No data available.');
+    } catch (e) {
+      print('Error retrieving status: $e');
     }
 
-    return dust;
+    return automatic;
   }
 }

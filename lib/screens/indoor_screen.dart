@@ -32,11 +32,13 @@ class _IndoorPageState extends State<IndoorPage>
     Future<String> fanStatus = firebase.getStatus();
     fanStatus.then((value) {
       status = value;
+      print('fanStatus1 $fanStatus');
     });
 
     Future<String> automatic = firebase.isAutomatic();
     automatic.then((value) {
       isAutomatic = value;
+      print('isAutomatic1 $isAutomatic');
     });
 
     Future<String> fanSwitch = firebase.isSwitchOn();
@@ -44,6 +46,7 @@ class _IndoorPageState extends State<IndoorPage>
       setState(() {
         switchOn = value;
         isSwitchOn = switchOn == '1' ? true : false;
+        print('isSwitchOn1 $isSwitchOn');
       });
     });
 
@@ -212,6 +215,7 @@ class _IndoorPageState extends State<IndoorPage>
     });*/
     isSwitchOn = FirebaseService.switchStatus == '1' ? true : false;
     isAutomatic = FirebaseService.automatic;
+
     return Padding(
       padding: const EdgeInsets.only(top: 14, right: 2),
       child: Container(
@@ -320,10 +324,10 @@ class _IndoorPageState extends State<IndoorPage>
                         setState(() {
                           if (value) {
                             fan.turnOn();
-                            fan.updateSwitch(1);
+                            fan.updateSwitch('1');
                           } else {
                             fan.turnOff();
-                            fan.updateSwitch(0);
+                            fan.updateSwitch('0');
                           }
                           isSwitchOn = value;
                           FirebaseService.switchStatus = isSwitchOn ? '1' : '0';

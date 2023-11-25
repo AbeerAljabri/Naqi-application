@@ -540,8 +540,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                           'healthStatus':
                                               text == 'نعم' ? true : false,
                                           'healthStatusLevel': text1,
+                                          'fanID': '111',
                                         }),
                                         // ignore: avoid_print
+
                                         print("data added"),
                                       })
                                   .then((value) {

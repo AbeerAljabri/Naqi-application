@@ -19,7 +19,6 @@ class Controller {
     // Get fan status and switch status from databse
     Future<String> fanStatus = firebase.getStatus();
     Future<String> isAutomatic = firebase.isAutomatic();
-
     fanStatus.then((value) {
       status = value;
 
@@ -28,16 +27,17 @@ class Controller {
         // check CO2 and fan status
         if ((co2 > 1000) & (status == '0')) {
           fan.turnOn();
-          fan.updateisAutomatic(1);
-          fan.updateSwitch(1);
-
+          fan.updateisAutomatic('1');
+          fan.updateSwitch('1');
+          // FirebaseService.switchStatus = '1';
           sendNotification(
               "مستوى ثاني أكسيد الكربون مرتفع! سيتم تشغيل المروحة");
         } // check CO2 and fan status and switch status
         else if ((co2 <= 1000) & (atomatic == '1')) {
           fan.turnOff();
-          fan.updateisAutomatic(0);
-          fan.updateSwitch(0);
+          fan.updateisAutomatic('0');
+          fan.updateSwitch('0');
+          // FirebaseService.switchStatus = '0';
           sendNotification("مستوى ثاني أكسيد الكربون جيد! سيتم ايقاف المروحة");
         }
       });

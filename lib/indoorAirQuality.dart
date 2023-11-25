@@ -434,28 +434,43 @@ class IndoorAirQuality {
           Positioned(
             bottom: 0.0,
             left: 0.0,
-            child: infoWidget(context,
+            child: /*infoWidget(context,
                 ' - يعتبر مستوى درجة الحرارة بارد إذا كان أقل من ١٠  \n - يعتبر مستوى درجة الحرارة معتدل إذا كان أعلى من أو يساوي ١٠ وأقل من ٢٨ \n  - يعتبر مستوى درجة الحرارة حار إذا كان أعلى من أو يساوي ٢٨'),
+          */
+                infoWidget(
+                    context,
+                    "تعرض دراجات الحرارة بوحدة سلزيوس وهي تتدرج كما في الصورة التالية",
+                    'images/tmpLimg.png'),
           ),
         if (title == 'مستوى الرطوبة')
           Positioned(
             bottom: 0.0,
             left: 0.0,
-            child: infoWidget(context,
+            child: /*infoWidget(context,
                 ' - يعتبر مستوى الرطوبة منخفض إذا كان أقل من ٣٠  \n - يعتبر مستوى الرطوبة متوسط إذا كان أعلى من أو يساوي ٣٠ وأقل من أو يساوي ٦٠  \n  - يعتبر مستوى الرطوبة عالي إذا كان أعلى من ٦٠'),
+          */
+                infoWidget(
+                    context,
+                    "تعرض مستويات الرطوبة بوحدة جم / م 3 وهي تتدرج كما في الصورة التالية",
+                    'images/inruLimg.png'),
           ),
         if (title == 'ثاني أكسيد الكربون')
           Positioned(
             bottom: 0.0,
             left: 0.0,
-            child: infoWidget(context,
+            child: /* infoWidget(context,
                 'يمكن أن تؤثر المستويات العالية من ثاني أكسيد الكربون في الهواء الداخلي سلبًا على جودة الهواء وقد تضر بصحة الإنسان. \n تشمل الأعراض الشائعة المرتبطة بارتفاع مستويات ثاني أكسيد الكربون الصداع والتعب والغثيان والإغماء.  \n - يعتبر مستوى ثاني أكسيد الكربون ممتاز إذا كان اقل من أو يساي ١٠٠٠  \n - يعتبر مستوى ثاني أكسيد الكربون ملوث إذا كان أعلى من ١٠٠٠ وأقل من ١٥٠٠ \n  - يعتبر مستوى ثاني أكسيد الكربون ملوث جدًا إذا كان أعلى من أو يساوي ١٥٠٠'),
+          */
+                infoWidget(
+                    context,
+                    "يعرض مستوى ثاني أكسيد الكربون بوحدة ppm وهو يتدرج كما في الصورة التالية",
+                    'images/co2Limg.png'),
           ),
       ],
     );
   }
 
-  Widget infoWidget(BuildContext context, String text) {
+  Widget infoWidget(BuildContext context, String text, String imageUrl) {
     return IconButton(
       onPressed: () {
         showModalBottomSheet(
@@ -471,9 +486,19 @@ class IndoorAirQuality {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(30.0),
-                  child: Text(
-                    text,
-                    textAlign: TextAlign.center,
+                  child: Column(
+                    children: [
+                      Text(
+                        text,
+                        textAlign: TextAlign.center,
+                      ),
+                      Image.asset(
+                        imageUrl,
+                        width: 400,
+                        height: 200,
+                      ),
+                      SizedBox(height: 10),
+                    ],
                   ),
                 ),
                 ElevatedButton(

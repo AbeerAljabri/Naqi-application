@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:naqi_app/fan.dart';
 import 'package:naqi_app/controller.dart';
 import 'package:naqi_app/firebase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class IndoorPage extends StatefulWidget {
   IndoorPage({Key? key}) : super(key: key);
@@ -340,5 +342,22 @@ class _IndoorPageState extends State<IndoorPage>
         ),
       ),
     );
+  }
+
+  checkIndoorSensorId() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userId = user.uid;
+      final userRef =
+          FirebaseFirestore.instance.collection('users').doc(userId);
+      final userData = await userRef.get();
+      if (userData.exists && userData.data() != null) {
+        final indoorSensorId = userData.data()!['IndoorSensorID'];
+        if (indoorSensorId != null && indoorSensorId.isNotEmpty) {
+          // Navigate to the indoor screen page
+          Navigator.pushReplacementNamed(context, 'home_screen');
+        }
+      }
+    }
   }
 }

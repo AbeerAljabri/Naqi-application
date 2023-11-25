@@ -40,6 +40,10 @@ class FirebaseService {
     return userSnapshot;
   }
 
+  void updateIndoorSensorID(String newIndoorSensorID) {
+    indoorSensorID = newIndoorSensorID;
+  }
+
   void getUserInfo() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {

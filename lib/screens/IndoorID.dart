@@ -8,6 +8,7 @@ import 'package:naqi_app/screens/signup_screen.dart';
 import 'package:naqi_app/screens/indoor_screen.dart';
 import 'dart:ui';
 import '../internetConnection.dart';
+import 'package:naqi_app/screens/indoor_screen.dart';
 
 class IndoorIDPage extends StatefulWidget {
   IndoorIDPage({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ HomeSceen HomePage = HomeSceen(index: 1);
 SignupScreen signupscreen = SignupScreen();
 IndoorPage indoorPage = IndoorPage();
 internetConnection connection = internetConnection();
+
 class _IndoorIDPageState extends State<IndoorIDPage> {
   String indoorSensorId = '';
 
@@ -209,6 +211,7 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
         isLoading = false;
         IndoorButtonText = 'تم التوصيل بنجاح';
       });
+      FirebaseService().updateIndoorSensorID(indoorSensorId);
       // Navigate to the home screen page
       Navigator.pushReplacementNamed(context, 'homeScreen');
     } else {

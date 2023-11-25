@@ -3,6 +3,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:naqi_app/firebase.dart';
 import 'package:naqi_app/sensor.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OutdoorAirQuality {
   static bool notificationSent = false;
@@ -97,8 +98,37 @@ class OutdoorAirQuality {
   Widget viewOutdoorAirQuality(List<dynamic> readings, context) {
     List<Map<String, dynamic>> levels = calculateLevel(readings);
     Map<String, Color> airQuality_color = calculateAirQuality(levels);
+    String first = FirebaseService.first_name;
+    String levelImg = footerImg(levels);
+    String leveltxt = footerTxt(levels);
     String airQuality = airQuality_color.keys.first;
     Color color = airQuality_color.values.first;
+    TextSpan nameSpan = TextSpan(
+      text: "مرحباً " + first + "\n",
+      style: GoogleFonts.robotoCondensed(
+        fontWeight: FontWeight.bold,
+        color: Color(0xFF019CB2),
+        fontSize: 20,
+      ),
+    );
+
+    TextSpan restOfTextSpan = TextSpan(
+      text: leveltxt,
+      style: GoogleFonts.robotoCondensed(
+        fontWeight: FontWeight.bold,
+        fontSize: 17,
+      ),
+    );
+
+    // Combine the TextSpans into a RichText widget
+    Text richText = Text.rich(
+      TextSpan(
+        children: [
+          nameSpan,
+          restOfTextSpan,
+        ],
+      ),
+    );
     return Expanded(
       child: Column(
         children: [
@@ -182,6 +212,43 @@ class OutdoorAirQuality {
                       : 1,
                 ),
               ],
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 250, // Set the desired width
+                    child: richText,
+                  ),
+                  /*Text(
+                    "مرحباً" + first + "\n",
+                    style: GoogleFonts.robotoCondensed(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF019CB2),
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(
+                    leveltxt,
+                    style: GoogleFonts.robotoCondensed(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                    ),
+                  ),*/
+                  Image.asset(
+                    levelImg,
+                    width: 300,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -467,28 +534,44 @@ class OutdoorAirQuality {
           Positioned(
             bottom: 0.0,
             left: 0.0,
-            child: infoWidget(context,
+            child: /*infoWidget(context,
                 ' - يعتبر مستوى درجة الحرارة بارد إذا كان أقل من ١٠  \n - يعتبر مستوى درجة الحرارة معتدل إذا كان أعلى من أو يساوي ١٠ وأقل من ٢٨ \n  - يعتبر مستوى درجة الحرارة حار إذا كان أعلى من أو يساوي ٢٨'),
+          */
+                infoWidget(
+                    context,
+                    "تعرض دراجات الحرارة بوحدة سلزيوس وهي تتدرج كما في الصورة التالية",
+                    'images/tmpLimg.png'),
           ),
         if (title == 'مستوى الرطوبة')
           Positioned(
             bottom: 0.0,
             left: 0.0,
-            child: infoWidget(context,
+            child: /*infoWidget(context,
                 ' - يعتبر مستوى الرطوبة منخفض إذا كان أقل من ٣٠  \n - يعتبر مستوى الرطوبة متوسط إذا كان أعلى من أو يساوي ٣٠ وأقل من أو يساوي ٧٠  \n  - يعتبر مستوى الرطوبة عالي إذا كان أعلى من ٧٠'),
+          */
+                infoWidget(
+                    context,
+                    "تعرض مستويات الرطوبة بوحدة جم / م 3 وهي تتدرج كما في الصورة التالية",
+                    'images/outruLimg.png'),
           ),
         if (title == 'مستوى الغبار')
           Positioned(
             bottom: 0.0,
             left: 0.0,
-            child: infoWidget(context,
+            child:
+                /*infoWidget(context,
                 '\n - يعتبر مستوى الغبار ممتاز إذا كان اقل من أو يساي ١٠٠٠٠  \n - يعتبر مستوى الغبار متوسط إذا كان أعلى من ١٠٠٠٠ وأقل من ٣٠٠٠٠ \n  - يعتبر مستوى الغبار ملوث إذا كان أعلى من أو يساوي ٣٠٠٠٠'),
+          */
+                infoWidget(
+                    context,
+                    "يعرض مستوى الغبار بوحدة الميكرون PM2.5  وتتدرج في المستويات المعروضة التي تتناسب مع صحة الإنسان الطبيعي، قد تختلف وفق حالتك الصحية  ",
+                    'images/pmLimg.png'),
           ),
       ],
     );
   }
 
-  Widget infoWidget(BuildContext context, String text) {
+  Widget infoWidget(BuildContext context, String text, String imageUrl) {
     return IconButton(
       onPressed: () {
         showModalBottomSheet(
@@ -504,9 +587,19 @@ class OutdoorAirQuality {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(30.0),
-                  child: Text(
-                    text,
-                    textAlign: TextAlign.center,
+                  child: Column(
+                    children: [
+                      Text(
+                        text,
+                        textAlign: TextAlign.center,
+                      ),
+                      Image.asset(
+                        imageUrl,
+                        width: 400,
+                        height: 200,
+                      ),
+                      SizedBox(height: 10),
+                    ],
                   ),
                 ),
                 ElevatedButton(
@@ -530,5 +623,35 @@ class OutdoorAirQuality {
         color: Color.fromARGB(255, 107, 107, 107),
       ),
     );
+  }
+
+  String footerImg(List<Map<String, dynamic>> levels) {
+    String airQuality = levels[2]["level"];
+    String img = "";
+
+    if (airQuality == "ملوث" || airQuality == "ملوث لحالتك الصحية") {
+      img = "images/muImg.png";
+    } else if (airQuality == "متوسط") {
+      img = "images/mtImg.png";
+    } else {
+      img = "images/mmImg.png";
+    }
+
+    return img;
+  }
+
+  String footerTxt(List<Map<String, dynamic>> levels) {
+    String airQuality = levels[2]["level"];
+    String txt = "";
+
+    if (airQuality == "ملوث" || airQuality == "ملوث لحالتك الصحية") {
+      txt = txt + "ننصحك بالبقاء داخل مكان مغلق";
+    } else if (airQuality == "متوسط") {
+      txt = txt + "في الواقع يفضل عدم الذهاب لأنشطة خارجية";
+    } else {
+      txt = txt + "الجو جميل للتنزهة!";
+    }
+
+    return txt;
   }
 }

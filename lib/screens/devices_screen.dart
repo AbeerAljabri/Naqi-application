@@ -22,6 +22,8 @@ class _DevicesPageState extends State<DevicesPage> {
   String indoorSensorId = FirebaseService.indoorSensorID ?? "";
   String outdoorSensorId = FirebaseService.outdoorSensorID ?? "";
 
+  FirebaseService firebaseService = FirebaseService();
+
   bool isInButtonEnabled = false;
   bool isOutButtonEnabled = false;
 
@@ -76,6 +78,7 @@ class _DevicesPageState extends State<DevicesPage> {
         if (fieldName == 'IndoorSensorID') {
           indoorSensorId = newValue;
           FirebaseService.indoorSensorID = indoorSensorId;
+          FirebaseService().updateIndoorSensorID(indoorSensorId);
         } else if (fieldName == 'OutdoorSensorID') {
           outdoorSensorId = newValue;
           FirebaseService.outdoorSensorID = outdoorSensorId;
@@ -153,7 +156,6 @@ class _DevicesPageState extends State<DevicesPage> {
               textAlign: TextAlign.left,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
-                  // Use OutlineInputBorder for a rounded border
                   borderRadius: BorderRadius.circular(8.0),
                   borderSide: BorderSide(color: Colors.grey, width: 1.0),
                 ),
@@ -186,7 +188,15 @@ class _DevicesPageState extends State<DevicesPage> {
                   isInButtonEnabled = newValue.isNotEmpty;
                 });
               },
+              enabled: indoorSensorId
+                  .isNotEmpty, // Set the enabled property based on the value of indoorSensorId
             ),
+            if (indoorSensorId
+                .isEmpty) // Display the message if indoorSensorId is empty
+              Text(
+                'لم تضف أي قيمة بعد، تستطيع إضافة قيمة جديدة من صفحة داخلي',
+                style: TextStyle(color: Color.fromARGB(255, 78, 111, 135)),
+              ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: (isInButtonEnabled &&
@@ -252,7 +262,15 @@ class _DevicesPageState extends State<DevicesPage> {
                   isOutButtonEnabled = newValue.isNotEmpty;
                 });
               },
+              enabled: outdoorSensorId
+                  .isNotEmpty, // Set the enabled property based on the value of outdoorSensorId
             ),
+            if (outdoorSensorId
+                .isEmpty) // Display the message if outdoorSensorId is empty
+              Text(
+                ' لم تضف أي قيمة بعد، تستطيع إضافة قيمة جديدة من صفحة خارجي',
+                style: TextStyle(color: Color.fromARGB(255, 78, 111, 135)),
+              ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: (isOutButtonEnabled &&

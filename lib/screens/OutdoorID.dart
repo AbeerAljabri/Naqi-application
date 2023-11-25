@@ -20,7 +20,6 @@ HomeSceen HomePage = HomeSceen(index: 2);
 SignupScreen signupscreen = SignupScreen();
 internetConnection connection = internetConnection();
 
-
 class _OutdoorIDPageState extends State<OutdoorIDPage> {
   String outdoorSensorId = '';
 
@@ -30,6 +29,32 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
   String errorMessage = '';
 
   String OutdoorButtonText = "توصيل المستشعر الخارجي";
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    checkIndoorSensorId();
+  }
+
+  void checkIndoorSensorId() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userId = user.uid;
+      final userRef =
+          FirebaseFirestore.instance.collection('users').doc(userId);
+      final userData = await userRef.get();
+      if (userData.exists && userData.data() != null) {
+        final indoorSensorId = userData.data()!['OutdoorSensorID'];
+        if (indoorSensorId != null && indoorSensorId.isNotEmpty) {
+          setState(() {
+            hasOutdoorSensor = true;
+          });
+          // Navigate to the indoor screen page
+          Navigator.pushReplacementNamed(context, 'home_screen');
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,10 +153,10 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
                 SizedBox(height: 10.0),
                 Center(
                   child: Container(
-                     width: 180,
+                    width: 180,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                         backgroundColor:
+                        backgroundColor:
                             MaterialStateProperty.resolveWith<Color>(
                           (Set<MaterialState> states) {
                             if (states.contains(MaterialState.disabled)) {
@@ -145,25 +170,29 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
                         foregroundColor: MaterialStateProperty.all<Color>(
                           const Color.fromARGB(255, 255, 255, 255),
                         ), // Set the text color
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(8), // Set the border radius
+                            borderRadius: BorderRadius.circular(
+                                8), // Set the border radius
                           ),
                         ),
                       ),
-                     onPressed: outdoorSensorId.isNotEmpty && !isLoading
+                      onPressed: outdoorSensorId.isNotEmpty && !isLoading
                           ? connectOutdoorSensor
                           : null,
                       child: isLoading
                           ? CircularProgressIndicator()
                           : Center(
-                              child: Text(OutdoorButtonText, style: TextStyle(
+                              child: Text(
+                                OutdoorButtonText,
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: outdoorSensorId.isNotEmpty
                                       ? Colors.white
                                       : Colors.grey[700],
-                                ),),
+                                ),
+                              ),
                             ),
                     ),
                   ),
@@ -177,7 +206,6 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
                       fontSize: 16.0,
                     ),
                   ),
-           
               ],
             ),
           ),
@@ -218,7 +246,6 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
       });
     }
   }
-
 
   void updateInfo(var feild, var feildValue) async {
     final user = FirebaseAuth.instance.currentUser;

@@ -10,7 +10,7 @@ class OutdoorAirQuality {
   bool flag = true;
   var temp = 0;
   var hum = 0;
-  num pm = 0.0;
+  num dust = 0.0;
   var time = DateTime(2000);
   FirebaseService firebase = FirebaseService();
 
@@ -29,8 +29,8 @@ class OutdoorAirQuality {
       }
     }
     time = DateTime.parse((data as Map)['received_at']);
-    pm = Sensor.pm;
-    List<dynamic> readings = [temp, hum, 5000, time];
+    dust = Sensor.dust;
+    List<dynamic> readings = [temp, hum, dust, time];
     return readings;
   }
 

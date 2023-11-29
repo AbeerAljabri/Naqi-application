@@ -5,6 +5,20 @@ import 'Bar_data.dart';
 class MyBarGraph {
   List Summary = []; // [sunAmount, monAmount, .., satAmount]
   double max = 0.0;
+   /*List calculateDay (int co2 )
+{
+
+
+
+return summary
+}*/
+/*List calculateWeekly (int co2 )
+{
+
+  
+
+return summary
+}*/
   Widget showTempbar(List Summary, int type, int reading) {
     late BarData myBarData;
 

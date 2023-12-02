@@ -174,6 +174,8 @@ class OutdoorAirQuality {
                   percent: (calculatePercentege(readings)[0] <= 1)
                       ? calculatePercentege(readings)[0]
                       : 1,
+                       isPositive: readings[0] >= 0,
+                  neg: readings[0] < 0,
                 ),
               ],
             ),
@@ -259,7 +261,12 @@ class OutdoorAirQuality {
   List<double> calculatePercentege(List<dynamic> readings) {
     List<double> percentages = [];
     // temp percentage
-    percentages.add(readings[0] / 55);
+    var n = readings[0] / 55;
+    if (n > 0) {
+      percentages.add(readings[0] / 55);
+    } else {
+      percentages.add(n.abs());
+    }
 
     // humidity percentage
     percentages.add(readings[1] / 100);
@@ -357,6 +364,8 @@ class OutdoorAirQuality {
     required double percent,
     Color color = Colors.white,
     Color fontColor = const Color.fromARGB(255, 107, 107, 107),
+    bool? isPositive,
+    bool neg = false,
   }) {
     return Stack(
       children: [
@@ -516,6 +525,7 @@ class OutdoorAirQuality {
                   radius: 65,
                   lineWidth: 5,
                   percent: percent,
+                  reverse: neg,
                   progressColor: colorIndicator,
                   backgroundColor: Color.fromARGB(255, 227, 230, 231),
                   center: Text(

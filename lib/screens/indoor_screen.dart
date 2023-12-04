@@ -284,7 +284,7 @@ class _IndoorPageState extends State<IndoorPage>
                             child: Padding(
                               padding: const EdgeInsets.only(left: 70),
                               child: Text(
-                                'قيد الإيقاف',
+                                'مغلقة',
                               ),
                             ),
                           ),
@@ -294,7 +294,7 @@ class _IndoorPageState extends State<IndoorPage>
                             child: Padding(
                               padding: const EdgeInsets.only(left: 70),
                               child: Text(
-                                'قيد التشغيل',
+                                'مفتوحة',
                               ),
                             ),
                           ),

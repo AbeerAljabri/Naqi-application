@@ -147,13 +147,13 @@ class _OutdoorPageState extends State<OutdoorPage>
                                       readings, context),
                                 ],
                               ),
-                              /*Row(
+                              Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   sensorReadings.checkTime(
                                       readings[3], context),
                                 ],
-                              ),*/
+                              ),
                             ]);
                           }
                         },

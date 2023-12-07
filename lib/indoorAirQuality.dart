@@ -34,7 +34,8 @@ class IndoorAirQuality {
     DateTime currDt = DateTime.now();
     var diffDt = currDt.difference(time);
     var Min = diffDt.inMinutes;
-    String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(time);
+    DateTime modifiedTime = time.add(Duration(hours: 3));
+    String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(modifiedTime);
     if (Min >= 2 && flag) {
       flag = false;
       WidgetsBinding.instance.addPostFrameCallback((_) {

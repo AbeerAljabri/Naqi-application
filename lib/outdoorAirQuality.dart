@@ -19,11 +19,11 @@ class OutdoorAirQuality {
       var paylaod = (data as Map)['uplink_message'];
       if (paylaod.containsKey('decoded_payload')) {
         var paylaod1 = (paylaod as Map)['decoded_payload'];
-        if (paylaod1.containsKey('temperature_1')) {
+        if (paylaod1.containsKey('temperature')) {
           temp = (data as Map)['uplink_message']['decoded_payload']
-                  ['temperature_1']
+                  ['temperature']
               .round();
-          hum = (data as Map)['uplink_message']['decoded_payload']['humidity_2']
+          hum = (data as Map)['uplink_message']['decoded_payload']['humidity']
               .round();
         }
       }
@@ -38,7 +38,8 @@ class OutdoorAirQuality {
     DateTime currDt = DateTime.now();
     var diffDt = currDt.difference(time);
     var Min = diffDt.inMinutes;
-    String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(time);
+    DateTime modifiedTime = time.add(Duration(hours: 3));
+    String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(modifiedTime);
     if (Min >= 2 && flag) {
       flag = false;
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -174,7 +175,7 @@ class OutdoorAirQuality {
                   percent: (calculatePercentege(readings)[0] <= 1)
                       ? calculatePercentege(readings)[0]
                       : 1,
-                       isPositive: readings[0] >= 0,
+                  isPositive: readings[0] >= 0,
                   neg: readings[0] < 0,
                 ),
               ],
@@ -657,9 +658,9 @@ class OutdoorAirQuality {
     if (airQuality == "ملوث" || airQuality == "ملوث لحالتك الصحية") {
       txt = txt + "ننصحك بالبقاء داخل مكان مغلق";
     } else if (airQuality == "متوسط") {
-      txt = txt + "في الواقع يفضل عدم الذهاب لأنشطة خارجية";
+      txt = txt + "يفضل عدم الذهاب لأنشطة خارجية";
     } else {
-      txt = txt + "الجو جميل للتنزهة!";
+      txt = txt + "يمكنك ممارسة الأنشطة الخارجية";
     }
 
     return txt;

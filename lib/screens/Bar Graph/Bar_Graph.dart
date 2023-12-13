@@ -1,78 +1,227 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'Bar_data.dart';
 
 class MyBarGraph {
-  List Summary = []; // [sunAmount, monAmount, .., satAmount]
+ static List Summary = []; // [sunAmount, monAmount, .., satAmount]
   double max = 0.0;
-   /*List calculateDay (int co2 )
-{
+ /* List Summary1(int selectedIndexDuration, int selectedIndexType,
+      int selectedIndexMeasure) {
+    Future<List<double>> fanStatus = calculateSummary(
+        selectedIndexDuration, selectedIndexType, selectedIndexMeasure);
+    fanStatus.then((value) {
+      Summary = value;
+      print('Summary $Summary');
+    });
+    return Summary;
+  }*/
+
+  Future<List<double>> calculateSummary(int selectedIndexDuration,
+      int selectedIndexType, int selectedIndexMeasure) async {
+    Map<int, String> indexMap;
+
+    if (selectedIndexType == 0) {
+      indexMap = {
+        0: 'temperature',
+        1: 'humidity',
+        2: 'co2',
+        3: 'eui-24e124707d084307',
+        4: 'IndoorAirQuality',
+      };
+    } else {
+      indexMap = {
+        0: 'temperature',
+        1: 'humidity',
+        2: 'dust',
+        3: 'eui-24e124136d416846',
+        4: 'OutdoorAirQuality',
+      };
+    }
+    //print('11111111111111111111111111');
+    DateTime currentTime = DateTime.now();
+   // String formattedDate = DateFormat('yyyy-MM-dd').format(currentTime);
+    String formattedDate = '2023-11-30';
+    //print('selectedIndexDuration: $selectedIndexDuration');
+   // print('Current Date: $formattedDate');
+    //DateTime lastDurationDate;
+    List<double> hourlyAverages = [];
+
+    if (selectedIndexDuration == 0) {
+      // Query temperature data for indoor air quality
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('Sensor')
+          .doc(indexMap[3])
+          .collection(indexMap[4]!)
+          .where('date', isEqualTo: formattedDate)
+          .get();
+      var i = 0;
+      // Iterate through the documents and print their data
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document
+          in snapshot.docs) {
+        Map<String, dynamic> data = document.data();
+        i = i + 1;
+       // print('Document ID: ${document.id}');
+       // print('Data: $data');
+        //print('------------------------');
+      }
+     // print(i);
+
+      Map<String, List<dynamic>> hourlyMap = {};
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document
+          in snapshot.docs) {
+        Map<String, dynamic> data = document.data();
+        if (data[indexMap[selectedIndexMeasure]] != null) {
+          // Parse the date string into a DateTime object
+          String date = data['date'];
+          String time = data['time'];
+          DateTime documentDate = DateTime.parse('$date $time');
+
+        //  print('Parsed DateTime: $documentDate');
+          // DateTime documentDate = (data['date']).toDate();
+        //  print('1 $documentDate');
+
+          num measure = data[indexMap[selectedIndexMeasure]];
+        //  print('2 $measure');
+          String hourKey =
+              '${documentDate.year}-${documentDate.month}-${documentDate.day} ${documentDate.hour}';
+         // print('3 $hourKey');
+          if (!hourlyMap.containsKey(hourKey)) {
+            hourlyMap[hourKey] = [measure];
+          } else {
+            hourlyMap[hourKey]!.add(measure);
+          }
+         // print("4 $hourlyMap");
+        }
+        print('5 $hourlyMap');
+      }
+
+      for (int i = 0; i < 24; i++) {
+        String hourKey = '$formattedDate $i';
+        if (!hourlyMap.containsKey(hourKey)) hourlyMap[hourKey] = [0];
+      }
+      // Get the keys and sort them
+      List<String> sortedKeys = hourlyMap.keys.toList()
+        ..sort((a, b) {
+          // Extract the hour part from the key (assuming it's in the format 'YYYY-MM-DD HH')
+          int hourA = int.parse(a.split(' ')[1]);
+          int hourB = int.parse(b.split(' ')[1]);
+
+          // Compare based on the hour part
+          return hourA.compareTo(hourB);
+        });
+
+      // Create a new map with sorted keys
+      Map<String, dynamic> sortedMap = Map.fromIterable(sortedKeys,
+          key: (key) => key, value: (key) => hourlyMap[key]);
+
+      // Print the sorted map
+      //print("7 $sortedKeys");
+     // print("8 $sortedMap");
+      //Calculate average for each hour
+      sortedMap.forEach((hour, temperatures) {
+        double averageTemperature =
+            temperatures.reduce((a, b) => a + b) / temperatures.length;
+        hourlyAverages.add(averageTemperature);
+      });
+     // print('6 $hourlyAverages');
+    }
+
+    /*else if (selectedIndexDuration == 1) {
+      lastDurationDate = currentTime.subtract(Duration(days: 7));
+      // week duration
+    } else if (selectedIndexDuration == 2) {
+      lastDurationDate = currentTime.subtract(Duration(days: 30));
+      // month duration
+    }*/
+
+    return hourlyAverages;
+  }
 
 
 
-return summary
-}*/
-/*List calculateWeekly (int co2 )
-{
-
-  
-
-return summary
-}*/
-  Widget showTempbar(List Summary, int type, int reading) {
+  Widget showBar(List summary, int duration, int type, int measure) {
     late BarData myBarData;
 
-    if (type == 0) {
+    if (duration == 0) {
       myBarData = BarData(
-        hour0: Summary[0],
-        hour1: Summary[1],
-        hour2: Summary[2],
-        hour3: Summary[3],
-        hour4: Summary[4],
-        hour5: Summary[5],
-        hour6: Summary[6],
-        hour7: Summary[7],
-        hour8: Summary[8],
-        hour9: Summary[9],
-        hour10: Summary[10],
-        hour11: Summary[11],
+        hour0: summary[0],
+        hour1: summary[1],
+        hour2: summary[2],
+        hour3: summary[3],
+        hour4: summary[4],
+        hour5: summary[5],
+        hour6: summary[6],
+        hour7: summary[7],
+        hour8: summary[8],
+        hour9: summary[9],
+        hour10: summary[10],
+        hour11: summary[11],
+        hour12: summary[12],
+        hour13: summary[13],
+        hour14: summary[14],
+        hour15: summary[15],
+        hour16: summary[16],
+        hour17: summary[17],
+        hour18: summary[18],
+        hour19: summary[19],
+        hour20: summary[20],
+        hour21: summary[21],
+        hour22: summary[22],
+        hour23: summary[23],
+
       );
-      myBarData.initializeBarData(type);
+      myBarData.initializeBarData(duration);
     }
 
-    if (type == 1) {
+    if (duration == 1) {
       myBarData = BarData(
-        sunAmount: Summary[0],
-        monAmount: Summary[1],
-        tueAmount: Summary[2],
-        wedAmount: Summary[3],
-        thurAmount: Summary[4],
-        friAmount: Summary[5],
-        satAmount: Summary[6],
+        sunAmount: summary[0],
+        monAmount: summary[1],
+        tueAmount: summary[2],
+        wedAmount: summary[3],
+        thurAmount: summary[4],
+        friAmount: summary[5],
+        satAmount: summary[6],
       );
-      myBarData.initializeBarData(type);
+      myBarData.initializeBarData(duration);
       // myBarData.initializeBarData();
     }
-    if (type == 2) {
+    if (duration == 2) {
       myBarData = BarData(
-        week1: Summary[0],
-        week2: Summary[1],
-        week3: Summary[2],
-        week4: Summary[3],
+        week1: summary[0],
+        week2: summary[1],
+        week3: summary[2],
+        week4: summary[3],
       );
 
-      myBarData.initializeBarData(type);
+      myBarData.initializeBarData(duration);
     }
-    if (reading == 0) {
-      max = 40;
+    if (type == 0) {
+      if (measure == 0) {
+        max = 40;
+      }
+      if (measure == 1) {
+        max = 100;
+      }
+      if (measure == 2) {
+        max = 2000;
+      }
     }
-    if (reading == 1) {
-      max = 100;
+    if (type == 1) {
+      if (measure == 0) {
+        max = 70;
+      }
+      if (measure == 1) {
+        max = 100;
+      }
+      if (measure == 2) {
+        max = 50000;
+      }
     }
-    if (reading == 2) {
-      max = 2000;
-    }
-
 // نضيف 3 اف ستيتمنت للنوع القراءة بحيث انه لو ضغط درجة الحرارة
 
     // myBarData.initializeBarData();
@@ -105,7 +254,7 @@ return summary
                     BarChartRodData(
                       fromY: data.y,
                       color: Color.fromARGB(255, 43, 138, 159),
-                      width: 20,
+                      width: 10,
                       borderRadius: BorderRadius.circular(4),
                       backDrawRodData: BackgroundBarChartRodData(
                         show: true,
@@ -127,7 +276,7 @@ return summary
     const style = TextStyle(
       color: Colors.grey,
       fontWeight: FontWeight.bold,
-      fontSize: 14,
+      fontSize: 12,
     );
     Widget text;
 
@@ -138,38 +287,74 @@ return summary
         text = const Text('00', style: style);
         break;
       case 1:
-        text = const Text('02', style: style);
+        text = const Text('01', style: style);
         break;
       case 2:
-        text = const Text('04', style: style);
+        text = const Text('02', style: style);
         break;
       case 3:
-        text = const Text('06', style: style);
+        text = const Text('03', style: style);
         break;
       case 4:
-        text = const Text('08', style: style);
+        text = const Text('04', style: style);
         break;
       case 5:
-        text = const Text('10', style: style);
+        text = const Text('05', style: style);
         break;
       case 6:
-        text = const Text('12', style: style);
+        text = const Text('06', style: style);
         break;
       case 7:
-        text = const Text('14', style: style);
+        text = const Text('07', style: style);
         break;
       case 8:
-        text = const Text('16', style: style);
+        text = const Text('08', style: style);
         break;
       case 9:
-        text = const Text('18', style: style);
+        text = const Text('09', style: style);
         break;
       case 10:
-        text = const Text('20', style: style);
+        text = const Text('10', style: style);
         break;
 
       case 11:
+        text = const Text('11', style: style);
+        break;
+      case 12:
+        text = const Text('12', style: style);
+        break;
+      case 13:
+        text = const Text('13', style: style);
+        break;
+      case 14:
+        text = const Text('14', style: style);
+        break;
+      case 15:
+        text = const Text('15', style: style);
+        break;
+      case 16:
+        text = const Text('16', style: style);
+        break;
+      case 17:
+        text = const Text('17', style: style);
+        break;
+      case 18:
+        text = const Text('18', style: style);
+        break;
+      case 19:
+        text = const Text('19', style: style);
+        break;
+      case 20:
+        text = const Text('20', style: style);
+        break;
+      case 21:
+        text = const Text('21', style: style);
+        break;
+      case 22:
         text = const Text('22', style: style);
+        break;
+      case 23:
+        text = const Text('23', style: style);
         break;
       default:
         text = const Text('', style: style);

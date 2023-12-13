@@ -13,6 +13,18 @@ class BarData {
   final double hour9;
   final double hour10;
   final double hour11;
+  final double hour12;
+  final double hour13;
+  final double hour14;
+  final double hour15;
+  final double hour16;
+  final double hour17;
+  final double hour18;
+  final double hour19;
+  final double hour20;
+  final double hour21;
+  final double hour22;
+  final double hour23;
   final double sunAmount;
   final double monAmount;
   final double tueAmount;
@@ -38,6 +50,18 @@ class BarData {
     this.hour9 = 0.0,
     this.hour10 = 0.0,
     this.hour11 = 0.0,
+    this.hour12 = 0.0,
+    this.hour13 = 0.0,
+    this.hour14 = 0.0,
+    this.hour15 = 0.0,
+    this.hour16 = 0.0,
+    this.hour17 = 0.0,
+    this.hour18 = 0.0,
+    this.hour19 = 0.0,
+    this.hour20 = 0.0,
+    this.hour21 = 0.0,
+    this.hour22 = 0.0,
+    this.hour23 = 0.0,
     this.sunAmount = 0.0,
     this.monAmount = 0.0,
     this.tueAmount = 0.0,
@@ -71,6 +95,18 @@ class BarData {
         IndividualBar(x: 9, y: hour9),
         IndividualBar(x: 10, y: hour10),
         IndividualBar(x: 11, y: hour11),
+        IndividualBar(x: 12, y: hour12),
+        IndividualBar(x: 13, y: hour13),
+        IndividualBar(x: 14, y: hour14),
+        IndividualBar(x: 15, y: hour15),
+        IndividualBar(x: 16, y: hour16),
+        IndividualBar(x: 17, y: hour17),
+        IndividualBar(x: 18, y: hour18),
+        IndividualBar(x: 19, y: hour19),
+        IndividualBar(x: 20, y: hour20),
+        IndividualBar(x: 21, y: hour21),
+        IndividualBar(x: 22, y: hour22),
+        IndividualBar(x: 23, y: hour23),
       ];
     }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'Bar Graph/Bar_Graph.dart';
-
+import 'home_screen.dart';
 class ReportPage extends StatefulWidget {
   ReportPage({Key? key}) : super(key: key);
 
@@ -11,32 +11,26 @@ class ReportPage extends StatefulWidget {
 
 class _ReportPageState extends State<ReportPage> {
   MyBarGraph graph = MyBarGraph();
-  int selectedIndex = 0;
-  int selectedIndex1 = 0;
-  int selectedIndex2 = 0;
-  int selectedIndex3 = 0;
-  int selectedButtonIndexDI = 0;
-  int selectedButtonIndexDO = 0;
-  int selectedButtonIndexWI = 0;
-  int selectedButtonIndexWO = 0;
-  int selectedButtonIndexMI = 0;
-  int selectedButtonIndexMO = 0;
-  final List Summary = [
-    23.0,
-    20.0,
-    18.0,
-    22.0,
-    20.0,
-    25.0,
-    20.0,
-    25.0,
-    22.0,
-    24.0,
-    20.0,
-    21.0
-  ];
+   HomeSceen home = HomeSceen(index:1);
+  int selectedIndexType = 0;
+  int selectedIndexDuration = 0;
+  int selectedIndexMeasure = 0;
+  List b = [];
+ //List b = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,2.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0];
+ @override
+  void initState() {
+//b =graph.Summary1(0, 0, 0);
+b = MyBarGraph.Summary;
+ print(b);
+    super.initState();
+   
+  }
+  
+
   @override
   Widget build(BuildContext context) {
+
+ 
     return Scaffold(
       body: Center(
         child: Column(
@@ -47,7 +41,7 @@ class _ReportPageState extends State<ReportPage> {
               child: ToggleSwitch(
                 minWidth: 150.0,
                 minHeight: 50.0,
-                initialLabelIndex: selectedIndex,
+                initialLabelIndex: selectedIndexDuration,
                 activeBgColor: [Color.fromARGB(255, 43, 138, 159)],
                 activeFgColor: Colors.white,
                 inactiveBgColor: const Color.fromARGB(255, 239, 235, 235),
@@ -56,25 +50,35 @@ class _ReportPageState extends State<ReportPage> {
                 labels: ['يومي', 'اسبوعي', 'شهري'],
                 onToggle: (index) {
                   setState(() {
-                    selectedIndex = index!;
-                    print(selectedIndex);
+                    selectedIndexDuration = index!;
+                    print('duration $selectedIndexDuration');
                   });
                 },
               ),
             ),
             Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: graph.showTempbar(Summary, selectedIndex, 0)),
-
+              //  child: Text(
+             //     'duration $selectedIndexDuration type $selectedIndexType measure $selectedIndexMeasure'),
+             //   graph.calculateSummary(selectedIndexDuration , selectedIndexType , selectedIndexMeasure);
+             
+                child: graph.showBar(
+                   b,
+                    selectedIndexDuration,
+                    selectedIndexType,
+                    selectedIndexMeasure)
+                   
+                    ),
+   
             SizedBox(height: 16),
 
-            if (selectedIndex == 0) ...[
+            if (selectedIndexDuration == 0) ...[
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: ToggleSwitch(
                   minWidth: 200.0,
                   minHeight: 50.0,
-                  initialLabelIndex: selectedIndex1,
+                  initialLabelIndex: selectedIndexType,
                   activeBgColor: [Color.fromARGB(255, 43, 138, 159)],
                   activeFgColor: Colors.white,
                   inactiveBgColor: const Color.fromARGB(255, 239, 235, 235),
@@ -83,23 +87,25 @@ class _ReportPageState extends State<ReportPage> {
                   labels: ['داخلي', 'خارجي'],
                   onToggle: (index) {
                     setState(() {
-                      selectedIndex1 = index!;
+                      selectedIndexType = index!;
+                      print('type $selectedIndexType');
                     });
                   },
                 ),
               ),
               SizedBox(height: 15),
-              if (selectedIndex1 == 0) ...[
+              if (selectedIndexType == 0) ...[
                 Column(
                   children: [
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexDI = 0;
+                          selectedIndexMeasure = 0;
+                          print('duration $selectedIndexMeasure');
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexDI == 0
+                        primary: selectedIndexMeasure == 0
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -107,7 +113,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'درجة الحرارة',
                         style: TextStyle(
-                          color: selectedButtonIndexDI == 0
+                          color: selectedIndexMeasure == 0
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -116,13 +122,12 @@ class _ReportPageState extends State<ReportPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexDI = 1;
-                          
+                          selectedIndexMeasure = 1;
                         });
                         //////here
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexDI == 1
+                        primary: selectedIndexMeasure == 1
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -130,7 +135,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'مستوى الرطوبة',
                         style: TextStyle(
-                          color: selectedButtonIndexDI == 1
+                          color: selectedIndexMeasure == 1
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -139,11 +144,11 @@ class _ReportPageState extends State<ReportPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexDI = 2;
+                          selectedIndexMeasure = 2;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexDI == 2
+                        primary: selectedIndexMeasure == 2
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -151,7 +156,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'ثاني اكسيد الكربون',
                         style: TextStyle(
-                          color: selectedButtonIndexDI == 2
+                          color: selectedIndexMeasure == 2
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -160,17 +165,17 @@ class _ReportPageState extends State<ReportPage> {
                   ],
                 ),
               ],
-              if (selectedIndex1 == 1) ...[
+              if (selectedIndexType == 1) ...[
                 Column(
                   children: [
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexDO = 0;
+                          selectedIndexMeasure = 0;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexDO == 0
+                        primary: selectedIndexMeasure == 0
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -178,7 +183,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'درجة الحرارة',
                         style: TextStyle(
-                          color: selectedButtonIndexDO == 0
+                          color: selectedIndexMeasure == 0
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -187,11 +192,11 @@ class _ReportPageState extends State<ReportPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexDO = 1;
+                          selectedIndexMeasure = 1;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexDO == 1
+                        primary: selectedIndexMeasure == 1
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -199,7 +204,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'مستوى الرطوبة',
                         style: TextStyle(
-                          color: selectedButtonIndexDO == 1
+                          color: selectedIndexMeasure == 1
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -208,11 +213,11 @@ class _ReportPageState extends State<ReportPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexDO = 2;
+                          selectedIndexMeasure = 2;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexDO == 2
+                        primary: selectedIndexMeasure == 2
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -220,7 +225,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'مستوى الغبار',
                         style: TextStyle(
-                          color: selectedButtonIndexDO == 2
+                          color: selectedIndexMeasure == 2
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -232,13 +237,13 @@ class _ReportPageState extends State<ReportPage> {
             ],
 
             // week
-            if (selectedIndex == 1) ...[
+            if (selectedIndexDuration == 1) ...[
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: ToggleSwitch(
                   minWidth: 200.0,
                   minHeight: 50.0,
-                  initialLabelIndex: selectedIndex2,
+                  initialLabelIndex: selectedIndexType,
                   activeBgColor: [Color.fromARGB(255, 43, 138, 159)],
                   activeFgColor: Colors.white,
                   inactiveBgColor: const Color.fromARGB(255, 239, 235, 235),
@@ -247,23 +252,23 @@ class _ReportPageState extends State<ReportPage> {
                   labels: ['داخلي', 'خارجي'],
                   onToggle: (index) {
                     setState(() {
-                      selectedIndex2 = index!;
+                      selectedIndexType = index!;
                     });
                   },
                 ),
               ),
               SizedBox(height: 15),
-              if (selectedIndex2 == 0) ...[
+              if (selectedIndexType == 0) ...[
                 Column(
                   children: [
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexWI = 0;
+                          selectedIndexMeasure = 0;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexWI == 0
+                        primary: selectedIndexMeasure == 0
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -271,7 +276,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'درجة الحرارة',
                         style: TextStyle(
-                          color: selectedButtonIndexWI == 0
+                          color: selectedIndexMeasure == 0
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -280,11 +285,11 @@ class _ReportPageState extends State<ReportPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexWI = 1;
+                          selectedIndexMeasure = 1;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexWI == 1
+                        primary: selectedIndexMeasure == 1
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -292,7 +297,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'مستوى الرطوبة',
                         style: TextStyle(
-                          color: selectedButtonIndexWI == 1
+                          color: selectedIndexMeasure == 1
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -301,11 +306,11 @@ class _ReportPageState extends State<ReportPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexWI = 2;
+                          selectedIndexMeasure = 2;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexWI == 2
+                        primary: selectedIndexMeasure == 2
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -313,7 +318,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'ثاني اكسيد الكربون',
                         style: TextStyle(
-                          color: selectedButtonIndexWI == 2
+                          color: selectedIndexMeasure == 2
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -322,17 +327,17 @@ class _ReportPageState extends State<ReportPage> {
                   ],
                 ),
               ],
-              if (selectedIndex2 == 1) ...[
+              if (selectedIndexType == 1) ...[
                 Column(
                   children: [
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexWO = 0;
+                          selectedIndexMeasure = 0;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexWO == 0
+                        primary: selectedIndexMeasure == 0
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -340,7 +345,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'درجة الحرارة',
                         style: TextStyle(
-                          color: selectedButtonIndexWO == 0
+                          color: selectedIndexMeasure == 0
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -349,11 +354,11 @@ class _ReportPageState extends State<ReportPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexWO = 1;
+                          selectedIndexMeasure = 1;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexWO == 1
+                        primary: selectedIndexMeasure == 1
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -361,7 +366,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'مستوى الرطوبة',
                         style: TextStyle(
-                          color: selectedButtonIndexWO == 1
+                          color: selectedIndexMeasure == 1
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -370,11 +375,11 @@ class _ReportPageState extends State<ReportPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexWO = 2;
+                          selectedIndexMeasure = 2;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexWO == 2
+                        primary: selectedIndexMeasure == 2
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -382,7 +387,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'مستوى الغبار',
                         style: TextStyle(
-                          color: selectedButtonIndexWO == 2
+                          color: selectedIndexMeasure == 2
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -394,13 +399,13 @@ class _ReportPageState extends State<ReportPage> {
             ],
 
             //month
-            if (selectedIndex == 2) ...[
+            if (selectedIndexDuration == 2) ...[
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: ToggleSwitch(
                   minWidth: 200.0,
                   minHeight: 50.0,
-                  initialLabelIndex: selectedIndex3,
+                  initialLabelIndex: selectedIndexType,
                   activeBgColor: [Color.fromARGB(255, 43, 138, 159)],
                   activeFgColor: Colors.white,
                   inactiveBgColor: const Color.fromARGB(255, 239, 235, 235),
@@ -409,23 +414,23 @@ class _ReportPageState extends State<ReportPage> {
                   labels: ['داخلي', 'خارجي'],
                   onToggle: (index) {
                     setState(() {
-                      selectedIndex3 = index!;
+                      selectedIndexType = index!;
                     });
                   },
                 ),
               ),
               SizedBox(height: 15),
-              if (selectedIndex3 == 0) ...[
+              if (selectedIndexType == 0) ...[
                 Column(
                   children: [
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexMI = 0;
+                          selectedIndexMeasure = 0;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexMI == 0
+                        primary: selectedIndexMeasure == 0
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -433,7 +438,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'درجة الحرارة',
                         style: TextStyle(
-                          color: selectedButtonIndexMI == 0
+                          color: selectedIndexMeasure == 0
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -442,11 +447,11 @@ class _ReportPageState extends State<ReportPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexMI = 1;
+                          selectedIndexMeasure = 1;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexMI == 1
+                        primary: selectedIndexMeasure == 1
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -454,7 +459,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'مستوى الرطوبة',
                         style: TextStyle(
-                          color: selectedButtonIndexMI == 1
+                          color: selectedIndexMeasure == 1
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -463,11 +468,11 @@ class _ReportPageState extends State<ReportPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexMI = 2;
+                          selectedIndexMeasure = 2;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexMI == 2
+                        primary: selectedIndexMeasure == 2
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -475,7 +480,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'ثاني اكسيد الكربون',
                         style: TextStyle(
-                          color: selectedButtonIndexMI == 2
+                          color: selectedIndexMeasure == 2
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -484,17 +489,17 @@ class _ReportPageState extends State<ReportPage> {
                   ],
                 ),
               ],
-              if (selectedIndex3 == 1) ...[
+              if (selectedIndexType == 1) ...[
                 Column(
                   children: [
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexMO = 0;
+                          selectedIndexMeasure = 0;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexMO == 0
+                        primary: selectedIndexMeasure == 0
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -502,7 +507,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'درجة الحرارة',
                         style: TextStyle(
-                          color: selectedButtonIndexMO == 0
+                          color: selectedIndexMeasure == 0
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -511,11 +516,11 @@ class _ReportPageState extends State<ReportPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexMO = 1;
+                          selectedIndexMeasure = 1;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexMO == 1
+                        primary: selectedIndexMeasure == 1
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -523,7 +528,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'مستوى الرطوبة',
                         style: TextStyle(
-                          color: selectedButtonIndexMO == 1
+                          color: selectedIndexMeasure == 1
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -532,11 +537,11 @@ class _ReportPageState extends State<ReportPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedButtonIndexMO = 2;
+                          selectedIndexMeasure = 2;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: selectedButtonIndexMO == 2
+                        primary: selectedIndexMeasure == 2
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
                         fixedSize: Size(352, 50),
@@ -544,7 +549,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Text(
                         'مستوى الغبار',
                         style: TextStyle(
-                          color: selectedButtonIndexMO == 2
+                          color: selectedIndexMeasure == 2
                               ? Colors.white
                               : Colors.black,
                         ),

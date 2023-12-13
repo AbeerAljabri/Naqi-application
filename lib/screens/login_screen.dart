@@ -46,7 +46,6 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -144,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       GestureDetector(
                         onTap: () {
@@ -173,70 +172,72 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                   ElevatedButton(
-  child: Text(
-    'تسجيل الدخول',
-    style: GoogleFonts.robotoCondensed(
-      color: Colors.white,
-      fontWeight: FontWeight.bold,
-      fontSize: 18,
-    ),
-  ),
-  style: buttonPrimary,
-  onPressed: () async {
-    // Check for internet connection
-    bool isConnected = await connection.checkInternetConnection();
+                    ElevatedButton(
+                      child: Text(
+                        'تسجيل الدخول',
+                        style: GoogleFonts.robotoCondensed(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      style: buttonPrimary,
+                      onPressed: () async {
+                        // Check for internet connection
+                        bool isConnected =
+                            await connection.checkInternetConnection();
 
-    if (!isConnected) {
-      // Show a Snackbar for no internet connection
-      final scaffold = ScaffoldMessenger.of(context);
-      scaffold.showSnackBar(
-        SnackBar(
-          content: Text(
-              "لا يوجد اتصال بالانترنت، الرجاء التحقق من الاتصال بالانترنت"),
-          duration: Duration(seconds: 5), // Set the duration as needed
-          action: SnackBarAction(
-            label: 'حسنًا',
-            onPressed: () {
-              // Handle the action when the "OK" button is pressed
-              scaffold.hideCurrentSnackBar();
-            },
-          ),
-        ),
-      );
-      return;
-    }
+                        if (!isConnected) {
+                          // Show a Snackbar for no internet connection
+                          final scaffold = ScaffoldMessenger.of(context);
+                          scaffold.showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  "لا يوجد اتصال بالانترنت، الرجاء التحقق من الاتصال بالانترنت"),
+                              duration: Duration(
+                                  seconds: 5), // Set the duration as needed
+                              action: SnackBarAction(
+                                label: 'حسنًا',
+                                onPressed: () {
+                                  // Handle the action when the "OK" button is pressed
+                                  scaffold.hideCurrentSnackBar();
+                                },
+                              ),
+                            ),
+                          );
+                          return;
+                        }
 
-    // Continue with the login operation
-    if (_key.currentState!.validate()) {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      )
-          .catchError((err) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("خطأ"),
-              content: Text("البريد الالكتروني او كلمة المرور خطأ"),
-              actions: [
-                TextButton(
-                  child: Text("حسنًا"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          },
-        );
-      });
-    }
-  },
-),
-
+                        // Continue with the login operation
+                        if (_key.currentState!.validate()) {
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
+                          )
+                              .catchError((err) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("خطأ"),
+                                  content: Text(
+                                      "البريد الالكتروني او كلمة المرور خطأ"),
+                                  actions: [
+                                    TextButton(
+                                      child: Text("حسنًا"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                          });
+                        }
+                      },
+                    ),
                   ],
                 ),
 

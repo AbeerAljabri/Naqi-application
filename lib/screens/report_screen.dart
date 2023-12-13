@@ -56,21 +56,37 @@ b = MyBarGraph.Summary;
                 },
               ),
             ),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-              //  child: Text(
-             //     'duration $selectedIndexDuration type $selectedIndexType measure $selectedIndexMeasure'),
-             //   graph.calculateSummary(selectedIndexDuration , selectedIndexType , selectedIndexMeasure);
-             
-                child: graph.showBar(
-                   b,
-                    selectedIndexDuration,
-                    selectedIndexType,
-                    selectedIndexMeasure)
-                   
-                    ),
-   
-            SizedBox(height: 16),
+         Container(
+  height: 350.0, // Set the desired height
+  width: 400.0,  // Set the desired width
+  child: Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: FutureBuilder<List<double>>(
+      future: graph.calculateSummary(selectedIndexDuration, selectedIndexType, selectedIndexMeasure),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: Container(
+              width: 50.0,  // Set the desired size for CircularProgressIndicator
+              height: 50.0, // Set the desired size for CircularProgressIndicator
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // Use the result from the future, which is a List<double>
+          List<double>? result = snapshot.data;
+          
+          // Now you can use the result as needed.
+          return graph.showBar(result!, selectedIndexDuration, selectedIndexType, selectedIndexMeasure);
+        }
+      },
+    ),
+  ),
+),
+
+SizedBox(height: 12),
 
             if (selectedIndexDuration == 0) ...[
               Padding(

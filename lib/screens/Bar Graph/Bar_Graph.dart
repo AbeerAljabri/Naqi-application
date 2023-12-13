@@ -41,7 +41,7 @@ class MyBarGraph {
     }
     //print('11111111111111111111111111');
     DateTime currentTime = DateTime.now();
-    // String formattedDate = DateFormat('yyyy-MM-dd').format(currentTime);
+   // String formattedDate = DateFormat('yyyy-MM-dd').format(currentTime);
     String formattedDate = '2023-11-30';
     //print('selectedIndexDuration: $selectedIndexDuration');
    // print('Current Date: $formattedDate');
@@ -96,7 +96,7 @@ class MyBarGraph {
           }
          // print("4 $hourlyMap");
         }
-       // print('5 $hourlyMap');
+        print('5 $hourlyMap');
       }
 
       for (int i = 0; i < 24; i++) {

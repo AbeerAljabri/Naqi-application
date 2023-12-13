@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'Bar Graph/Bar_Graph.dart';
@@ -20,8 +21,6 @@ class _ReportPageState extends State<ReportPage> {
  @override
   void initState() {
 //b =graph.Summary1(0, 0, 0);
-b = MyBarGraph.Summary;
- print(b);
     super.initState();
    
   }
@@ -49,6 +48,7 @@ b = MyBarGraph.Summary;
                 totalSwitches: 3,
                 labels: ['يومي', 'اسبوعي', 'شهري'],
                 onToggle: (index) {
+                  
                   setState(() {
                     selectedIndexDuration = index!;
                     print('duration $selectedIndexDuration');
@@ -580,4 +580,38 @@ SizedBox(height: 12),
       ),
     );
   }
+   void insert() async{     // Reference to Firestore
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  // Collection reference
+  CollectionReference dataCollection = firestore.collection('Sensor/eui-24e124707d084307/IndoorAirQuality/');
+
+  // Generate and add 30 documents
+    // Simulate data (replace this with your actual data)
+    double temperature = 17.0; // Random temperature between 20 and 50
+    double humidity = 25.0 ;  // Random humidity between 50 and 100
+    double co2 = 400.0;            // Random dust value between 0 and 100
+    String date = '2023-12-12';
+    String time = '10:00';
+    // Create a document with the simulated data
+    Map<String, dynamic> documentData = {
+      'temperature': temperature,
+      'humidity': humidity,
+      'co2': co2,
+      'date': date,
+      'time':time,
+    };
+
+    // Add the document to the collection
+    dataCollection.add(documentData);
+  
+  // Add the document to the collection and get the document reference
+    DocumentReference documentRef = await dataCollection.add(documentData);
+
+    // Print the document ID
+    print('Document added with ID: ${documentRef.id}');
+
+  print('Documents added to Firestore.');
+}
+
 }

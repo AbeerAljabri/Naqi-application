@@ -5,18 +5,8 @@ import 'package:intl/intl.dart';
 import 'Bar_data.dart';
 
 class MyBarGraph {
- static List Summary = []; // [sunAmount, monAmount, .., satAmount]
+  static List Summary = []; // [sunAmount, monAmount, .., satAmount]
   double max = 0.0;
- /* List Summary1(int selectedIndexDuration, int selectedIndexType,
-      int selectedIndexMeasure) {
-    Future<List<double>> fanStatus = calculateSummary(
-        selectedIndexDuration, selectedIndexType, selectedIndexMeasure);
-    fanStatus.then((value) {
-      Summary = value;
-      print('Summary $Summary');
-    });
-    return Summary;
-  }*/
 
   Future<List<double>> calculateSummary(int selectedIndexDuration,
       int selectedIndexType, int selectedIndexMeasure) async {
@@ -40,15 +30,18 @@ class MyBarGraph {
       };
     }
     //print('11111111111111111111111111');
-    DateTime currentTime = DateTime.now();
-   // String formattedDate = DateFormat('yyyy-MM-dd').format(currentTime);
-    String formattedDate = '2023-11-30';
+
     //print('selectedIndexDuration: $selectedIndexDuration');
-   // print('Current Date: $formattedDate');
+    // print('Current Date: $formattedDate');
     //DateTime lastDurationDate;
     List<double> hourlyAverages = [];
+    List<double> dailyAverages = [];
+    List<double> monthlyAverages = [];
 
     if (selectedIndexDuration == 0) {
+      DateTime currentTime = DateTime.now();
+      String formattedDate = DateFormat('yyyy-MM-dd').format(currentTime);
+    // String formattedDate = '2023-11-30';
       // Query temperature data for indoor air quality
       QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
           .instance
@@ -63,11 +56,11 @@ class MyBarGraph {
           in snapshot.docs) {
         Map<String, dynamic> data = document.data();
         i = i + 1;
-       // print('Document ID: ${document.id}');
-       // print('Data: $data');
+        // print('Document ID: ${document.id}');
+        // print('Data: $data');
         //print('------------------------');
       }
-     // print(i);
+      // print(i);
 
       Map<String, List<dynamic>> hourlyMap = {};
 
@@ -80,21 +73,21 @@ class MyBarGraph {
           String time = data['time'];
           DateTime documentDate = DateTime.parse('$date $time');
 
-        //  print('Parsed DateTime: $documentDate');
+          //  print('Parsed DateTime: $documentDate');
           // DateTime documentDate = (data['date']).toDate();
-        //  print('1 $documentDate');
+          //  print('1 $documentDate');
 
           num measure = data[indexMap[selectedIndexMeasure]];
-        //  print('2 $measure');
+          //  print('2 $measure');
           String hourKey =
               '${documentDate.year}-${documentDate.month}-${documentDate.day} ${documentDate.hour}';
-         // print('3 $hourKey');
+          // print('3 $hourKey');
           if (!hourlyMap.containsKey(hourKey)) {
             hourlyMap[hourKey] = [measure];
           } else {
             hourlyMap[hourKey]!.add(measure);
           }
-         // print("4 $hourlyMap");
+          // print("4 $hourlyMap");
         }
         print('5 $hourlyMap');
       }
@@ -120,28 +113,144 @@ class MyBarGraph {
 
       // Print the sorted map
       //print("7 $sortedKeys");
-     // print("8 $sortedMap");
+      // print("8 $sortedMap");
       //Calculate average for each hour
       sortedMap.forEach((hour, temperatures) {
         double averageTemperature =
             temperatures.reduce((a, b) => a + b) / temperatures.length;
         hourlyAverages.add(averageTemperature);
       });
-     // print('6 $hourlyAverages');
-    }
+      // print('6 $hourlyAverages');
+    } 
+    
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
+    
+    
+    else if( (selectedIndexDuration == 1 )||(selectedIndexDuration == 2 ) ){
+     DateTime lastDurationDate = DateTime.now();
+     //DateTime lastDurationDate = DateTime(2023, 11, 1);
 
-    /*else if (selectedIndexDuration == 1) {
-      lastDurationDate = currentTime.subtract(Duration(days: 7));
+      print("11 $lastDurationDate");
+      if (selectedIndexDuration == 1 ){
+      lastDurationDate = lastDurationDate.subtract(Duration(days: 6));}
+      else if (selectedIndexDuration == 2 )
+      {   lastDurationDate = lastDurationDate.subtract(Duration(days: 30));}
+      String formattedDate1 = DateFormat('yyyy-MM-dd').format(lastDurationDate);
+      print("10 $formattedDate1");
+
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('Sensor')
+          .doc(indexMap[3])
+          .collection(indexMap[4]!)
+          .where('date', isGreaterThanOrEqualTo: formattedDate1)
+          .get();
+      var i = 0;
+      // Iterate through the documents and print their data
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document
+          in snapshot.docs) {
+        Map<String, dynamic> data = document.data();
+        i = i + 1;
+        print('Document ID: ${document.id}');
+        print('Data: $data');
+        print('------------------------');
+      }
+      // print(i);
+
+      Map<String, List<dynamic>> weeklyMap = {};
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document
+          in snapshot.docs) {
+        Map<String, dynamic> data = document.data();
+        if (data[indexMap[selectedIndexMeasure]] != null) {
+          // Parse the date string into a DateTime object
+          String date = data['date'];
+          String time = data['time'];
+          DateTime documentDate = DateTime.parse('$date $time');
+
+          //  print('Parsed DateTime: $documentDate');
+          // DateTime documentDate = (data['date']).toDate();
+          //  print('1 $documentDate');
+
+          num measure = data[indexMap[selectedIndexMeasure]];
+          print('2 $measure');
+          String dateKey = DateFormat('yyyy-MM-dd').format(documentDate);
+          print('3 $dateKey');
+          if (!weeklyMap.containsKey(dateKey)) {
+            weeklyMap[dateKey] = [measure];
+          } else {
+            weeklyMap[dateKey]!.add(measure);
+          }
+          print("4 $weeklyMap");
+        }
+        print('5 $weeklyMap');
+      }
+      DateTime dateKey = DateTime.parse(formattedDate1);
+      if(selectedIndexDuration == 1 ){
+      for (int i = 0; i < 7; i++) {
+        String formattedKey = DateFormat('yyyy-MM-dd').format(dateKey); 
+              print('12 $formattedKey');
+        if (!weeklyMap.containsKey(formattedKey)) {
+          weeklyMap[formattedKey] = [0];
+        }
+        dateKey = dateKey.add(Duration(days: 1));
+      }
+      } else   if(selectedIndexDuration == 2){
+      for (int i = 0; i < 30; i++) {
+        String formattedKey = DateFormat('yyyy-MM-dd').format(dateKey); 
+              print('12 $formattedKey');
+        if (!weeklyMap.containsKey(formattedKey)) {
+          weeklyMap[formattedKey] = [0];
+        }
+        dateKey = dateKey.add(Duration(days: 1));
+      }
+      }
+
+
+     
+
+
+
+// Now, weeklyMap contains entries for all dates within the range, and missing ones have values set to zero
+      print('Modified Weekly Map: $weeklyMap');
+
+      // Get the keys and sort them
+     List<String> sortedKeys = weeklyMap.keys.toList()
+  ..sort((a, b) {
+    // Compare keys directly as DateTime objects
+    DateTime dateA = DateTime.parse(a);
+    DateTime dateB = DateTime.parse(b);
+
+    return dateA.compareTo(dateB);
+  });
+print("14 $sortedKeys");
+
+      // Create a new map with sorted keys
+     Map<String, dynamic> sortedMap = Map.fromIterable(sortedKeys,
+     key: (key) => key, value: (key) => weeklyMap[key]);
+
+      // Print the sorted map
+      print("7 $sortedKeys");
+      print("8 $sortedMap");
+      //Calculate average for each hour
+    sortedMap.forEach((hour, temperatures) {
+        double averageTemperature =
+            temperatures.reduce((a, b) => a + b) / temperatures.length;
+        hourlyAverages.add(averageTemperature);
+      });
+
       // week duration
-    } else if (selectedIndexDuration == 2) {
+    } /*else if (selectedIndexDuration == 2) {
       lastDurationDate = currentTime.subtract(Duration(days: 30));
       // month duration
     }*/
 
     return hourlyAverages;
   }
-
-
 
   Widget showBar(List summary, int duration, int type, int measure) {
     late BarData myBarData;
@@ -172,7 +281,6 @@ class MyBarGraph {
         hour21: summary[21],
         hour22: summary[22],
         hour23: summary[23],
-
       );
       myBarData.initializeBarData(duration);
     }
@@ -192,10 +300,36 @@ class MyBarGraph {
     }
     if (duration == 2) {
       myBarData = BarData(
-        week1: summary[0],
-        week2: summary[1],
-        week3: summary[2],
-        week4: summary[3],
+        day1: summary[0],
+        day2: summary[1],
+        day3: summary[2],
+        day4: summary[3],
+        day5: summary[4],
+        day6: summary[5],
+        day7: summary[6],
+        day8: summary[7],
+        day9: summary[8],
+        day10: summary[9],
+        day11: summary[10],
+        day12: summary[11],
+        day13: summary[12],
+        day14: summary[13],
+        day15: summary[14],
+        day16: summary[15],
+        day17: summary[16],
+        day18: summary[17],
+        day19: summary[18],
+        day20: summary[19],
+        day21: summary[20],
+        day22: summary[21],
+        day23: summary[22],
+        day24: summary[23],
+        day25: summary[24],
+        day26: summary[25],
+        day27: summary[26],
+        day28: summary[27],
+        day29: summary[28],
+        day30: summary[29],
       );
 
       myBarData.initializeBarData(duration);

@@ -7,11 +7,12 @@ import 'Bar_data.dart';
 class MyBarGraph {
   static List Summary = []; // [sunAmount, monAmount, .., satAmount]
   double max = 0.0;
-
+  static int type = 0;
+  static List<String> formattedKeys = [];
   Future<List<double>> calculateSummary(int selectedIndexDuration,
       int selectedIndexType, int selectedIndexMeasure) async {
     Map<int, String> indexMap;
-
+    type = selectedIndexDuration;
     if (selectedIndexType == 0) {
       indexMap = {
         0: 'temperature',
@@ -41,7 +42,7 @@ class MyBarGraph {
     if (selectedIndexDuration == 0) {
       DateTime currentTime = DateTime.now();
       String formattedDate = DateFormat('yyyy-MM-dd').format(currentTime);
-    // String formattedDate = '2023-11-30';
+      // String formattedDate = '2023-11-30';
       // Query temperature data for indoor air quality
       QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
           .instance
@@ -89,7 +90,7 @@ class MyBarGraph {
           }
           // print("4 $hourlyMap");
         }
-        print('5 $hourlyMap');
+        // print('5 $hourlyMap');
       }
 
       for (int i = 0; i < 24; i++) {
@@ -121,26 +122,22 @@ class MyBarGraph {
         hourlyAverages.add(averageTemperature);
       });
       // print('6 $hourlyAverages');
-    } 
-    
-    
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    
-    
-    
-    
-    else if( (selectedIndexDuration == 1 )||(selectedIndexDuration == 2 ) ){
-     DateTime lastDurationDate = DateTime.now();
-     //DateTime lastDurationDate = DateTime(2023, 11, 1);
+    }
 
-      print("11 $lastDurationDate");
-      if (selectedIndexDuration == 1 ){
-      lastDurationDate = lastDurationDate.subtract(Duration(days: 6));}
-      else if (selectedIndexDuration == 2 )
-      {   lastDurationDate = lastDurationDate.subtract(Duration(days: 30));}
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    else if ((selectedIndexDuration == 1) || (selectedIndexDuration == 2)) {
+      DateTime lastDurationDate = DateTime.now();
+      //DateTime lastDurationDate = DateTime(2023, 11, 1);
+
+      // print("11 $lastDurationDate");
+      if (selectedIndexDuration == 1) {
+        lastDurationDate = lastDurationDate.subtract(Duration(days: 6));
+      } else if (selectedIndexDuration == 2) {
+        lastDurationDate = lastDurationDate.subtract(Duration(days: 30));
+      }
       String formattedDate1 = DateFormat('yyyy-MM-dd').format(lastDurationDate);
-      print("10 $formattedDate1");
+      //  print("10 $formattedDate1");
 
       QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
           .instance
@@ -155,9 +152,9 @@ class MyBarGraph {
           in snapshot.docs) {
         Map<String, dynamic> data = document.data();
         i = i + 1;
-        print('Document ID: ${document.id}');
-        print('Data: $data');
-        print('------------------------');
+        //    print('Document ID: ${document.id}');
+        //  print('Data: $data');
+        //  print('------------------------');
       }
       // print(i);
 
@@ -177,72 +174,78 @@ class MyBarGraph {
           //  print('1 $documentDate');
 
           num measure = data[indexMap[selectedIndexMeasure]];
-          print('2 $measure');
+          //   print('2 $measure');
           String dateKey = DateFormat('yyyy-MM-dd').format(documentDate);
-          print('3 $dateKey');
+          // print('3 $dateKey');
           if (!weeklyMap.containsKey(dateKey)) {
             weeklyMap[dateKey] = [measure];
           } else {
             weeklyMap[dateKey]!.add(measure);
           }
-          print("4 $weeklyMap");
+          //  print("4 $weeklyMap");
         }
-        print('5 $weeklyMap');
+        // print('5 $weeklyMap');
       }
       DateTime dateKey = DateTime.parse(formattedDate1);
-      if(selectedIndexDuration == 1 ){
-      for (int i = 0; i < 7; i++) {
-        String formattedKey = DateFormat('yyyy-MM-dd').format(dateKey); 
-              print('12 $formattedKey');
-        if (!weeklyMap.containsKey(formattedKey)) {
-          weeklyMap[formattedKey] = [0];
+      if (selectedIndexDuration == 1) {
+        for (int i = 0; i < 7; i++) {
+          String formattedKey = DateFormat('yyyy-MM-dd').format(dateKey);
+          //  print('12 $formattedKey');
+          if (!weeklyMap.containsKey(formattedKey)) {
+            weeklyMap[formattedKey] = [0];
+          }
+          dateKey = dateKey.add(Duration(days: 1));
         }
-        dateKey = dateKey.add(Duration(days: 1));
-      }
-      } else   if(selectedIndexDuration == 2){
-      for (int i = 0; i < 30; i++) {
-        String formattedKey = DateFormat('yyyy-MM-dd').format(dateKey); 
-              print('12 $formattedKey');
-        if (!weeklyMap.containsKey(formattedKey)) {
-          weeklyMap[formattedKey] = [0];
+      } else if (selectedIndexDuration == 2) {
+        for (int i = 0; i < 30; i++) {
+          String formattedKey = DateFormat('yyyy-MM-dd').format(dateKey);
+          //  print('12 $formattedKey');
+          if (!weeklyMap.containsKey(formattedKey)) {
+            weeklyMap[formattedKey] = [0];
+          }
+          dateKey = dateKey.add(Duration(days: 1));
         }
-        dateKey = dateKey.add(Duration(days: 1));
       }
-      }
-
-
-     
-
-
 
 // Now, weeklyMap contains entries for all dates within the range, and missing ones have values set to zero
-      print('Modified Weekly Map: $weeklyMap');
+      //print('Modified Weekly Map: $weeklyMap');
 
       // Get the keys and sort them
-     List<String> sortedKeys = weeklyMap.keys.toList()
-  ..sort((a, b) {
-    // Compare keys directly as DateTime objects
-    DateTime dateA = DateTime.parse(a);
-    DateTime dateB = DateTime.parse(b);
+      List<String> sortedKeys = weeklyMap.keys.toList()
+        ..sort((a, b) {
+          // Compare keys directly as DateTime objects
+          DateTime dateA = DateTime.parse(a);
+          DateTime dateB = DateTime.parse(b);
 
-    return dateA.compareTo(dateB);
-  });
-print("14 $sortedKeys");
+          return dateA.compareTo(dateB);
+        });
+      //  print("14 $sortedKeys");
 
       // Create a new map with sorted keys
-     Map<String, dynamic> sortedMap = Map.fromIterable(sortedKeys,
-     key: (key) => key, value: (key) => weeklyMap[key]);
+      Map<String, dynamic> sortedMap = Map.fromIterable(sortedKeys,
+          key: (key) => key, value: (key) => weeklyMap[key]);
 
       // Print the sorted map
-      print("7 $sortedKeys");
-      print("8 $sortedMap");
+      //  print("7 $sortedKeys");
+      //  print("8 $sortedMap");
       //Calculate average for each hour
-    sortedMap.forEach((hour, temperatures) {
+      sortedMap.forEach((hour, temperatures) {
         double averageTemperature =
             temperatures.reduce((a, b) => a + b) / temperatures.length;
         hourlyAverages.add(averageTemperature);
       });
+      print("111111 $sortedMap");
+      print("222222 $hourlyAverages");
+      // Access keys and format as dd:MM
+      formattedKeys = sortedMap.keys.map((key) {
+        DateTime dateTime = DateTime.parse(key);
+        String formattedDate =
+            "${dateTime.day.toString().padLeft(2, '0')}-${dateTime.month.toString().padLeft(2, '0')}";
+        return formattedDate;
+      }).toList();
 
+      // Print formatted keys
+      print('33333 $formattedKeys');
       // week duration
     } /*else if (selectedIndexDuration == 2) {
       lastDurationDate = currentTime.subtract(Duration(days: 30));
@@ -356,12 +359,11 @@ print("14 $sortedKeys");
         max = 50000;
       }
     }
-// نضيف 3 اف ستيتمنت للنوع القراءة بحيث انه لو ضغط درجة الحرارة
 
     // myBarData.initializeBarData();
 
     return SizedBox(
-      height: 310,
+      height: 300,
       width: 350,
       child: BarChart(
         BarChartData(
@@ -372,7 +374,22 @@ print("14 $sortedKeys");
           titlesData: FlTitlesData(
             show: true,
             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                /*  getTitlesWidget: (double value, TitleMeta titleMeta) {
+                  // titleMeta can be used for additional information if needed
+                  return Text(
+                    '$value',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                    ),
+                  );
+                },*/
+                reservedSize: 35,
+              ),
+            ),
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
@@ -387,8 +404,8 @@ print("14 $sortedKeys");
                   barRods: [
                     BarChartRodData(
                       fromY: data.y,
-                      color: Color.fromARGB(255, 43, 138, 159),
-                      width: 10,
+                      color: Color.fromARGB(255, 162, 221, 235),
+                      width: 5,
                       borderRadius: BorderRadius.circular(4),
                       backDrawRodData: BackgroundBarChartRodData(
                         show: true,
@@ -407,227 +424,270 @@ print("14 $sortedKeys");
   }
 
   Widget getBottomTitles(double value, TitleMeta meta) {
+    // type = print(value);
     const style = TextStyle(
       color: Colors.grey,
       fontWeight: FontWeight.bold,
       fontSize: 12,
     );
     Widget text;
-
+    text = const Text('', style: style);
     //String getBottomTitles(double value, int type) {
-    // if (type == 0) {
-    switch (value.toInt()) {
-      case 0:
-        text = const Text('00', style: style);
-        break;
-      case 1:
-        text = const Text('01', style: style);
-        break;
-      case 2:
-        text = const Text('02', style: style);
-        break;
-      case 3:
-        text = const Text('03', style: style);
-        break;
-      case 4:
-        text = const Text('04', style: style);
-        break;
-      case 5:
-        text = const Text('05', style: style);
-        break;
-      case 6:
-        text = const Text('06', style: style);
-        break;
-      case 7:
-        text = const Text('07', style: style);
-        break;
-      case 8:
-        text = const Text('08', style: style);
-        break;
-      case 9:
-        text = const Text('09', style: style);
-        break;
-      case 10:
-        text = const Text('10', style: style);
-        break;
-
-      case 11:
-        text = const Text('11', style: style);
-        break;
-      case 12:
-        text = const Text('12', style: style);
-        break;
-      case 13:
-        text = const Text('13', style: style);
-        break;
-      case 14:
-        text = const Text('14', style: style);
-        break;
-      case 15:
-        text = const Text('15', style: style);
-        break;
-      case 16:
-        text = const Text('16', style: style);
-        break;
-      case 17:
-        text = const Text('17', style: style);
-        break;
-      case 18:
-        text = const Text('18', style: style);
-        break;
-      case 19:
-        text = const Text('19', style: style);
-        break;
-      case 20:
-        text = const Text('20', style: style);
-        break;
-      case 21:
-        text = const Text('21', style: style);
-        break;
-      case 22:
-        text = const Text('22', style: style);
-        break;
-      case 23:
-        text = const Text('23', style: style);
-        break;
-      default:
-        text = const Text('', style: style);
-        break;
-    }
-    return SideTitleWidget(child: text, axisSide: meta.axisSide);
-    // }
-    /* if (type == 1) {
+    if (type == 0) {
       switch (value.toInt()) {
-          case 0:
-        text = const Text('الاحد', style: style);
-        break;
-      case 1:
-        text = const Text('الأثنين', style: style);
-        break;
-      case 2:
-        text = const Text('الثلاثاء', style: style);
-        break;
-      case 3:
-        text = const Text('الأربعاء', style: style);
-        break;
-      case 4:
-        text = const Text('الخميس', style: style);
-        break;
-      case 5:
-        text = const Text('الجمعة', style: style);
-        break;
-      case 6:
-        text = const Text('السبت', style: style);
-        break;
-    
+        case 0:
+          text = const Text('00', style: style);
+          break;
+        case 1:
+          // text = const Text('01', style: style);
+          text = const Text('', style: style);
+          break;
+        case 2:
+          // text = const Text('02', style: style);
+          text = const Text('', style: style);
+          break;
+        case 3:
+          //text = const Text('03', style: style);
+          text = const Text('', style: style);
+          break;
+        case 4:
+          text = const Text('04', style: style);
+          break;
+        case 5:
+          //  text = const Text('05', style: style);
+          text = const Text('', style: style);
+          break;
+        case 6:
+          // text = const Text('06', style: style);
+          text = const Text('', style: style);
+          break;
+        case 7:
+          // text = const Text('07', style: style);
+          text = const Text('', style: style);
+          break;
+        case 8:
+          text = const Text('08', style: style);
+          break;
+        case 9:
+          // text = const Text('09', style: style);
+          text = const Text('', style: style);
+          break;
+        case 10:
+          // text = const Text('10', style: style);
+          text = const Text('', style: style);
+          break;
+
+        case 11:
+          // text = const Text('11', style: style);
+          text = const Text('', style: style);
+          break;
+        case 12:
+          text = const Text('12', style: style);
+          break;
+        case 13:
+          //text = const Text('13', style: style);
+          text = const Text('', style: style);
+          break;
+        case 14:
+          //  text = const Text('14', style: style);
+          text = const Text('', style: style);
+          break;
+        case 15:
+
+          /// text = const Text('15', style: style);
+          text = const Text('', style: style);
+          break;
+        case 16:
+          text = const Text('16', style: style);
+          break;
+        case 17:
+          // text = const Text('17', style: style);
+          text = const Text('', style: style);
+          break;
+        case 18:
+          // text = const Text('18', style: style);
+          text = const Text('', style: style);
+          break;
+        case 19:
+          //  text = const Text('19', style: style);
+          text = const Text('', style: style);
+          break;
+        case 20:
+          text = const Text('20', style: style);
+          break;
+        case 21:
+          // text = const Text('21', style: style);
+          text = const Text('', style: style);
+          break;
+        case 22:
+          // text = const Text('22', style: style);
+          text = const Text('', style: style);
+          break;
+        case 23:
+          // text = const Text('23', style: style);
+          text = const Text('', style: style);
+          break;
+        default:
+          text = const Text('', style: style);
+          break;
       }
-       return SideTitleWidget(child: text, axisSide: meta.axisSide);
+      //return SideTitleWidget(child: text, axisSide: meta.axisSide);
+    }
+    if (type == 1) {
+      switch (value.toInt()) {
+        case 0:
+          text = Text(formattedKeys[0], style: style);
+          break;
+        case 1:
+          text = Text(formattedKeys[1], style: style);
+          break;
+        case 2:
+          text = Text(formattedKeys[2], style: style);
+          break;
+        case 3:
+          text = Text(formattedKeys[3], style: style);
+          break;
+        case 4:
+          text = Text(formattedKeys[4], style: style);
+          break;
+        case 5:
+          text = Text(formattedKeys[5], style: style);
+          break;
+        case 6:
+          text = Text(formattedKeys[6], style: style);
+          break;
+        default:
+          text = const Text('', style: style);
+          break;
+      }
+      //return SideTitleWidget(child: text, axisSide: meta.axisSide);
     }
 
     if (type == 2) {
       switch (value.toInt()) {
         case 0:
-        text = const Text('الأسبوع الأول', style: style);
-        break;
-      case 1:
-        text = const Text('الأسبوع الثاني', style: style);
-        break;
-      case 2:
-        text = const Text('الأسبوع الثالث', style: style);
-        break;
-      case 3:
-        text = const Text('الأسبوع الرابع', style: style);
-        break;
+          text = Text(formattedKeys[0], style: style);
+          break;
+        case 1:
+          // text = const Text('الأسبوع الثاني', style: style);
+          text = Text('', style: style);
+          break;
+        case 2:
+          // text = const Text('الأسبوع الثالث', style: style);
+          text = Text('', style: style);
+          break;
+        case 3:
+          // text = const Text('الأسبوع الرابع', style: style);
+          text = Text('', style: style);
+          break;
+        case 4:
+          // text = const Text('الأسبوع الأول', style: style);
+          text = Text('', style: style);
+          break;
+        case 5:
+          text = Text(formattedKeys[5], style: style);
+          break;
+        case 6:
+          // text = const Text('الأسبوع الثاني', style: style);
+          text = Text('', style: style);
+          break;
+        case 7:
+          // text = const Text('الأسبوع الثالث', style: style);
+          text = Text('', style: style);
+          break;
+        case 8:
+          // text = const Text('الأسبوع الرابع', style: style);
+          text = Text('', style: style);
+          break;
+        case 9:
+          // text = const Text('الأسبوع الأول', style: style);
+          text = Text('', style: style);
+          break;
+        case 10:
+          text = Text(formattedKeys[10], style: style);
+          break;
+        case 11:
+          // text = const Text('الأسبوع الثاني', style: style);
+          text = Text('', style: style);
+          break;
+        case 12:
+          // text = const Text('الأسبوع الثالث', style: style);
+          text = Text('', style: style);
+          break;
+        case 13:
+          // text = const Text('الأسبوع الرابع', style: style);
+          text = Text('', style: style);
+          break;
+        case 14:
+          // text = const Text('الأسبوع الأول', style: style);
+          text = Text('', style: style);
+          break;
+        case 15:
+          text = Text(formattedKeys[15], style: style);
+          break;
+        case 16:
+          // text = const Text('الأسبوع الثاني', style: style);
+          text = Text('', style: style);
+          break;
+        case 17:
+          // text = const Text('الأسبوع الثالث', style: style);
+          text = Text('', style: style);
+          break;
+        case 18:
+          // text = const Text('الأسبوع الرابع', style: style);
+          text = Text('', style: style);
+          break;
+        case 19:
+          // text = const Text('الأسبوع الأول', style: style);
+          text = Text('', style: style);
+          break;
+        case 20:
+          text = Text(formattedKeys[20], style: style);
+          break;
+        case 21:
+          // text = const Text('الأسبوع الثاني', style: style);
+          text = Text('', style: style);
+          break;
+        case 22:
+          // text = const Text('الأسبوع الثالث', style: style);
+          text = Text('', style: style);
+          break;
+        case 23:
+          // text = const Text('الأسبوع الرابع', style: style);
+          text = Text('', style: style);
+          break;
+        case 24:
+          // text = const Text('الأسبوع الأول', style: style);
+          text = Text('', style: style);
+          break;
+        case 25:
+          text = Text(formattedKeys[25], style: style);
+          break;
+        case 25:
+          // text = const Text('الأسبوع الثاني', style: style);
+          text = Text('', style: style);
+          break;
+        case 27:
+          // text = const Text('الأسبوع الثالث', style: style);
+          text = Text('', style: style);
+          break;
+        case 28:
+          // text = const Text('الأسبوع الرابع', style: style);
+          text = Text('', style: style);
+          break;
+        case 29:
+          text = Text(formattedKeys[29], style: style);
+
+          break;
+
+        default:
+          text = Text('', style: style);
+          break;
       }
-         return SideTitleWidget(child: text, axisSide: meta.axisSide);
+      //return SideTitleWidget(child: text, axisSide: meta.axisSide);
     }
-  }*/
-    //  return SideTitleWidget(child: text, axisSide: meta.axisSide);
+
+    return SideTitleWidget(child: text, axisSide: meta.axisSide);
   }
-
-  /*class MyBarGraph extends StatelessWidget {
- final List weeklySummary; // [sunAmount, monAmount, .., satAmount]
-  const MyBarGraph({
-    Key? key,
-    required this.weeklySummary,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // initialize bar data
-    BarData myBarData = BarData(
-      sunAmount: 10.0,
-      monAmount: 20.0,
-      tueAmount: 30.0,
-      wedAmount: 10.0,
-      thurAmount: 10.0,
-      friAmount: 40.0,
-      satAmount: 40.0,
-    );
-    myBarData.initializeBarData();
-
-    return BarChart(
-      BarChartData(
-        maxY: 100,
-        minY: 0,
-        gridData: FlGridData(show: false),
-        borderData: FlBorderData(show: false),
-        titlesData: FlTitlesData(
-          show: true,
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              //getTitles: getBottomTitles,
-            ),
-          ),
-        ),
-        barGroups: myBarData.barData
-            .map(
-              (data) => BarChartGroupData(
-                x: data.x,
-                barRods: [
-                  BarChartRodData(
-                    fromY: data.y,
-                    color: Colors.grey[800],
-                    width: 25,
-                    borderRadius: BorderRadius.circular(4),
-                    backDrawRodData: BackgroundBarChartRodData(
-                      show: true,
-                      fromY: 100,
-                      color: Colors.grey[200],
-                    ),
-                    toY: double.infinity,
-                  ),
-                ],
-              ),
-            )
-            .toList(),
-      ),
-    );
-  }
-
-  String getBottomTitles(double value, _) {
-    switch (value.toInt()) {
-      case 0:
-        return 'S';
-      case 1:
-        return 'M';
-      case 2:
-        return 'T';
-      case 3:
-        return 'W';
-      case 4:
-        return 'T';
-      case 5:
-        return 'F';
-      case 6:
-        return 'S';
-      default:
-        return '';
-    }
-  }
-}*/
+  //  return SideTitleWidget(child: text, axisSide: meta.axisSide);
 }

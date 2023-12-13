@@ -49,7 +49,6 @@ class Controller {
     bool healthStaus = FirebaseService.healthStatus;
     String healthStatusLevel = FirebaseService.healthStatusLevel;
 
-    print(notificationSent);
     // check to see if a notification has already been sent
     if (!notificationSent) {
       if (dust > 30000) {
@@ -57,7 +56,7 @@ class Controller {
         notificationSent = true;
         general = true;
       }
-      // check pm value based on user health status
+      // check dust value based on user health status
       else {
         if (healthStaus == true) {
           if ((healthStatusLevel == 'شديد') && (dust >= 15000)) {

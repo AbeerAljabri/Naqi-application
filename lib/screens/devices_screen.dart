@@ -164,14 +164,16 @@ class _DevicesPageState extends State<DevicesPage> {
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
-                suffixIcon: Container(
-                  padding: EdgeInsets.only(left: 8.0),
-                  child: infoWidget(
-                    context,
-                    "تستطيع إيجاد المعرف على المستشعر في الأسفل",
-                    'images/indoorSensorID.jpeg',
-                  ),
-                ),
+                suffixIcon: indoorSensorId.isNotEmpty
+                    ? Container(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: infoWidget(
+                          context,
+                          "تستطيع إيجاد المعرف على المستشعر في الأسفل",
+                          'images/indoorSensorID.jpeg',
+                        ),
+                      )
+                    : null,
               ),
               controller: TextEditingController.fromValue(
                 TextEditingValue(
@@ -194,7 +196,7 @@ class _DevicesPageState extends State<DevicesPage> {
             if (indoorSensorId
                 .isEmpty) // Display the message if indoorSensorId is empty
               Text(
-                'لم تضف أي قيمة بعد، تستطيع إضافة قيمة جديدة من صفحة داخلي',
+                'لم تضف أي مستشعر بعد، تستطيع إضافة مستشعر جديد من صفحة داخلي',
                 style: TextStyle(color: Color.fromARGB(255, 78, 111, 135)),
               ),
             SizedBox(height: 10),
@@ -237,14 +239,16 @@ class _DevicesPageState extends State<DevicesPage> {
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
-                suffixIcon: Container(
-                  padding: EdgeInsets.only(left: 8.0),
-                  child: infoWidget(
-                    context,
-                    "تستطيع إيجاد المعرف على المستشعر في الأسفل",
-                    'images/outdoorSensorID.jpeg',
-                  ),
-                ),
+                suffixIcon: outdoorSensorId.isNotEmpty
+                    ? Container(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: infoWidget(
+                          context,
+                          "تستطيع إيجاد المعرف على المستشعر في الأسفل",
+                          'images/outdoorSensorID.jpeg',
+                        ),
+                      )
+                    : null,
               ),
               controller: TextEditingController.fromValue(
                 TextEditingValue(
@@ -268,7 +272,7 @@ class _DevicesPageState extends State<DevicesPage> {
             if (outdoorSensorId
                 .isEmpty) // Display the message if outdoorSensorId is empty
               Text(
-                ' لم تضف أي قيمة بعد، تستطيع إضافة قيمة جديدة من صفحة خارجي',
+                ' لم تضف أي مستشعر بعد، تستطيع إضافة مستشعر جديد من صفحة خارجي',
                 style: TextStyle(color: Color.fromARGB(255, 78, 111, 135)),
               ),
             SizedBox(height: 10),

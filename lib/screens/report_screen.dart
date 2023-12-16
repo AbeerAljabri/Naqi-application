@@ -18,10 +18,9 @@ class _ReportPageState extends State<ReportPage> {
   int selectedIndexDuration = 0;
   int selectedIndexMeasure = 0;
   List b = [];
-  //List b = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,2.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0];
+
   @override
   void initState() {
-//b =graph.Summary1(0, 0, 0);
     super.initState();
   }
 
@@ -36,14 +35,14 @@ class _ReportPageState extends State<ReportPage> {
               padding: const EdgeInsets.only(top: 10),
               child: ToggleSwitch(
                 minWidth: 150.0,
-                minHeight: 50.0,
+                minHeight: 40.0,
                 initialLabelIndex: selectedIndexDuration,
                 activeBgColor: [Color.fromARGB(255, 43, 138, 159)],
                 activeFgColor: Colors.white,
                 inactiveBgColor: const Color.fromARGB(255, 239, 235, 235),
                 inactiveFgColor: Colors.grey[900],
                 totalSwitches: 3,
-                labels: ['يومي', 'اسبوعي', 'شهري'],
+                labels: ['يوم', 'أسبوع', 'شهر'],
                 onToggle: (index) {
                   setState(() {
                     selectedIndexDuration = index!;
@@ -52,8 +51,9 @@ class _ReportPageState extends State<ReportPage> {
                 },
               ),
             ),
+            SizedBox(height: 10),
             Container(
-              height: 340.0, // Set the desired height
+              height: 330.0, // Set the desired height
               width: 400.0, // Set the desired width
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -93,7 +93,7 @@ class _ReportPageState extends State<ReportPage> {
                 padding: const EdgeInsets.only(top: 10),
                 child: ToggleSwitch(
                   minWidth: 200.0,
-                  minHeight: 50.0,
+                  minHeight: 40.0,
                   initialLabelIndex: selectedIndexType,
                   activeBgColor: [Color.fromARGB(255, 43, 138, 159)],
                   activeFgColor: Colors.white,
@@ -258,7 +258,7 @@ class _ReportPageState extends State<ReportPage> {
                 padding: const EdgeInsets.only(top: 10),
                 child: ToggleSwitch(
                   minWidth: 200.0,
-                  minHeight: 50.0,
+                  minHeight: 40.0,
                   initialLabelIndex: selectedIndexType,
                   activeBgColor: [Color.fromARGB(255, 43, 138, 159)],
                   activeFgColor: Colors.white,
@@ -287,7 +287,7 @@ class _ReportPageState extends State<ReportPage> {
                         primary: selectedIndexMeasure == 0
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
-                        fixedSize: Size(352, 50),
+                        fixedSize: Size(352, 40),
                       ),
                       child: Text(
                         'درجة الحرارة',
@@ -308,7 +308,7 @@ class _ReportPageState extends State<ReportPage> {
                         primary: selectedIndexMeasure == 1
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
-                        fixedSize: Size(352, 50),
+                        fixedSize: Size(352, 40),
                       ),
                       child: Text(
                         'مستوى الرطوبة',
@@ -329,7 +329,7 @@ class _ReportPageState extends State<ReportPage> {
                         primary: selectedIndexMeasure == 2
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
-                        fixedSize: Size(352, 50),
+                        fixedSize: Size(350, 40),
                       ),
                       child: Text(
                         'ثاني اكسيد الكربون',
@@ -420,7 +420,7 @@ class _ReportPageState extends State<ReportPage> {
                 padding: const EdgeInsets.only(top: 10),
                 child: ToggleSwitch(
                   minWidth: 200.0,
-                  minHeight: 50.0,
+                  minHeight: 40.0,
                   initialLabelIndex: selectedIndexType,
                   activeBgColor: [Color.fromARGB(255, 43, 138, 159)],
                   activeFgColor: Colors.white,
@@ -579,41 +579,5 @@ class _ReportPageState extends State<ReportPage> {
         ),
       ),
     );
-  }
-
-  void insert() async {
-    // Reference to Firestore
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    // Collection reference
-    CollectionReference dataCollection =
-        firestore.collection('Sensor/eui-24e124707d084307/IndoorAirQuality/');
-
-    // Generate and add 30 documents
-    // Simulate data (replace this with your actual data)
-    double temperature = 17.0; // Random temperature between 20 and 50
-    double humidity = 25.0; // Random humidity between 50 and 100
-    double co2 = 400.0; // Random dust value between 0 and 100
-    String date = '2023-12-12';
-    String time = '10:00';
-    // Create a document with the simulated data
-    Map<String, dynamic> documentData = {
-      'temperature': temperature,
-      'humidity': humidity,
-      'co2': co2,
-      'date': date,
-      'time': time,
-    };
-
-    // Add the document to the collection
-    dataCollection.add(documentData);
-
-    // Add the document to the collection and get the document reference
-    DocumentReference documentRef = await dataCollection.add(documentData);
-
-    // Print the document ID
-    print('Document added with ID: ${documentRef.id}');
-
-    print('Documents added to Firestore.');
   }
 }

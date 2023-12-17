@@ -208,7 +208,7 @@ class OutdoorAirQuality {
             // Second item
             child: Image.asset(
               levelImg,
-              width: 270,
+              width: 250,
             ),
           ),
         ],

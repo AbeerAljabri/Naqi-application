@@ -105,7 +105,7 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
                     child: Text(
                       'لا يوجد مستشعر خارجي موصول',
                       style: TextStyle(
-                        fontSize: 26,
+                        fontSize: 24,
                         color: Color.fromARGB(255, 43, 138, 159),
                         fontWeight: FontWeight.bold,
                       ),
@@ -191,6 +191,7 @@ class _OutdoorIDPageState extends State<OutdoorIDPage> {
                                   color: outdoorSensorId.isNotEmpty
                                       ? Colors.white
                                       : Colors.grey[700],
+                                  fontSize: 13,
                                 ),
                               ),
                             ),

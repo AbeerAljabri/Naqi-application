@@ -83,7 +83,7 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
                     child: Text(
                       'لا يوجد مستشعر داخلي موصول',
                       style: TextStyle(
-                        fontSize: 26,
+                        fontSize: 24,
                         color: Color.fromARGB(255, 43, 138, 159),
                         fontWeight: FontWeight.bold,
                       ),
@@ -168,6 +168,7 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
                                   color: indoorSensorId.isNotEmpty
                                       ? Colors.white
                                       : Colors.grey[700],
+                                  fontSize: 14,
                                 ),
                               ),
                             ),

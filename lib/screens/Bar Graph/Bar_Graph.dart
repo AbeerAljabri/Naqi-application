@@ -240,7 +240,7 @@ class MyBarGraph {
       formattedKeys = sortedMap.keys.map((key) {
         DateTime dateTime = DateTime.parse(key);
         String formattedDate =
-            "${dateTime.day.toString().padLeft(2, '0')}-${dateTime.month.toString().padLeft(2, '0')}";
+             "${dateTime.day.toString().padLeft(2, '0')}${DateFormat('MMM').format(dateTime)}";
         return formattedDate;
       }).toList();
 
@@ -405,7 +405,7 @@ class MyBarGraph {
                     BarChartRodData(
                       fromY: data.y,
                       color: Color.fromARGB(255, 162, 221, 235),
-                      width: 5,
+                      width: 8,
                       borderRadius: BorderRadius.circular(4),
                       backDrawRodData: BackgroundBarChartRodData(
                         show: true,
@@ -436,7 +436,7 @@ class MyBarGraph {
     if (type == 0) {
       switch (value.toInt()) {
         case 0:
-          text = const Text('00', style: style);
+          text = const Text('12AM', style: style);
           break;
         case 1:
           // text = const Text('01', style: style);
@@ -451,7 +451,7 @@ class MyBarGraph {
           text = const Text('', style: style);
           break;
         case 4:
-          text = const Text('04', style: style);
+          text = const Text('', style: style);
           break;
         case 5:
           //  text = const Text('05', style: style);
@@ -459,14 +459,14 @@ class MyBarGraph {
           break;
         case 6:
           // text = const Text('06', style: style);
-          text = const Text('', style: style);
+          text = const Text('6AM', style: style);
           break;
         case 7:
           // text = const Text('07', style: style);
           text = const Text('', style: style);
           break;
         case 8:
-          text = const Text('08', style: style);
+          text = const Text('', style: style);
           break;
         case 9:
           // text = const Text('09', style: style);
@@ -482,7 +482,7 @@ class MyBarGraph {
           text = const Text('', style: style);
           break;
         case 12:
-          text = const Text('12', style: style);
+          text = const Text('12PM', style: style);
           break;
         case 13:
           //text = const Text('13', style: style);
@@ -498,7 +498,7 @@ class MyBarGraph {
           text = const Text('', style: style);
           break;
         case 16:
-          text = const Text('16', style: style);
+          text = const Text('', style: style);
           break;
         case 17:
           // text = const Text('17', style: style);
@@ -506,14 +506,14 @@ class MyBarGraph {
           break;
         case 18:
           // text = const Text('18', style: style);
-          text = const Text('', style: style);
+          text = const Text('6PM', style: style);
           break;
         case 19:
           //  text = const Text('19', style: style);
           text = const Text('', style: style);
           break;
         case 20:
-          text = const Text('20', style: style);
+          text = const Text('', style: style);
           break;
         case 21:
           // text = const Text('21', style: style);

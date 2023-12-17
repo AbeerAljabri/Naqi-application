@@ -241,7 +241,7 @@ class MyBarGraph {
       formattedKeys = sortedMap.keys.map((key) {
         DateTime dateTime = DateTime.parse(key);
         String formattedDate =
-             "${dateTime.day.toString().padLeft(2, '0')}${DateFormat('MMM').format(dateTime)}";
+            "${dateTime.day.toString().padLeft(2, '0')}${DateFormat('MMM').format(dateTime)}";
         return formattedDate;
       }).toList();
 
@@ -456,7 +456,8 @@ class MyBarGraph {
                   if (measure == 0) {
                     return Text(
                       '$intValue\u00B0',
-                      style: TextStyle(fontSize: 12),
+                      style: TextStyle(
+                          fontSize: 12, color: Color.fromARGB(255, 95, 94, 94)),
                     );
                   } else if (measure == 1) {
                     return Text('$intValue%', style: TextStyle(fontSize: 12));
@@ -487,7 +488,7 @@ class MyBarGraph {
                   barRods: [
                     BarChartRodData(
                       fromY: data.y,
-                      color: Color.fromARGB(255, 162, 221, 235),
+                      color: Color.fromARGB(255, 116, 180, 196),
                       width: 5,
                       borderRadius: BorderRadius.circular(4),
                       backDrawRodData: BackgroundBarChartRodData(
@@ -509,8 +510,8 @@ class MyBarGraph {
   Widget getBottomTitles(double value, TitleMeta meta) {
     // type = print(value);
     const style = TextStyle(
-      color: Colors.grey,
-      fontWeight: FontWeight.bold,
+      color: Color.fromARGB(255, 95, 94, 94),
+      //fontWeight: FontWeight.bold,
       fontSize: 12,
     );
     Widget text;

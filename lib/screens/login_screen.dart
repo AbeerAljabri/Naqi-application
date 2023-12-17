@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       } else if ((value.isNotEmpty) &&
                           !RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
                               .hasMatch(value)) {
-                        return "الرجاء اخال عنوان بريد إلكتروني صالح";
+                        return "الرجاء ادخال عنوان بريد إلكتروني صالح";
                       }
                     },
                   ),

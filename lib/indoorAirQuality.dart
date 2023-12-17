@@ -213,18 +213,18 @@ class IndoorAirQuality {
 
     // Temperature level
     if (readings[0] <= 15) {
-      levels.add({"level": "بارد", "color": Colors.green});
+      levels.add({"level": "بارد", "color": Colors.blue});
     } else if ((readings[0] > 15) && (readings[0] < 30)) {
-      levels.add({"level": "معتدل", "color": Colors.yellow});
+      levels.add({"level": "معتدل", "color": Colors.green});
     } else if (readings[0] >= 30) {
       levels.add({"level": "حار", "color": Colors.red});
     }
 
     // Humidity level
     if (readings[1] < 30) {
-      levels.add({"level": "منخفض", "color": Colors.green});
+      levels.add({"level": "منخفض", "color": Colors.blue});
     } else if ((readings[1] >= 30) && (readings[1] <= 60)) {
-      levels.add({"level": "متوسط", "color": Colors.yellow});
+      levels.add({"level": "متوسط", "color": Colors.green});
     } else if (readings[1] > 60) {
       levels.add({"level": "عالي", "color": Colors.red});
     }

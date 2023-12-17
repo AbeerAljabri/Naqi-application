@@ -99,37 +99,12 @@ class OutdoorAirQuality {
   Widget viewOutdoorAirQuality(List<dynamic> readings, context) {
     List<Map<String, dynamic>> levels = calculateLevel(readings);
     Map<String, Color> airQuality_color = calculateAirQuality(levels);
-    String first = FirebaseService.first_name;
+
     String levelImg = footerImg(levels);
     String leveltxt = footerTxt(levels);
     String airQuality = airQuality_color.keys.first;
     Color color = airQuality_color.values.first;
-    TextSpan nameSpan = TextSpan(
-      text: "مرحباً " + first + "\n",
-      style: GoogleFonts.robotoCondensed(
-        fontWeight: FontWeight.bold,
-        color: Color(0xFF019CB2),
-        fontSize: 20,
-      ),
-    );
 
-    TextSpan restOfTextSpan = TextSpan(
-      text: leveltxt,
-      style: GoogleFonts.robotoCondensed(
-        fontWeight: FontWeight.bold,
-        fontSize: 17,
-      ),
-    );
-
-    // Combine the TextSpans into a RichText widget
-    Text richText = Text.rich(
-      TextSpan(
-        children: [
-          nameSpan,
-          restOfTextSpan,
-        ],
-      ),
-    );
     return Expanded(
       child: Column(
         children: [
@@ -217,41 +192,25 @@ class OutdoorAirQuality {
               ],
             ),
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 250, // Set the desired width
-                    child: richText,
-                  ),
-                  /*Text(
-                    "مرحباً" + first + "\n",
-                    style: GoogleFonts.robotoCondensed(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF019CB2),
-                      fontSize: 20,
-                    ),
-                  ),
-                  Text(
-                    leveltxt,
-                    style: GoogleFonts.robotoCondensed(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17,
-                    ),
-                  ),*/
-                  Image.asset(
-                    levelImg,
-                    width: 300,
-                  ),
-                ],
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5.0),
+            // First item
+            child: Text(
+              leveltxt,
+              style: GoogleFonts.robotoCondensed(
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
               ),
+            ),
+          ),
+          Container(
+            //child: Padding(
+            //padding: const EdgeInsets.only(bottom: 10.0),
+            // Second item
+            child: Image.asset(
+              levelImg,
+              width: 250,
+              // ),
             ),
           ),
         ],
@@ -286,18 +245,18 @@ class OutdoorAirQuality {
     // temprature level
     // Temperature level
     if (readings[0] <= 15) {
-      levels.add({"level": "بارد", "color": Colors.green});
+      levels.add({"level": "بارد", "color": Colors.blue});
     } else if ((readings[0] > 15) && (readings[0] < 30)) {
-      levels.add({"level": "معتدل", "color": Colors.yellow});
+      levels.add({"level": "معتدل", "color": Colors.green});
     } else if (readings[0] >= 30) {
       levels.add({"level": "حار", "color": Colors.red});
     }
 
     // Humidity level
     if (readings[1] < 30) {
-      levels.add({"level": "منخفض", "color": Colors.green});
+      levels.add({"level": "منخفض", "color": Colors.blue});
     } else if ((readings[1] >= 30) && (readings[1] <= 70)) {
-      levels.add({"level": "متوسط", "color": Colors.yellow});
+      levels.add({"level": "متوسط", "color": Colors.green});
     } else if (readings[1] > 70) {
       levels.add({"level": "عالي", "color": Colors.red});
     }

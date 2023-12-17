@@ -287,7 +287,7 @@ class _ReportPageState extends State<ReportPage> {
                         primary: selectedIndexMeasure == 0
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
-                        fixedSize: Size(352, 40),
+                        fixedSize: Size(352, 50),
                       ),
                       child: Text(
                         'درجة الحرارة',
@@ -308,7 +308,7 @@ class _ReportPageState extends State<ReportPage> {
                         primary: selectedIndexMeasure == 1
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
-                        fixedSize: Size(352, 40),
+                        fixedSize: Size(352, 50),
                       ),
                       child: Text(
                         'مستوى الرطوبة',
@@ -329,7 +329,7 @@ class _ReportPageState extends State<ReportPage> {
                         primary: selectedIndexMeasure == 2
                             ? Color.fromARGB(255, 43, 138, 159)
                             : Color.fromARGB(255, 227, 224, 224),
-                        fixedSize: Size(350, 40),
+                        fixedSize: Size(350, 50),
                       ),
                       child: Text(
                         'ثاني اكسيد الكربون',

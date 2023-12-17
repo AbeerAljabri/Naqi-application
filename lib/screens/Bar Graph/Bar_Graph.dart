@@ -8,6 +8,7 @@ class MyBarGraph {
   static List Summary = []; // [sunAmount, monAmount, .., satAmount]
   double max = 0.0;
   static int type = 0;
+  List<double> hourlyAverages = [];
   static List<String> formattedKeys = [];
   Future<List<double>> calculateSummary(int selectedIndexDuration,
       int selectedIndexType, int selectedIndexMeasure) async {
@@ -35,9 +36,9 @@ class MyBarGraph {
     //print('selectedIndexDuration: $selectedIndexDuration');
     // print('Current Date: $formattedDate');
     //DateTime lastDurationDate;
-    List<double> hourlyAverages = [];
-    List<double> dailyAverages = [];
-    List<double> monthlyAverages = [];
+    hourlyAverages = [];
+    //List<double> dailyAverages = [];
+    //List<double> monthlyAverages = [];
 
     if (selectedIndexDuration == 0) {
       DateTime currentTime = DateTime.now();
@@ -337,29 +338,98 @@ class MyBarGraph {
 
       myBarData.initializeBarData(duration);
     }
+    int maxValue = 0;
     if (type == 0) {
       if (measure == 0) {
-        max = 40;
+        // max = 40;
+        max = hourlyAverages
+            .reduce((value, element) => value > element ? value : element);
+
+        max = double.parse(max.toStringAsFixed(0));
+
+        if (max == 0) {
+          max = 40;
+        }
+
+        while (max.toInt() % 10 != 0) {
+          print(max.toInt() % 10);
+          max++;
+        }
       }
       if (measure == 1) {
-        max = 100;
+        max = hourlyAverages
+            .reduce((value, element) => value > element ? value : element);
+        max = double.parse(max.toStringAsFixed(0));
+        if (max == 0) {
+          max = 100;
+        }
+        while (max.toInt() % 20 != 0) {
+          max++;
+        }
       }
       if (measure == 2) {
-        max = 2000;
+        //max = 2000;
+        max = hourlyAverages
+            .reduce((value, element) => value > element ? value : element);
+        max = double.parse(max.toStringAsFixed(0));
+        if (max == 0) {
+          max = 2000;
+        }
+        while (max.toInt() % 500 != 0) {
+          max++;
+        }
       }
     }
     if (type == 1) {
       if (measure == 0) {
-        max = 70;
+        // max = 70;
+        max = hourlyAverages
+            .reduce((value, element) => value > element ? value : element);
+        max = double.parse(max.toStringAsFixed(0));
+        if (max == 0) {
+          max = 70;
+        }
+        while (max.toInt() % 10 != 0) {
+          max++;
+        }
+
+        ///print('Maximum value: $maxValue');
       }
       if (measure == 1) {
-        max = 100;
+        // max = 100;
+        max = hourlyAverages
+            .reduce((value, element) => value > element ? value : element);
+        max = double.parse(max.toStringAsFixed(0));
+        if (max == 0) {
+          max = 100;
+        }
+        while (max.toInt() % 20 != 0) {
+          max++;
+        }
       }
       if (measure == 2) {
-        max = 50000;
+        //  max = 50000;
+        max = hourlyAverages
+            .reduce((value, element) => value > element ? value : element);
+        max = double.parse(max.toStringAsFixed(0));
+        if (max == 0) {
+          max = 50000;
+        }
+        while (max.toInt() % 5000 != 0) {
+          max++;
+        }
       }
     }
-
+    double getInterval(int measure) {
+      if (measure == 0) {
+        return 10;
+      } else if (measure == 1) {
+        return 20;
+      } else if ((measure == 2) && (type == 0)) {
+        return 500;
+      }
+      return 5000;
+    }
     // myBarData.initializeBarData();
 
     return SizedBox(
@@ -377,17 +447,30 @@ class MyBarGraph {
             leftTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                /*  getTitlesWidget: (double value, TitleMeta titleMeta) {
-                  // titleMeta can be used for additional information if needed
-                  return Text(
-                    '$value',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                    ),
-                  );
-                },*/
                 reservedSize: 35,
+                getTitlesWidget: (value, meta) {
+                  double interval;
+
+                  // Use a conditional statement to determine the title
+                  int intValue = value.toInt();
+                  if (measure == 0) {
+                    return Text(
+                      '$intValue\u00B0',
+                      style: TextStyle(fontSize: 12),
+                    );
+                  } else if (measure == 1) {
+                    return Text('$intValue%', style: TextStyle(fontSize: 12));
+                  } else if (measure == 2 && type == 1) {
+                    // Check if the value is above 1000 and display as K
+                    if (value > 1000) {
+                      return Text('${(value / 1000).toInt()}K',
+                          style: TextStyle(fontSize: 12));
+                    }
+                  }
+                  // Return the Text widget with the determined title
+                  return Text('$intValue', style: TextStyle(fontSize: 12));
+                },
+                interval: getInterval(measure),
               ),
             ),
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -405,7 +488,7 @@ class MyBarGraph {
                     BarChartRodData(
                       fromY: data.y,
                       color: Color.fromARGB(255, 162, 221, 235),
-                      width: 8,
+                      width: 5,
                       borderRadius: BorderRadius.circular(4),
                       backDrawRodData: BackgroundBarChartRodData(
                         show: true,

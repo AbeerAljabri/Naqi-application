@@ -193,7 +193,7 @@ class OutdoorAirQuality {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
+            padding: const EdgeInsets.only(bottom: 0.0),
             // First item
             child: Text(
               leveltxt,
@@ -204,7 +204,7 @@ class OutdoorAirQuality {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
+            padding: const EdgeInsets.only(bottom: 0.0),
             // Second item
             child: Image.asset(
               levelImg,

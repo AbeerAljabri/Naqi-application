@@ -223,11 +223,6 @@ class _IndoorIDPageState extends State<IndoorIDPage> {
     }
   }
 
-  /*void navigateToIndoorAirQualityPage(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed('homeScreen');
-  }*/
-
-  //
   void updateInfo(var feild, var feildValue) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {

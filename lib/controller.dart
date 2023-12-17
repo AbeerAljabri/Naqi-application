@@ -14,7 +14,7 @@ class Controller {
   String atomatic = '';
   FirebaseService firebase = FirebaseService();
   Fan fan = Fan();
-  // bool switchStatus = IndoorPage.getSwitchStatus();
+
   void checkIndoorAirQualityData(var co2) {
     // Get fan status and switch status from databse
     Future<String> fanStatus = firebase.getStatus();
@@ -29,7 +29,6 @@ class Controller {
           fan.turnOn();
           fan.updateisAutomatic('1');
           fan.updateSwitch('1');
-          // FirebaseService.switchStatus = '1';
           sendNotification(
               "مستوى ثاني أكسيد الكربون مرتفع! سيتم تشغيل المروحة");
         } // check CO2 and fan status and switch status
@@ -37,7 +36,6 @@ class Controller {
           fan.turnOff();
           fan.updateisAutomatic('0');
           fan.updateSwitch('0');
-          // FirebaseService.switchStatus = '0';
           sendNotification("مستوى ثاني أكسيد الكربون جيد! سيتم ايقاف المروحة");
         }
       });

@@ -229,7 +229,7 @@ class OutdoorAirQuality {
     // humidity percentage
     percentages.add(readings[1] / 100);
 
-    // pm percantsge
+    // dust percantsge
     percentages.add(readings[2] / 50000);
 
     return percentages;
@@ -240,7 +240,7 @@ class OutdoorAirQuality {
     bool healthStaus = FirebaseService.healthStatus;
     String healthStatusLevel = FirebaseService.healthStatusLevel;
     List<Map<String, dynamic>> levels = [];
-    // temprature level
+
     // Temperature level
     if (readings[0] <= 15) {
       levels.add({"level": "بارد", "color": Colors.blue});
@@ -299,7 +299,6 @@ class OutdoorAirQuality {
   }
 
   Map<String, Color> calculateAirQuality(List<Map<String, dynamic>> levels) {
-    //String airQuality = levels[2];
     String airQuality = levels[2]["level"];
 
     if (airQuality == "ملوث") {
@@ -502,38 +501,28 @@ class OutdoorAirQuality {
           Positioned(
             bottom: 0.0,
             left: 0.0,
-            child: /*infoWidget(context,
-                ' - يعتبر مستوى درجة الحرارة بارد إذا كان أقل من ١٠  \n - يعتبر مستوى درجة الحرارة معتدل إذا كان أعلى من أو يساوي ١٠ وأقل من ٢٨ \n  - يعتبر مستوى درجة الحرارة حار إذا كان أعلى من أو يساوي ٢٨'),
-          */
-                infoWidget(
-                    context,
-                    "تعرض دراجات الحرارة بوحدة سلزيوس وهي تتدرج كما في الصورة التالية",
-                    'images/tmpLimg.png'),
+            child: infoWidget(
+                context,
+                "تعرض دراجات الحرارة بوحدة سلزيوس وهي تتدرج كما في الصورة التالية",
+                'images/tmpLimg.png'),
           ),
         if (title == 'مستوى الرطوبة')
           Positioned(
             bottom: 0.0,
             left: 0.0,
-            child: /*infoWidget(context,
-                ' - يعتبر مستوى الرطوبة منخفض إذا كان أقل من ٣٠  \n - يعتبر مستوى الرطوبة متوسط إذا كان أعلى من أو يساوي ٣٠ وأقل من أو يساوي ٧٠  \n  - يعتبر مستوى الرطوبة عالي إذا كان أعلى من ٧٠'),
-          */
-                infoWidget(
-                    context,
-                    "تعرض مستويات الرطوبة بوحدة جم / م 3 وهي تتدرج كما في الصورة التالية",
-                    'images/outruLimg.png'),
+            child: infoWidget(
+                context,
+                "تعرض مستويات الرطوبة بوحدة جم / م 3 وهي تتدرج كما في الصورة التالية",
+                'images/outruLimg.png'),
           ),
         if (title == 'مستوى الغبار')
           Positioned(
             bottom: 0.0,
             left: 0.0,
-            child:
-                /*infoWidget(context,
-                '\n - يعتبر مستوى الغبار ممتاز إذا كان اقل من أو يساي ١٠٠٠٠  \n - يعتبر مستوى الغبار متوسط إذا كان أعلى من ١٠٠٠٠ وأقل من ٣٠٠٠٠ \n  - يعتبر مستوى الغبار ملوث إذا كان أعلى من أو يساوي ٣٠٠٠٠'),
-          */
-                infoWidget(
-                    context,
-                    "يعرض مستوى الغبار بوحدة الميكرون PM2.5  وتتدرج في المستويات المعروضة التي تتناسب مع صحة الإنسان الطبيعي، قد تختلف وفق حالتك الصحية  ",
-                    'images/pmLimg.png'),
+            child: infoWidget(
+                context,
+                "يعرض مستوى الغبار بوحدة الميكرون PM2.5  وتتدرج في المستويات المعروضة التي تتناسب مع صحة الإنسان الطبيعي، قد تختلف وفق حالتك الصحية  ",
+                'images/pmLimg.png'),
           ),
       ],
     );

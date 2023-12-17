@@ -163,19 +163,12 @@ class BarData {
 
     if (type == 1) {
       barData = [
-// sun
         IndividualBar(x: 0, y: sunAmount),
-// mon
         IndividualBar(x: 1, y: monAmount),
-// tue
         IndividualBar(x: 2, y: tueAmount),
-// wed
         IndividualBar(x: 3, y: wedAmount),
-// thur
         IndividualBar(x: 4, y: thurAmount),
-// fri
         IndividualBar(x: 5, y: friAmount),
-// sat
         IndividualBar(x: 6, y: satAmount),
       ];
     }

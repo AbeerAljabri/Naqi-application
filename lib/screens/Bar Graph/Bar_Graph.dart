@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'Bar_data.dart';
 
 class MyBarGraph {
-  static List Summary = []; // [sunAmount, monAmount, .., satAmount]
+  static List Summary = [];
   double max = 0.0;
   static int type = 0;
   List<double> hourlyAverages = [];
@@ -31,19 +31,13 @@ class MyBarGraph {
         4: 'OutdoorAirQuality',
       };
     }
-    //print('11111111111111111111111111');
 
-    //print('selectedIndexDuration: $selectedIndexDuration');
-    // print('Current Date: $formattedDate');
-    //DateTime lastDurationDate;
     hourlyAverages = [];
-    //List<double> dailyAverages = [];
-    //List<double> monthlyAverages = [];
 
     if (selectedIndexDuration == 0) {
       DateTime currentTime = DateTime.now();
       String formattedDate = DateFormat('yyyy-MM-dd').format(currentTime);
-      // String formattedDate = '2023-11-30';
+
       // Query temperature data for indoor air quality
       QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
           .instance
@@ -58,11 +52,7 @@ class MyBarGraph {
           in snapshot.docs) {
         Map<String, dynamic> data = document.data();
         i = i + 1;
-        // print('Document ID: ${document.id}');
-        // print('Data: $data');
-        //print('------------------------');
       }
-      // print(i);
 
       Map<String, List<dynamic>> hourlyMap = {};
 
@@ -74,24 +64,17 @@ class MyBarGraph {
           String date = data['date'];
           String time = data['time'];
           DateTime documentDate = DateTime.parse('$date $time');
-
-          //  print('Parsed DateTime: $documentDate');
-          // DateTime documentDate = (data['date']).toDate();
-          //  print('1 $documentDate');
-
           num measure = data[indexMap[selectedIndexMeasure]];
-          //  print('2 $measure');
+
           String hourKey =
               '${documentDate.year}-${documentDate.month}-${documentDate.day} ${documentDate.hour}';
-          // print('3 $hourKey');
+
           if (!hourlyMap.containsKey(hourKey)) {
             hourlyMap[hourKey] = [measure];
           } else {
             hourlyMap[hourKey]!.add(measure);
           }
-          // print("4 $hourlyMap");
         }
-        // print('5 $hourlyMap');
       }
 
       for (int i = 0; i < 24; i++) {
@@ -113,32 +96,21 @@ class MyBarGraph {
       Map<String, dynamic> sortedMap = Map.fromIterable(sortedKeys,
           key: (key) => key, value: (key) => hourlyMap[key]);
 
-      // Print the sorted map
-      //print("7 $sortedKeys");
-      // print("8 $sortedMap");
       //Calculate average for each hour
       sortedMap.forEach((hour, temperatures) {
         double averageTemperature =
             temperatures.reduce((a, b) => a + b) / temperatures.length;
         hourlyAverages.add(averageTemperature);
       });
-      // print('6 $hourlyAverages');
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    else if ((selectedIndexDuration == 1) || (selectedIndexDuration == 2)) {
+    } else if ((selectedIndexDuration == 1) || (selectedIndexDuration == 2)) {
       DateTime lastDurationDate = DateTime.now();
-      //DateTime lastDurationDate = DateTime(2023, 11, 1);
 
-      // print("11 $lastDurationDate");
       if (selectedIndexDuration == 1) {
         lastDurationDate = lastDurationDate.subtract(Duration(days: 6));
       } else if (selectedIndexDuration == 2) {
         lastDurationDate = lastDurationDate.subtract(Duration(days: 30));
       }
       String formattedDate1 = DateFormat('yyyy-MM-dd').format(lastDurationDate);
-      //  print("10 $formattedDate1");
 
       QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
           .instance
@@ -153,11 +125,7 @@ class MyBarGraph {
           in snapshot.docs) {
         Map<String, dynamic> data = document.data();
         i = i + 1;
-        //    print('Document ID: ${document.id}');
-        //  print('Data: $data');
-        //  print('------------------------');
       }
-      // print(i);
 
       Map<String, List<dynamic>> weeklyMap = {};
 
@@ -170,28 +138,22 @@ class MyBarGraph {
           String time = data['time'];
           DateTime documentDate = DateTime.parse('$date $time');
 
-          //  print('Parsed DateTime: $documentDate');
-          // DateTime documentDate = (data['date']).toDate();
-          //  print('1 $documentDate');
-
           num measure = data[indexMap[selectedIndexMeasure]];
-          //   print('2 $measure');
+
           String dateKey = DateFormat('yyyy-MM-dd').format(documentDate);
-          // print('3 $dateKey');
+
           if (!weeklyMap.containsKey(dateKey)) {
             weeklyMap[dateKey] = [measure];
           } else {
             weeklyMap[dateKey]!.add(measure);
           }
-          //  print("4 $weeklyMap");
         }
-        // print('5 $weeklyMap');
       }
       DateTime dateKey = DateTime.parse(formattedDate1);
       if (selectedIndexDuration == 1) {
         for (int i = 0; i < 7; i++) {
           String formattedKey = DateFormat('yyyy-MM-dd').format(dateKey);
-          //  print('12 $formattedKey');
+
           if (!weeklyMap.containsKey(formattedKey)) {
             weeklyMap[formattedKey] = [0];
           }
@@ -200,16 +162,13 @@ class MyBarGraph {
       } else if (selectedIndexDuration == 2) {
         for (int i = 0; i < 30; i++) {
           String formattedKey = DateFormat('yyyy-MM-dd').format(dateKey);
-          //  print('12 $formattedKey');
+
           if (!weeklyMap.containsKey(formattedKey)) {
             weeklyMap[formattedKey] = [0];
           }
           dateKey = dateKey.add(Duration(days: 1));
         }
       }
-
-// Now, weeklyMap contains entries for all dates within the range, and missing ones have values set to zero
-      //print('Modified Weekly Map: $weeklyMap');
 
       // Get the keys and sort them
       List<String> sortedKeys = weeklyMap.keys.toList()
@@ -220,15 +179,11 @@ class MyBarGraph {
 
           return dateA.compareTo(dateB);
         });
-      //  print("14 $sortedKeys");
 
       // Create a new map with sorted keys
       Map<String, dynamic> sortedMap = Map.fromIterable(sortedKeys,
           key: (key) => key, value: (key) => weeklyMap[key]);
 
-      // Print the sorted map
-      //  print("7 $sortedKeys");
-      //  print("8 $sortedMap");
       //Calculate average for each hour
       sortedMap.forEach((hour, temperatures) {
         double averageTemperature =
@@ -247,11 +202,7 @@ class MyBarGraph {
 
       // Print formatted keys
       print('33333 $formattedKeys');
-      // week duration
-    } /*else if (selectedIndexDuration == 2) {
-      lastDurationDate = currentTime.subtract(Duration(days: 30));
-      // month duration
-    }*/
+    }
 
     return hourlyAverages;
   }
@@ -300,7 +251,6 @@ class MyBarGraph {
         satAmount: summary[6],
       );
       myBarData.initializeBarData(duration);
-      // myBarData.initializeBarData();
     }
     if (duration == 2) {
       myBarData = BarData(
@@ -341,7 +291,6 @@ class MyBarGraph {
     int maxValue = 0;
     if (type == 0) {
       if (measure == 0) {
-        // max = 40;
         max = hourlyAverages
             .reduce((value, element) => value > element ? value : element);
 
@@ -368,7 +317,6 @@ class MyBarGraph {
         }
       }
       if (measure == 2) {
-        //max = 2000;
         max = hourlyAverages
             .reduce((value, element) => value > element ? value : element);
         max = double.parse(max.toStringAsFixed(0));
@@ -392,11 +340,8 @@ class MyBarGraph {
         while (max.toInt() % 10 != 0) {
           max++;
         }
-
-        ///print('Maximum value: $maxValue');
       }
       if (measure == 1) {
-        // max = 100;
         max = hourlyAverages
             .reduce((value, element) => value > element ? value : element);
         max = double.parse(max.toStringAsFixed(0));
@@ -408,7 +353,6 @@ class MyBarGraph {
         }
       }
       if (measure == 2) {
-        //  max = 50000;
         max = hourlyAverages
             .reduce((value, element) => value > element ? value : element);
         max = double.parse(max.toStringAsFixed(0));
@@ -430,7 +374,6 @@ class MyBarGraph {
       }
       return 5000;
     }
-    // myBarData.initializeBarData();
 
     return SizedBox(
       height: 300,
@@ -508,114 +451,92 @@ class MyBarGraph {
   }
 
   Widget getBottomTitles(double value, TitleMeta meta) {
-    // type = print(value);
     const style = TextStyle(
       color: Color.fromARGB(255, 95, 94, 94),
-      //fontWeight: FontWeight.bold,
       fontSize: 12,
     );
     Widget text;
     text = const Text('', style: style);
-    //String getBottomTitles(double value, int type) {
+
     if (type == 0) {
       switch (value.toInt()) {
         case 0:
           text = const Text('12AM', style: style);
           break;
         case 1:
-          // text = const Text('01', style: style);
           text = const Text('', style: style);
           break;
         case 2:
-          // text = const Text('02', style: style);
           text = const Text('', style: style);
           break;
         case 3:
-          //text = const Text('03', style: style);
           text = const Text('', style: style);
           break;
         case 4:
           text = const Text('', style: style);
           break;
         case 5:
-          //  text = const Text('05', style: style);
           text = const Text('', style: style);
           break;
         case 6:
-          // text = const Text('06', style: style);
           text = const Text('6AM', style: style);
           break;
         case 7:
-          // text = const Text('07', style: style);
           text = const Text('', style: style);
           break;
         case 8:
           text = const Text('', style: style);
           break;
         case 9:
-          // text = const Text('09', style: style);
           text = const Text('', style: style);
           break;
         case 10:
-          // text = const Text('10', style: style);
           text = const Text('', style: style);
           break;
 
         case 11:
-          // text = const Text('11', style: style);
           text = const Text('', style: style);
           break;
         case 12:
           text = const Text('12PM', style: style);
           break;
         case 13:
-          //text = const Text('13', style: style);
           text = const Text('', style: style);
           break;
         case 14:
-          //  text = const Text('14', style: style);
           text = const Text('', style: style);
           break;
         case 15:
-
-          /// text = const Text('15', style: style);
           text = const Text('', style: style);
           break;
         case 16:
           text = const Text('', style: style);
           break;
         case 17:
-          // text = const Text('17', style: style);
           text = const Text('', style: style);
           break;
         case 18:
-          // text = const Text('18', style: style);
           text = const Text('6PM', style: style);
           break;
         case 19:
-          //  text = const Text('19', style: style);
           text = const Text('', style: style);
           break;
         case 20:
           text = const Text('', style: style);
           break;
         case 21:
-          // text = const Text('21', style: style);
           text = const Text('', style: style);
           break;
         case 22:
-          // text = const Text('22', style: style);
           text = const Text('', style: style);
           break;
         case 23:
-          // text = const Text('23', style: style);
           text = const Text('', style: style);
           break;
         default:
           text = const Text('', style: style);
           break;
       }
-      //return SideTitleWidget(child: text, axisSide: meta.axisSide);
     }
     if (type == 1) {
       switch (value.toInt()) {
@@ -644,7 +565,6 @@ class MyBarGraph {
           text = const Text('', style: style);
           break;
       }
-      //return SideTitleWidget(child: text, axisSide: meta.axisSide);
     }
 
     if (type == 2) {
@@ -653,110 +573,87 @@ class MyBarGraph {
           text = Text(formattedKeys[0], style: style);
           break;
         case 1:
-          // text = const Text('الأسبوع الثاني', style: style);
           text = Text('', style: style);
           break;
         case 2:
-          // text = const Text('الأسبوع الثالث', style: style);
           text = Text('', style: style);
           break;
         case 3:
-          // text = const Text('الأسبوع الرابع', style: style);
           text = Text('', style: style);
           break;
         case 4:
-          // text = const Text('الأسبوع الأول', style: style);
           text = Text('', style: style);
           break;
         case 5:
           text = Text(formattedKeys[5], style: style);
           break;
         case 6:
-          // text = const Text('الأسبوع الثاني', style: style);
           text = Text('', style: style);
           break;
         case 7:
-          // text = const Text('الأسبوع الثالث', style: style);
           text = Text('', style: style);
           break;
         case 8:
-          // text = const Text('الأسبوع الرابع', style: style);
           text = Text('', style: style);
           break;
         case 9:
-          // text = const Text('الأسبوع الأول', style: style);
           text = Text('', style: style);
           break;
         case 10:
           text = Text(formattedKeys[10], style: style);
           break;
         case 11:
-          // text = const Text('الأسبوع الثاني', style: style);
           text = Text('', style: style);
           break;
         case 12:
-          // text = const Text('الأسبوع الثالث', style: style);
           text = Text('', style: style);
           break;
         case 13:
-          // text = const Text('الأسبوع الرابع', style: style);
           text = Text('', style: style);
           break;
         case 14:
-          // text = const Text('الأسبوع الأول', style: style);
           text = Text('', style: style);
           break;
         case 15:
           text = Text(formattedKeys[15], style: style);
           break;
         case 16:
-          // text = const Text('الأسبوع الثاني', style: style);
           text = Text('', style: style);
           break;
         case 17:
-          // text = const Text('الأسبوع الثالث', style: style);
           text = Text('', style: style);
           break;
         case 18:
-          // text = const Text('الأسبوع الرابع', style: style);
           text = Text('', style: style);
           break;
         case 19:
-          // text = const Text('الأسبوع الأول', style: style);
           text = Text('', style: style);
           break;
         case 20:
           text = Text(formattedKeys[20], style: style);
           break;
         case 21:
-          // text = const Text('الأسبوع الثاني', style: style);
           text = Text('', style: style);
           break;
         case 22:
-          // text = const Text('الأسبوع الثالث', style: style);
           text = Text('', style: style);
           break;
         case 23:
-          // text = const Text('الأسبوع الرابع', style: style);
           text = Text('', style: style);
           break;
         case 24:
-          // text = const Text('الأسبوع الأول', style: style);
           text = Text('', style: style);
           break;
         case 25:
           text = Text(formattedKeys[25], style: style);
           break;
         case 25:
-          // text = const Text('الأسبوع الثاني', style: style);
           text = Text('', style: style);
           break;
         case 27:
-          // text = const Text('الأسبوع الثالث', style: style);
           text = Text('', style: style);
           break;
         case 28:
-          // text = const Text('الأسبوع الرابع', style: style);
           text = Text('', style: style);
           break;
         case 29:
@@ -768,10 +665,8 @@ class MyBarGraph {
           text = Text('', style: style);
           break;
       }
-      //return SideTitleWidget(child: text, axisSide: meta.axisSide);
     }
 
     return SideTitleWidget(child: text, axisSide: meta.axisSide);
   }
-  //  return SideTitleWidget(child: text, axisSide: meta.axisSide);
 }

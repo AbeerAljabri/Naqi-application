@@ -97,10 +97,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12)),
                         labelText: "البريد الالكتروني",
-
-                        // ignore: prefer_const_constructors
                         prefixIcon: Icon(Icons.email)),
-                    // ignore: body_might_complete_normally_nullable
+
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'ادخل عنوان البريد إلكتروني ';
@@ -129,8 +127,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       prefixIcon: Icon(Icons.lock),
                       suffixIcon: togglePassword(),
                     ),
-
-                    // ignore: body_might_complete_normally_nullable
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'ادخل كلمة المرور';

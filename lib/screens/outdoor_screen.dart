@@ -29,54 +29,15 @@ class _OutdoorPageState extends State<OutdoorPage>
       var pm = reading[2];
       controller.checkOutdoorAirQuality(pm);
     });
-
-    // يمكن نحتاجها لو سوينا ايديت اي دي
-    /*Future<String> indoorSensorID = firebase.getIndoorSensorID();
-    indoorSensorID.then((value) {
-      setState(() {
-        indoorSensorID1 = value;
-        FirebaseService.indoorSensorID = indoorSensorID1;
-      });
-      Future<String> indoorSensorURL =
-          firebase.getIndoorSensorURL(indoorSensorID1);
-      indoorSensorURL.then((value) {
-        setState(() {
-          indoorSensorUrl = value;
-          FirebaseService.indoorSensorURL = indoorSensorUrl;
-        });
-      });
-    });
-
-   Future<String> outdoorSensorID = firebase.getOudoorSensorID();
-    outdoorSensorID.then((value) {
-      setState(() {
-        outdoorSensorID1 = value;
-        FirebaseService.outdoorSensorID = outdoorSensorID1;
-      });
-      Future<String> outdoorSensorURL =
-          firebase.getOudoorSensorURL(outdoorSensorID1);
-      outdoorSensorURL.then((value) {
-        setState(() {
-          outdoorSensorUrl = value;
-          FirebaseService.outdoorSensorURL = outdoorSensorUrl;
-        });
-      });
-    });*/
   }
 
   @override
   bool get wantKeepAlive => true;
-  //OutdoorSensor sensor = OutdoorSensor();
 
   Sensor sensor = Sensor();
   Fan fan = Fan();
   OutdoorAirQuality sensorReadings = OutdoorAirQuality();
   FirebaseService firebase = FirebaseService();
-
-  //String indoorSensorID1 = '';
-  //String indoorSensorUrl = '';
-  //String outdoorSensorID1 = '';
-  //String outdoorSensorUrl = '';
 
   Widget build(BuildContext context) {
     return Scaffold(

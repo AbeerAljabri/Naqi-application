@@ -28,9 +28,8 @@ class SettingsPage extends StatelessWidget {
         color: Colors.grey,
       );
     } else {
-      // Handle the case where the provided icon name is not found
       return Icon(
-        Icons.error_outline, // You can change this to a different error icon
+        Icons.error_outline,
         size: 20.0,
         color: Colors.grey,
       );

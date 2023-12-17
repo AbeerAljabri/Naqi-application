@@ -51,39 +51,6 @@ class _IndoorPageState extends State<IndoorPage>
         print('isSwitchOn1 $isSwitchOn');
       });
     });
-
-    // يمكن نحتاجها لو سوينا ايديت اي دي
-    /*Future<String> indoorSensorID = firebase.getIndoorSensorID();
-    indoorSensorID.then((value) {
-      setState(() {
-        indoorSensorID1 = value;
-        FirebaseService.indoorSensorID = indoorSensorID1;
-      });
-      Future<String> indoorSensorURL =
-          firebase.getIndoorSensorURL(indoorSensorID1);
-      indoorSensorURL.then((value) {
-        setState(() {
-          indoorSensorUrl = value;
-          FirebaseService.indoorSensorURL = indoorSensorUrl;
-        });
-      });
-    });
-
-   Future<String> outdoorSensorID = firebase.getOudoorSensorID();
-    outdoorSensorID.then((value) {
-      setState(() {
-        outdoorSensorID1 = value;
-        FirebaseService.outdoorSensorID = outdoorSensorID1;
-      });
-      Future<String> outdoorSensorURL =
-          firebase.getOudoorSensorURL(outdoorSensorID1);
-      outdoorSensorURL.then((value) {
-        setState(() {
-          outdoorSensorUrl = value;
-          FirebaseService.outdoorSensorURL = outdoorSensorUrl;
-        });
-      });
-    });*/
   }
 
   @override
@@ -98,10 +65,6 @@ class _IndoorPageState extends State<IndoorPage>
 
   String isAutomatic = '';
   String status = '';
-  //String indoorSensorID1 = '';
-  //String indoorSensorUrl = '';
-  //String outdoorSensorID1 = '';
-  //String outdoorSensorUrl = '';
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -202,19 +165,7 @@ class _IndoorPageState extends State<IndoorPage>
     fanStatus.then((value) {
       status = value;
     });
-//اتأكد منه اذا شبكنا المروحة
-    /* Future<String> automatic = firebase.isAutomatic();
-    automatic.then((value) {
-      isAutomatic = value;
-    });
 
-    Future<String> fanSwitch = firebase.isSwitchOn();
-    fanSwitch.then((value) {
-      setState(() {
-        switchOn = value;
-        isSwitchOn = switchOn == '1' ? true : false;
-      });
-    });*/
     isSwitchOn = FirebaseService.switchStatus == '1' ? true : false;
     isAutomatic = FirebaseService.automatic;
 

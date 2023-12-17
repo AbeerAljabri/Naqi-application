@@ -17,8 +17,8 @@ class profilePage extends StatefulWidget {
 
 class _profilePageState extends State<profilePage> {
   String originalFirstName = FirebaseService.first_name ?? "";
-  bool changesMade = false; // Add a boolean variable to track changes
-  bool isButtonEnabled = false; // Add a boolean variable to track button state
+  bool changesMade = false; //  boolean variable to track changes
+  bool isButtonEnabled = false; //  boolean variable to track button state
 
   internetConnection connection = internetConnection();
   @override
@@ -72,18 +72,14 @@ class _profilePageState extends State<profilePage> {
                           fontSize: 16,
                         ),
                       ),
-                      SizedBox(
-                          height:
-                              5), // Adjusted the SizedBox height for better spacing
-
+                      SizedBox(height: 5),
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Colors.grey,
                             width: 1.0,
                           ),
-                          borderRadius: BorderRadius.circular(
-                              8.0), // Simplified BorderRadius
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: ListTile(
                           leading: Icon(Icons.person),
@@ -96,8 +92,7 @@ class _profilePageState extends State<profilePage> {
                                     newValue; // Update the original value locally
                                 changesMade =
                                     true; // Set changesMade to true when changes are made
-                                isButtonEnabled = newValue
-                                    .isNotEmpty; // تحقق من عدم فراغ القيمة
+                                isButtonEnabled = newValue.isNotEmpty;
                               });
                             },
                             decoration: InputDecoration(

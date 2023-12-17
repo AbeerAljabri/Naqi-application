@@ -72,25 +72,6 @@ class Sensor {
     String secondTime =
         "${(time.minute > 0 ? time.hour.toString().padLeft(2, '0') : time.hour - 1)}:${(time.minute > 0 ? time.minute - 1 : 59).toString().padLeft(2, '0')}";
 
-    // print("Date: $dateString");
-    //print("Time: $timeString");
-    //print("seconedTIme: $secondTime");
-    /*final collection = FirebaseFirestore.instance.collection('dustTest');
-
-    // Query the collection for documents that match the date and time
-    final querySnapshot = await collection
-        .where('date', isEqualTo: dateString)
-        .where('time', isEqualTo: timeString)
-        .get();
-    if (querySnapshot.docs.isNotEmpty) {
-      final data = querySnapshot.docs.first.data() as Map<String, dynamic>;
-
-      // Access the data fields
-      dust = data['dust'];
-      if (dust != null) {
-        return dust;
-      }
-    }*/
     final collection = FirebaseFirestore.instance.collection('Sensor');
 
     final documentId = 'eui-24e124136d416846';

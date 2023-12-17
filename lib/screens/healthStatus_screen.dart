@@ -94,7 +94,6 @@ class _healthStatusPageState extends State<healthStatusPage> {
                             children: <Widget>[
                               Row(
                                 children: [
-                                  // Container( padding: const EdgeInsets.only(right: 12), child: icon),
                                   Container(
                                     padding: const EdgeInsets.only(right: 12),
                                     child: Center(
@@ -199,7 +198,6 @@ class _healthStatusPageState extends State<healthStatusPage> {
                               children: <Widget>[
                                 Row(
                                   children: [
-                                    // Container( padding: const EdgeInsets.only(right: 12), child: icon),
                                     Container(
                                       padding: const EdgeInsets.only(right: 12),
                                       child: Center(

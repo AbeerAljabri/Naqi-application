@@ -130,7 +130,6 @@ class FirebaseService {
           .where('SensorID', isEqualTo: sensorID)
           .get();
       if (sensorDoc.docs.isNotEmpty) {
-        // Assuming there could be multiple documents with the same sensorID, you may choose which one to return or handle them as needed.
         final sensorDoc1 = sensorDoc.docs.first;
         outdoorSensorURL = sensorDoc1.data()['URL'];
 

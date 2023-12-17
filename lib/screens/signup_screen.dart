@@ -59,9 +59,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   bool validateStructure(String value) {
-    String pattern =
-        // r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-        r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#\$&*~_-]).{8,}$';
+    String pattern = r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#\$&*~_-]).{8,}$';
     RegExp regExp = RegExp(pattern);
     return regExp.hasMatch(value);
   }
@@ -73,7 +71,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   void initState() {
-    // getConnectivity();
     super.initState();
   }
 
@@ -92,8 +89,6 @@ class _SignupScreenState extends State<SignupScreen> {
       backgroundColor: Colors.white,
       body: Form(
         key: _key,
-        //padding: const EdgeInsets.all(8.0),
-        //child: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -243,7 +238,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     },
                   ),
                 ),
-// هنااا
+
                 Padding(
                   padding:
                       const EdgeInsets.only(right: 25.0, left: 25, top: 10),
@@ -276,7 +271,6 @@ class _SignupScreenState extends State<SignupScreen> {
                               children: <Widget>[
                                 Row(
                                   children: [
-                                    // Container( padding: const EdgeInsets.only(right: 12), child: icon),
                                     Container(
                                       padding: const EdgeInsets.only(right: 12),
                                       child: Center(
@@ -383,7 +377,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                 children: <Widget>[
                                   Row(
                                     children: [
-                                      // Container( padding: const EdgeInsets.only(right: 12), child: icon),
                                       Container(
                                         padding:
                                             const EdgeInsets.only(right: 12),
@@ -542,13 +535,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                           'healthStatusLevel': text1,
                                           'fanID': '111',
                                         }),
-                                        // ignore: avoid_print
 
                                         print("data added"),
                                       })
                                   .then((value) {
                                 AwesomeDialog(
-                                    // width: width(context, 1),
                                     context: context,
                                     dialogType: DialogType.success,
                                     title: "",
@@ -562,7 +553,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                   Navigator.of(context).pushNamed('/');
                                 });
                               });
-                              // Navigator.of(context).pushNamed('/');
                             } on FirebaseAuthException catch (e) {
                               if (e.code == 'email-already-in-use') {
                                 showDialog(
@@ -649,27 +639,4 @@ class _SignupScreenState extends State<SignupScreen> {
       color: Colors.grey,
     );
   }
-
-  /*showDialogBox() => showCupertinoDialog<String>(
-        context: context,
-        builder: (BuildContext content) => CupertinoAlertDialog(
-          title: Text('لا يوجد اتصال بالانترنت'),
-          content: Text("الرجاء التحقق من اتصال الانترنت"),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(context, 'Cancel');
-                setState(() => isAlertSet = false);
-                isDeviceConnected =
-                    await InternetConnectionChecker().hasConnection;
-                if (!isDeviceConnected) {
-                  showDialogBox();
-                  setState(() => isAlertSet = true);
-                }
-              },
-              child: Text('حسنا'),
-            ),
-          ],
-        ),
-      );*/
 }

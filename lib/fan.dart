@@ -44,12 +44,6 @@ class Fan {
 
   void turnOn() {
     sendDownlink('AwER');
-    /*FirebaseDatabase.instance.reference().child("Fan").update({"Status": 1});
-    FirebaseFirestore.instance
-        .collection('Fan')
-        .doc(
-            'z0IChlO0HkJX0gJ6tZlF') // Replace 'your_document_id' with the actual document ID
-        .update({"Status": '1'});*/
 
     try {
       FirebaseFirestore.instance
@@ -58,7 +52,6 @@ class Fan {
           .get()
           .then((QuerySnapshot querySnapshot) {
         if (querySnapshot.size > 0) {
-          // Assuming there is only one document with the given fanID
           String documentID = querySnapshot.docs.first.id;
 
           // Update the document with the new value for 'isSwitchOn'
@@ -82,12 +75,7 @@ class Fan {
 
   void turnOff() {
     sendDownlink('AwAA');
-    /* FirebaseDatabase.instance.reference().child("Fan").update({"Status": 0});
-    FirebaseFirestore.instance
-        .collection('Fan')
-        .doc(
-            'z0IChlO0HkJX0gJ6tZlF') // Replace 'your_document_id' with the actual document ID
-        .update({"Status": '0'});*/
+
     try {
       FirebaseFirestore.instance
           .collection('Fan')
@@ -156,7 +144,6 @@ class Fan {
           .get()
           .then((QuerySnapshot querySnapshot) {
         if (querySnapshot.size > 0) {
-          // Assuming there is only one document with the given fanID
           String documentID = querySnapshot.docs.first.id;
 
           // Update the document with the new value for 'isAutomatic'
@@ -177,11 +164,4 @@ class Fan {
       print('Error: $e');
     }
   }
-
-  /*void updateisAutomatic2(int isAutomatic) {
-    FirebaseDatabase.instance
-        .reference()
-        .child("Fan")
-        .update({"isAutomatic": isAutomatic});
-  }*/
 }

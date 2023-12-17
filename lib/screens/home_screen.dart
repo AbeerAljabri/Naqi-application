@@ -43,9 +43,10 @@ class _HomeSceenState extends State<HomeSceen>
   late int index = index;
   _HomeSceenState({required this.index});
   late final pages = [
-    //هنا صفحة حسابي
+    // setting page
     settingsPage,
-    //هنا صفحة داخلي
+
+    // indoor page
 
     FutureBuilder<bool>(
       future: checkIndoorSensorID(),
@@ -92,7 +93,7 @@ class _HomeSceenState extends State<HomeSceen>
         }
       },
     ),
-    //هنا صفحة خارجي
+    // outdoor page
     FutureBuilder<bool>(
       future: checkOutdoorSensorID(),
       builder: (context, snapshot) {
@@ -138,10 +139,9 @@ class _HomeSceenState extends State<HomeSceen>
         }
       },
     ),
-    //Center(child: Text('خارجي', style: TextStyle(fontSize: 37))),
-    //هنا صفحة التقارير
+
+    //  report page
     reportPage,
-   // Center(child: Text('التقارير', style: TextStyle(fontSize: 37))),
   ];
   @override
   Widget build(BuildContext context) {

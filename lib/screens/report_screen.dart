@@ -53,8 +53,8 @@ class _ReportPageState extends State<ReportPage> {
             ),
             SizedBox(height: 10),
             Container(
-              height: 330.0, // Set the desired height
-              width: 400.0, // Set the desired width
+              height: 330.0,
+              width: 400.0,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FutureBuilder<List<double>>(
@@ -64,10 +64,8 @@ class _ReportPageState extends State<ReportPage> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
                         child: Container(
-                          width:
-                              50.0, // Set the desired size for CircularProgressIndicator
-                          height:
-                              50.0, // Set the desired size for CircularProgressIndicator
+                          width: 50.0,
+                          height: 50.0,
                           child: CircularProgressIndicator(),
                         ),
                       );
@@ -77,7 +75,6 @@ class _ReportPageState extends State<ReportPage> {
                       // Use the result from the future, which is a List<double>
                       List<double>? result = snapshot.data;
 
-                      // Now you can use the result as needed.
                       return graph.showBar(result!, selectedIndexDuration,
                           selectedIndexType, selectedIndexMeasure);
                     }
@@ -104,7 +101,6 @@ class _ReportPageState extends State<ReportPage> {
                   onToggle: (index) {
                     setState(() {
                       selectedIndexType = index!;
-                      print('type $selectedIndexType');
                     });
                   },
                 ),
@@ -117,7 +113,6 @@ class _ReportPageState extends State<ReportPage> {
                       onPressed: () {
                         setState(() {
                           selectedIndexMeasure = 0;
-                          print('duration $selectedIndexMeasure');
                         });
                       },
                       style: ElevatedButton.styleFrom(
@@ -140,7 +135,6 @@ class _ReportPageState extends State<ReportPage> {
                         setState(() {
                           selectedIndexMeasure = 1;
                         });
-                        //////here
                       },
                       style: ElevatedButton.styleFrom(
                         primary: selectedIndexMeasure == 1

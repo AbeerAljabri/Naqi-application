@@ -21,7 +21,7 @@ To get started with the project, follow these steps:
 
 1. Clone the repository
 
-git clone https://github.com/Abeer-Aljabri/2023-GP1-04
+'git clone https://github.com/Abeer-Aljabri/2023-GP1-04'
 
 2. Install dependencies
 

@@ -5,11 +5,11 @@ NAQI is an Arabic mobile application and IoT hardware that aims to monitor and i
 
 ## Built With
 [![My Skills](https://skillicons.dev/icons?i=flutter)](https://skillicons.dev)
-- Flutter
-- Dart
+[![My Skills](https://skillicons.dev/icons?i=dart)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=firebase)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=firebase)](https://skillicons.dev)
 - Android Stodio
 - Visual Studio Code
-- Firebase
 - The Things Netwotk
 
 ## Getting Started

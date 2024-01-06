@@ -43,7 +43,7 @@ flutter pub get
 
 You can launch the app using the following command:
 
-flutter run
+`flutter run`
 
 5. Test the app
 

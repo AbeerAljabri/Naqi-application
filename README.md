@@ -4,10 +4,9 @@
 NAQI is an Arabic mobile application and IoT hardware that aims to monitor and improve air quality by measuring key indicators including temperature, humidity, carbon dioxide (CO2), and dust. The system provides health status customization, viewing streaming live data, receiving alert notifications, and creating reports with statistical information. To improve air quality, an exhaust fan is automatically operated if the level of air pollution has risen and can be remotely controlled by the user.
 
 ## Built With
-[![My Skills](https://skillicons.dev/icons?i=flutter)](https://skillicons.dev)
-[![My Skills](https://skillicons.dev/icons?i=dart)](https://skillicons.dev)
-[![My Skills](https://skillicons.dev/icons?i=firebase)](https://skillicons.dev)
-[![My Skills](https://skillicons.dev/icons?i=firebase)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=flutter,dart,firebase&perline=3)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=androidstodio)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i= visualStudioCode)](https://skillicons.dev)
 - Android Stodio
 - Visual Studio Code
 - The Things Netwotk
